@@ -9,55 +9,31 @@ namespace visualizer
 
     struct StartAnim: public Anim
     {
-        public:
-            void animate( const float& t, AnimData *d );
+      public:
+        void animate( const float& t, AnimData *d, IGame* game );
 
-            float controlDuration() const
-            {
-                return 0;
-            }
-
-            float totalDuration() const
-            {
-                return 0;
-            }
     };
   
     class DrawBoard: public Anim
     {
-        public:
-            DrawBoard( Board* board )
-            {
-                m_board = board;
-            }
+      public:
+        void animate( const float& t, AnimData* d, IGame* game );
 
-    void animate( const float& t, AnimData* d, IGame* game );
+        float controlDuration() const
+        { return 0; }
 
-    float controlDuration() const
-    { return 0; }
-
-    float totalDuration() const
-    { return 0; }
-
-    private:
-        Board* m_board;
+        float totalDuration() const
+        { return 0; }
 
     }; // DrawBoard
   
     class DrawChessPiece: public Anim
     {
-        public:
-            DrawChessPiece( ChessPiece* piece ) { m_piece = piece; }
+      public:
+        DrawChessPiece( ChessPiece* piece ) { m_piece = piece; }
 
-            void animate( const float& t, AnimData* d, IGame* game );
-
-            float controlDuration() const
-            { return 0; }
-
-            float totalDuration() const
-            { return 0; }
-
-    private:
+        void animate( const float& t, AnimData* d, IGame* game );
+      private:
         ChessPiece* m_piece;
         
     }; // DrawChessPiece

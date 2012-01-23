@@ -44,7 +44,7 @@ namespace visualizer
       THROW
         (
         GameException,
-        "Cannot load gamelog", 
+        "Cannot load gamelog, %s", 
         gamelog.c_str()
         );
     }
@@ -55,7 +55,7 @@ namespace visualizer
     
     void Chess::run()
     {
-        SmartPointer<Board> board = new Board( renderer );
+        SmartPointer<Board> board = new Board();
 
         timeManager->setNumTurns( m_game->states.size() );
         animationEngine->registerGame( this, this );
@@ -65,14 +65,14 @@ namespace visualizer
         {
             Frame turn;
             
-            SmartPointer<Board> board = new Board( renderer );
-            board->addKeyFrame( new DrawBoard( board ) );
+            SmartPointer<Board> board = new Board();
+            board->addKeyFrame( new DrawBoard() );
             turn.addAnimatable( board );
             
             // Loop though each Piece in the current state
             for(std::map<int, Piece>::iterator i = m_game->states[ state ].pieces.begin(); i != m_game->states[ state ].pieces.end(); i++)
             {
-                SmartPointer<ChessPiece> piece = new ChessPiece( renderer );
+                SmartPointer<ChessPiece> piece = new ChessPiece();
                 
                 piece->x = i->second.file - 1;
                 piece->y = i->second.rank - 1;

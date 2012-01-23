@@ -4,7 +4,7 @@
 
 namespace visualizer
 {
-    void StartAnim::animate( const float& /* t */, AnimData * /* d */ )
+    void StartAnim::animate( const float& /* t */, AnimData * /* d */, IGame* game )
     {
     }
     

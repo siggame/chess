@@ -8,25 +8,15 @@ namespace visualizer
 {
     struct Board: public Animatable
     {
-        Board( IRenderer *render ) : Animatable( render )
-        {}
-
-        AnimData* getData()
-        { return 0; }
     };
   
     struct ChessPiece: public Animatable
     {
-        ChessPiece( IRenderer *render ) : Animatable( render )
-        {}
-        
         int x;
         int y;
         int owner;
         int type;
         
-        AnimData* getData()
-        { return 0; }
     };
 
 } // visualizer
