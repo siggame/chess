@@ -9,6 +9,8 @@
 #include <map>
 #include <string>
 
+#include "smartpointer.h"
+
 const int MOVE = 0;
 
 struct Move
@@ -53,6 +55,11 @@ struct move : public Animation
 };
 
 
+struct AnimOwner: public Animation
+{
+  int owner;
+};
+
 struct GameState
 {
   std::map<int,Move> moves;
@@ -62,10 +69,8 @@ struct GameState
   int playerID;
   int gameNumber;
   int TurnsToStalemate;
-  int player0Time;
-  int player1Time;
 
-  std::vector<Animation*> animations;
+  std::map< int, std::vector< SmartPointer< Animation > > > animations;
   friend std::ostream& operator<<(std::ostream& stream, GameState obj);
 };
 

@@ -48,8 +48,6 @@ std::ostream& operator<<(std::ostream& stream, GameState ob)
   stream << "playerID: " << ob.playerID  <<'\n';
   stream << "gameNumber: " << ob.gameNumber  <<'\n';
   stream << "TurnsToStalemate: " << ob.TurnsToStalemate  <<'\n';
-  stream << "player0Time: " << ob.player0Time  <<'\n';
-  stream << "player1Time: " << ob.player1Time  <<'\n';
 
   stream << "\n\nMoves:\n";
   for(std::map<int,Move>::iterator i = ob.moves.begin(); i != ob.moves.end(); i++)
@@ -58,11 +56,22 @@ std::ostream& operator<<(std::ostream& stream, GameState ob)
   for(std::map<int,Piece>::iterator i = ob.pieces.begin(); i != ob.pieces.end(); i++)
     stream << i->second << '\n';
   stream << "\nAnimation\n";
-  for(std::vector<Animation*>::iterator i = ob.animations.begin(); i != ob.animations.end(); i++)
+  for
+    (
+    std::map< int, std::vector< SmartPointer< Animation > > >::iterator j = ob.animations.begin(); 
+    j != ob.animations.end(); 
+    j++ 
+    )
   {
-    if((**i).type == MOVE)
-      stream << *((move*)*i) << "\n";
+  for(std::vector< SmartPointer< Animation > >::iterator i = j->second.begin(); i != j->second.end(); i++)
+  {
+//    if((*(*i)).type == MOVE)
+//      stream << *((move*)*i) << "\n";
   }
+  
+
+  }
+  return stream;
 }
 
 Game::Game()
