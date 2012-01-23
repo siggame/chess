@@ -30,7 +30,7 @@ namespace visualizer
     cout << "Load Chess Gamelog" << endl;
     
     renderer->setCamera( 0, 0, 8, 8 );
-    renderer->setUnitSize( 8, 8 );
+    renderer->setGridDimensions( 8, 8 );
     
     resourceManager->loadResourceFile( "./plugins/chess/textures.r" );
     
@@ -48,24 +48,47 @@ namespace visualizer
         gamelog.c_str()
         );
     }
-    
-    SmartPointer<Board> board = new Board( renderer );
     // END: Initial Setup
     
-    Frame turn;
-    
-    board->addKeyFrame( new DrawBoard( board ) );
-    turn.addAnimatable( board );
-    addFrame( turn );
-
-    timeManager->setNumTurns( 1 );
-    animationEngine->registerFrameContainer( this );
-    timeManager->play();					//really don't need this beeteedubs
-
+    run();
   } // Chess::loadGamelog()
+    
+    void Chess::run()
+    {
+        SmartPointer<Board> board = new Board( renderer );
 
-
-
+        timeManager->setNumTurns( m_game->states.size() );
+        animationEngine->registerFrameContainer( this );
+        
+        // Loop through each state in the gamelog
+        for(int state = 0; state < m_game->states.size(); state++)
+        {
+            Frame turn;
+            
+            SmartPointer<Board> board = new Board( renderer );
+            board->addKeyFrame( new DrawBoard( board ) );
+            turn.addAnimatable( board );
+            
+            // Loop though each Piece in the current state
+            for(std::map<int, Piece>::iterator i = m_game->states[ state ].pieces.begin(); i != m_game->states[ state ].pieces.end(); i++)
+            {
+                SmartPointer<ChessPiece> piece = new ChessPiece( renderer );
+                
+                piece->x = i->second.file - 1;
+                piece->y = i->second.rank - 1;
+                piece->type = i->second.type;
+                piece->owner = i->second.owner;
+                
+                board->addKeyFrame( new DrawChessPiece( piece ) );
+                turn.addAnimatable( piece );
+            }
+            
+            addFrame( turn );
+        }
+        
+        timeManager->play();
+    }
+    
 } // visualizer
 
 Q_EXPORT_PLUGIN2( Chess, visualizer::Chess );

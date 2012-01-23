@@ -1,13 +1,13 @@
 font DroidSansMono textures/DroidSansMono.png DroidSansMono.dat
-texture black-king textures/black-king.png
-texture black-queen textures/black-queen.png
-texture black-rook textures/black-rook.png
-texture black-bishop textures/black-bishop.png
-texture black-pawn textures/black-pawn.png
-texture black-knight textures/black-knight.png
-texture white-king textures/white-king.png
-texture white-queen textures/white-queen.png
-texture white-rook textures/white-rook.png
-texture white-bishop textures/white-bishop.png
-texture white-pawn textures/white-pawn.png
-texture black-knight textures/black-knight.png
+texture 0-K textures/black-king.png
+texture 0-Q textures/black-queen.png
+texture 0-R textures/black-rook.png
+texture 0-B textures/black-bishop.png
+texture 0-P textures/black-pawn.png
+texture 0-N textures/black-knight.png
+texture 1-K textures/white-king.png
+texture 1-Q textures/white-queen.png
+texture 1-R textures/white-rook.png
+texture 1-B textures/white-bishop.png
+texture 1-P textures/white-pawn.png
+texture 1-N textures/white-knight.png
