@@ -17,6 +17,15 @@ namespace visualizer
     }
 
   };
+  
+  struct Board: public Animatable
+  {
+    Board( IRenderer *render ) : Animatable( render )
+    {}
+    
+    AnimData* getData()
+    { return 0; }
+  };
 
 } // visualizer
 

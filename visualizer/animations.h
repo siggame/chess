@@ -47,6 +47,27 @@ namespace visualizer
       image* m_image;
 
   };
+  
+  class DrawBoard: public Anim
+  {
+    public:
+      DrawBoard( Board* board )
+      {
+        m_board = board;
+      }
+
+      void animate( const float& t, AnimData* d );
+
+      float controlDuration() const
+      { return 0; }
+
+      float totalDuration() const
+      { return 0; }
+
+    private:
+      Board* m_board;
+
+  }; // DrawBoard
 
 }
 

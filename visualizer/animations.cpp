@@ -14,5 +14,19 @@ namespace visualizer
     i.renderer().drawTexturedQuad( 0, 0, 40, 40, "visualExplosion" );
 
   }
+  
+  void DrawBoard::animate( const float& /* t */, AnimData * /* d */ )
+  {
+    Board &board = *m_board;
+    
+    for(int x = 0; x < 8; x++)
+    {
+      for(int y = 0; y < 8; y++)
+      {
+        board.renderer().setColor( Color (!((x + y ) % 2), !((x + y ) % 2), !((x + y ) % 2)) );
+        board.renderer().drawQuad(x, y, 1, 1);
+      }
+    }
+  }
 
 }
