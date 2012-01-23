@@ -24,21 +24,35 @@ namespace visualizer
     return lr;
   } // LogRegex Chess::logFileInfo()
 
-  void Chess::loadGamelog( std::string toBeLalalaloaded )
+  void Chess::loadGamelog( std::string gamelog )
   {
+    // BEGIN: Initial Setup
     cout << "Load Chess Gamelog" << endl;
     
     renderer->setCamera( 0, 0, 8, 8 );
     renderer->setUnitSize( 8, 8 );
     
-    SmartPointer<Board> board = new Board( renderer );
+    resourceManager->loadResourceFile( "./plugins/chess/textures.r" );
     
-    //resourceManager->loadTexture( toBeLalalaloaded, "visualExplosion" );
+    m_game = new Game;
+
+    if( !parseString( *m_game, gamelog.c_str() ) )
+    {
+      delete m_game;
+      m_game = 0;
+      errorLog << gamelog;
+      THROW
+        (
+        GameException,
+        "Cannot load gamelog", 
+        gamelog.c_str()
+        );
+    }
+    
+    SmartPointer<Board> board = new Board( renderer );
+    // END: Initial Setup
+    
     Frame turn;
-    //image *i = new image( renderer );
-    //i->addKeyFrame( new StartAnim );
-    //i->addKeyFrame( new DrawImage( i ) );
-    //turn.addAnimatable( i );
     
     board->addKeyFrame( new DrawBoard( board ) );
     turn.addAnimatable( board );

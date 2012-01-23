@@ -11,6 +11,15 @@
 
 using namespace std;
 
+char *ToLower( char *str )
+{
+  for( int i = 0; i < strlen( str ); i++ )
+  {
+    str[ i ] = tolower( str[ i ] );
+  }
+  return str;
+}
+
 
 static bool parseMove(Move& object, sexp_t* expression)
 {
@@ -18,41 +27,62 @@ static bool parseMove(Move& object, sexp_t* expression)
   if ( !expression ) return false;
   sub = expression->list;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseMove.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.id = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseMove.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.fromFile = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseMove.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.fromRank = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseMove.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.toFile = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseMove.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.toRank = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseMove.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.promoteType = atoi(sub->val);
   sub = sub->next;
 
   return true;
 
-  ERROR:
-  cerr << "Error in parseMove.\n Parsing: " << *expression << endl;
-  return false;
 }
 static bool parsePiece(Piece& object, sexp_t* expression)
 {
@@ -60,41 +90,62 @@ static bool parsePiece(Piece& object, sexp_t* expression)
   if ( !expression ) return false;
   sub = expression->list;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parsePiece.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.id = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parsePiece.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.owner = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parsePiece.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.file = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parsePiece.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.rank = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parsePiece.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.hasMoved = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parsePiece.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.type = atoi(sub->val);
   sub = sub->next;
 
   return true;
 
-  ERROR:
-  cerr << "Error in parsePiece.\n Parsing: " << *expression << endl;
-  return false;
 }
 
 static bool parseMove(move& object, sexp_t* expression)
@@ -103,27 +154,43 @@ static bool parseMove(move& object, sexp_t* expression)
   if ( !expression ) return false;
   object.type = MOVE;
   sub = expression->list->next;
-  if( !sub ) goto ERROR;
+  if( !sub ) 
+  {
+    cerr << "Error in parsemove.\n Parsing: " << *expression << endl;
+    return false;
+  }
   object.fromFile = atoi(sub->val);
   sub = sub->next;
-  if( !sub ) goto ERROR;
+  if( !sub ) 
+  {
+    cerr << "Error in parsemove.\n Parsing: " << *expression << endl;
+    return false;
+  }
   object.fromRank = atoi(sub->val);
   sub = sub->next;
-  if( !sub ) goto ERROR;
+  if( !sub ) 
+  {
+    cerr << "Error in parsemove.\n Parsing: " << *expression << endl;
+    return false;
+  }
   object.toFile = atoi(sub->val);
   sub = sub->next;
-  if( !sub ) goto ERROR;
+  if( !sub ) 
+  {
+    cerr << "Error in parsemove.\n Parsing: " << *expression << endl;
+    return false;
+  }
   object.toRank = atoi(sub->val);
   sub = sub->next;
-  if( !sub ) goto ERROR;
+  if( !sub ) 
+  {
+    cerr << "Error in parsemove.\n Parsing: " << *expression << endl;
+    return false;
+  }
   object.promoteType = atoi(sub->val);
   sub = sub->next;
   return true;
 
-
-  ERROR:
-  cerr << "Error in parsemove.\n Parsing: " << *expression << endl;
-  return false;
 }
 
 static bool parseSexp(Game& game, sexp_t* expression)
@@ -154,12 +221,6 @@ static bool parseSexp(Game& game, sexp_t* expression)
           sub = sub->next;
           if ( !sub ) return false;
           gs.TurnsToStalemate = atoi(sub->val);
-          sub = sub->next;
-          if ( !sub ) return false;
-          gs.player0Time = atoi(sub->val);
-          sub = sub->next;
-          if ( !sub ) return false;
-          gs.player1Time = atoi(sub->val);
           sub = sub->next;
       }
       else if(string(sub->val) == "Move")
@@ -193,18 +254,19 @@ static bool parseSexp(Game& game, sexp_t* expression)
   }
   else if(string(expression->val) == "animations")
   {
-    std::vector<Animation*> animations;
+    std::map< int, std::vector< SmartPointer< Animation > > > animations;
     while(expression->next)
     {
       expression = expression->next;
       sub = expression->list;
       if ( !sub ) return false;
-      if(string(sub->val) == "move")
+      if(string(ToLower( sub->val ) ) == "move")
       {
-        move* animation = new move;
+        SmartPointer<move> animation = new move;
         if ( !parseMove(*animation, expression) )
           return false;
-        animations.push_back(animation);
+
+        animations[ ((AnimOwner*)&*animation)->owner ].push_back( animation );
       }
     }
     game.states[game.states.size()-1].animations = animations;
@@ -250,9 +312,9 @@ static bool parseSexp(Game& game, sexp_t* expression)
 
 bool parseFile(Game& game, const char* filename)
 {
-  bool value;
+  //bool value;
   FILE* in = fopen(filename, "r");
-  int size;
+  //int size;
   if(!in)
     return false;
 
@@ -260,7 +322,7 @@ bool parseFile(Game& game, const char* filename)
 
   sexp_t* st = NULL;
 
-  while(st = parse())
+  while((st = parse()))
   {
     if( !parseSexp(game, st) )
     {
@@ -279,16 +341,20 @@ bool parseFile(Game& game, const char* filename)
 
 bool parseString(Game& game, const char* string)
 {
+
+  parseString( string );
+
   sexp_t* st = NULL;
 
-  st = extract_sexpr(string);
-  bool flag = true;
-  while(st && flag)
+  while((st = parse()))
   {
-    flag = parseSexp(game, st);
+    if( !parseSexp(game, st) )
+    {
+      while(parse()); //empty the file, keep Lex happy.
+      return false;
+    }
     destroy_sexp(st);
-    st = parse();
   }
 
-  return flag;
+  return true;
 }
