@@ -1,4 +1,5 @@
 #include "animations.h"
+#include "chess.h"
 #include <sstream>
 
 namespace visualizer
@@ -7,21 +8,20 @@ namespace visualizer
     {
     }
     
-    void DrawBoard::animate( const float& /* t */, AnimData * /* d */ )
+    void DrawBoard::animate( const float& /* t */, AnimData * /* d */, IGame* game )
     {
-        Board &board = *m_board;
         
         for(int x = 0; x < 8; x++)
         {
             for(int y = 0; y < 8; y++)
             {
-                board.renderer().setColor( Color (!((x + y ) % 2), !((x + y ) % 2), !((x + y ) % 2)) );
-                board.renderer().drawQuad(x, y, 1, 1);
+                game->renderer->setColor( Color (!((x + y ) % 2), !((x + y ) % 2), !((x + y ) % 2)) );
+                game->renderer->drawQuad(x, y, 1, 1);
             }
         }
     }
     
-    void DrawChessPiece::animate( const float& /* t */, AnimData * /* d */ )
+    void DrawChessPiece::animate( const float& /* t */, AnimData * /* d */, IGame* game )
     {
         ChessPiece &piece = *m_piece;
         
@@ -29,8 +29,8 @@ namespace visualizer
         
         ss << piece.owner << "-" << (char)piece.type;
         
-        piece.renderer().setColor( Color( 1, 1, 1 ) );
-        piece.renderer().drawTexturedQuad(piece.x, piece.y, 1, 1, ss.str());
+        game->renderer->setColor( Color( 1, 1, 1 ) );
+        game->renderer->drawTexturedQuad(piece.x, piece.y, 1, 1, ss.str());
     }
 
 }

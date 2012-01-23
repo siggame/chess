@@ -45,5 +45,3 @@ constants = [
   Variable('player1Name', str, 'Player 1\'s name'),
   ]
 
-import timerAspect
-timerAspect.install()

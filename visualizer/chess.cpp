@@ -58,7 +58,7 @@ namespace visualizer
         SmartPointer<Board> board = new Board( renderer );
 
         timeManager->setNumTurns( m_game->states.size() );
-        animationEngine->registerFrameContainer( this );
+        animationEngine->registerGame( this, this );
         
         // Loop through each state in the gamelog
         for(int state = 0; state < m_game->states.size(); state++)

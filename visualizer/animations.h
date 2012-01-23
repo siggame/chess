@@ -31,7 +31,7 @@ namespace visualizer
                 m_board = board;
             }
 
-    void animate( const float& t, AnimData* d );
+    void animate( const float& t, AnimData* d, IGame* game );
 
     float controlDuration() const
     { return 0; }
@@ -49,7 +49,7 @@ namespace visualizer
         public:
             DrawChessPiece( ChessPiece* piece ) { m_piece = piece; }
 
-            void animate( const float& t, AnimData* d );
+            void animate( const float& t, AnimData* d, IGame* game );
 
             float controlDuration() const
             { return 0; }
