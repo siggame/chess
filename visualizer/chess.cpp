@@ -3,6 +3,8 @@
 #include "frame.h"
 #include "animations.h"
 
+#include <QDialog>
+
 namespace visualizer
 {
 
@@ -30,7 +32,41 @@ namespace visualizer
 
   void Chess::spectate( std::string ipAddress )
   {
-    cout << ipAddress << endl;
+    m_ipAddress = ipAddress;
+    QDialog *chooseGame = new QDialog();
+
+    QGridLayout *layout = new QGridLayout();
+    chooseGame->setLayout( layout );
+
+    QLabel* gameNumber = new QLabel( "Game Number: (Enter Nothing For New Game)" );
+    m_gameNumber = new QLineEdit();
+    QPushButton *spectate = new QPushButton( "Spectate" );
+    QPushButton *play = new QPushButton( "Play As Human Client" );
+
+    layout->addWidget( gameNumber, 0, 0, 1, 0 );
+    layout->addWidget( m_gameNumber, 1, 0, 1, 0 );
+    layout->addWidget( spectate, 2, 0 );
+    layout->addWidget( play, 2, 1 );
+
+    connect( spectate, SIGNAL( clicked() ), this, SLOT( beSpectator() ) );
+    connect( spectate, SIGNAL( clicked() ), chooseGame, SLOT( close() ) );
+    connect( play, SIGNAL( clicked() ), this, SLOT( bePlayer() ) );
+    connect( play, SIGNAL( clicked() ), chooseGame, SLOT( close() ) );
+
+    chooseGame->exec();
+
+  }
+
+  void Chess::beSpectator()
+  {
+    cout << "Connecting to: " <<  m_ipAddress << "as spectator." << endl;
+    cout << "GAME NUMBER: " << qPrintable( m_gameNumber->text() ) << endl;
+  }
+
+  void Chess::bePlayer()
+  {
+    cout << "Connecting to: " <<  m_ipAddress << "as player." << endl;
+    cout << "GAME NUMBER: " << qPrintable( m_gameNumber->text() ) << endl;
   }
 
   void Chess::loadGamelog( std::string gamelog )
