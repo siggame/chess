@@ -61,6 +61,7 @@ namespace visualizer
   {
     cout << "Connecting to: " <<  m_ipAddress << "as spectator." << endl;
     cout << "GAME NUMBER: " << qPrintable( m_gameNumber->text() ) << endl;
+    
   }
 
   void Chess::bePlayer()
