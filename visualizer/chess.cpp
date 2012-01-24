@@ -14,15 +14,24 @@ namespace visualizer
   {
   } // Chess::~Chess()
 
-  LogRegex Chess::logFileInfo()
+  PluginInfo Chess::getPluginInfo()
   {
-    LogRegex lr;
-    lr.regex = "Piece";
-    lr.startSize = 1000;
-    lr.giveFilename = false;
+    PluginInfo i;
+    i.searchLength = 1000;
+    i.gamelogRegexPattern = "Piece";
+    i.returnFilename = false;
+    i.spectateMode = true;
+    i.pluginName = "Chess Plugin v2";
 
-    return lr;
-  } // LogRegex Chess::logFileInfo()
+    options->loadOptionFile( "./plugins/chess/chess.xml", "chess" );
+
+    return i;
+  } // PluginInfo Chess::getPluginInfo()
+
+  void Chess::spectate( std::string ipAddress )
+  {
+    cout << ipAddress << endl;
+  }
 
   void Chess::loadGamelog( std::string gamelog )
   {

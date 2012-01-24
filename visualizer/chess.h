@@ -20,7 +20,8 @@ namespace visualizer
         Chess();
         ~Chess();
 
-        LogRegex logFileInfo();
+        PluginInfo getPluginInfo();
+        void spectate( std::string ipAddress );
         void loadGamelog( std::string gamelog );
         void run();
 
