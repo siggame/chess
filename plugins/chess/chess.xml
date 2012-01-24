@@ -1,0 +1,7 @@
+<options>
+  <option>
+    <key>SpectateServer</key>
+    <type>String</type>
+    <value>127.0.0.2</value>
+  </option>
+</options>
