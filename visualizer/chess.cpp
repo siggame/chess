@@ -61,13 +61,13 @@ namespace visualizer
   {
     cout << "Connecting to: " <<  m_ipAddress << "as spectator." << endl;
     cout << "GAME NUMBER: " << qPrintable( m_gameNumber->text() ) << endl;
-  }
+  } // Chess::beSpectator() 
 
   void Chess::bePlayer()
   {
     cout << "Connecting to: " <<  m_ipAddress << "as player." << endl;
     cout << "GAME NUMBER: " << qPrintable( m_gameNumber->text() ) << endl;
-  }
+  } // Chess::bePlayer()
 
   void Chess::loadGamelog( std::string gamelog )
   {
