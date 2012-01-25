@@ -67,10 +67,38 @@ namespace visualizer
 
   void Chess::conn( int button )
   {
-    m_player = false;
+    m_spectating = m_player = false;
     cout << "Connecting to: " <<  m_ipAddress << " as " << button << endl;
     cout << "GAME NUMBER: " << qPrintable( m_gameNumber->text() ) << endl;
     c = client::createConnection();
+
+    if( !client::serverConnect( c, m_ipAddress.c_str(), "19000" ) )
+    {
+      THROW( Exception, "Could Not Connect To Server" );
+    }
+
+    if( !client::serverLogin( c, username(), password() ) )
+    {
+      THROW( Exception, "Invalid Login Credentials" );
+    }
+
+    int gameNumber;
+
+    if( m_gameNumber->text().size() )
+    {
+      gameNumber = QVariant( m_gameNumber->text() ).toInt(); 
+      if( !client::joinGame( c, gameNumber ) )
+      {
+        THROW( Exception, "Error Joining Game!" );
+      }
+    }
+    else
+    {
+      gameNumber = client::createGame( c );
+    }
+
+    m_spectating = true;
+
   
   } // Chess::conn() 
 
@@ -115,6 +143,11 @@ namespace visualizer
         cout << input.x << ", " << input.y << ", " << input.sx << ", " << input.sy << endl;
         cout << "LEFT: " << input.leftRelease << ", RIGHT: " << input.rightRelease << endl;
       }
+    }
+
+    if( m_spectating )
+    {
+      client::networkLoop( c );
     }
 
   }

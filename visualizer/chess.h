@@ -47,6 +47,7 @@ namespace visualizer
       std::string m_ipAddress;
 
       bool m_player;
+      bool m_spectating;
 
   }; 
 
