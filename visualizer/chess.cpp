@@ -73,11 +73,10 @@ namespace visualizer
     cout << "INIT" << endl;
   }
 
-  bool Chess::run()
+  void Chess::addCurrentBoard()
   {
-    cout << "RUNNING" << endl;
+
     Frame turn;
-        
     SmartPointer<Board> board = new Board();
     board->addKeyFrame( new DrawBoard() );
     turn.addAnimatable( board );
@@ -98,7 +97,14 @@ namespace visualizer
     addFrame( turn );
     timeManager->setNumTurns( size() );
     timeManager->play();
+  }
+
+  bool Chess::run()
+  {
+    cout << "RUNNING" << endl;
+
     
+    addCurrentBoard();
     // We'll want to wait for user input.
     bool input = false;
     while( !input )
@@ -114,6 +120,7 @@ namespace visualizer
       inputMutex.unlock();
     }
 
+    addCurrentBoard();
 
     // Once we get it, we'll create the same board, but with the moved piece. 
 
@@ -239,18 +246,21 @@ namespace visualizer
 
         int x = floor( input.x - 0.5 );
         int y = floor( input.y - 0.5 );
+        bool moved = false;
         if( lastX >= 0 && lastX < 8 && lastY >= 0 && lastY < 8 )
         {
           if( x >= 0 && x < 8 && y >= 0 && y < 8 )
           {
-            for( vector<client::Piece>::iterator p = pieces.begin(); p != pieces.end(); p++ )
+            for( vector<client::Piece>::iterator p = pieces.begin(); p != pieces.end() && !moved; p++ )
             {
               if( p->file() == lastX+1 && p->rank() == lastY+1 )
               {
                 p->move( x+1, y+1, 'Q' );
                 inputMutex.lock();
                 m_playerMoved = true;
+                moved = true;
                 inputMutex.unlock();
+                lastX = lastY = -1;
                 break;
               }
 
@@ -259,8 +269,11 @@ namespace visualizer
           }
         }
 
-        lastX = x;
-        lastY = y;
+        if( !moved )
+        {
+          lastX = x;
+          lastY = y;
+        }
       }
     }
 

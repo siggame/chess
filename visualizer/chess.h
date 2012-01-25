@@ -34,6 +34,8 @@ namespace visualizer
       void load();
       void setup();
 
+      void addCurrentBoard();
+
     public:
       void init();
       bool run();

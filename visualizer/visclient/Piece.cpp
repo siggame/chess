@@ -45,6 +45,9 @@ int Piece::type()
 
 int Piece::move(int file, int rank, int type)
 {
+  ((_Piece*)ptr)->file = file;
+  ((_Piece*)ptr)->rank = rank;
+
   return pieceMove( (_Piece*)ptr, file, rank, type);
 }
 
