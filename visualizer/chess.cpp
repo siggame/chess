@@ -75,6 +75,26 @@ namespace visualizer
   bool Chess::run()
   {
     cout << "RUNNING" << endl;
+    Frame turn;
+
+    for( vector<client::Piece>::iterator p = pieces.begin(); p != pieces.end(); p++ )
+    {
+      SmartPointer<ChessPiece> piece = new ChessPiece();
+
+      piece->x = p->file()-1;
+      piece->y = p->rank()-1;
+      piece->type = p->type();
+      piece->owner = p->owner();
+
+      piece->addKeyFrame( new DrawChessPiece( piece ) );
+      turn.addAnimatable( piece );
+    }
+
+    addFrame( turn );
+    timeManager->setNumTurns( turnNumber()+2 );
+    timeManager->play();
+    
+    // We'll want to wait for user input.
 
     return true;
 
@@ -138,7 +158,6 @@ namespace visualizer
     NetworkLoop* n = new NetworkLoop( this, c );
     n->start();
     
-
     Frame turn;
         
     SmartPointer<Board> board = new Board();
