@@ -32,6 +32,7 @@ namespace visualizer
       const char* password() { return options->getString( "Password" ).c_str(); }
 
       void load();
+      void setup();
 
     public:
       void init();

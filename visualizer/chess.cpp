@@ -71,11 +71,24 @@ namespace visualizer
 
   bool Chess::run()
   {
+    cout << "RUNNING" << endl;
 
   }
 
   void Chess::end()
   {
+  }
+
+  void Chess::setup()
+  {
+    
+    renderer->setCamera( 0, 0, 8.5, 8.5 );
+    renderer->setGridDimensions( 8.5, 8.5 );
+    
+    resourceManager->loadResourceFile( "./plugins/chess/textures.r" );
+
+    animationEngine->registerGame( this, this );
+ 
   }
 
   void Chess::conn( int button )
@@ -113,22 +126,30 @@ namespace visualizer
     m_spectating = true;
 
     timeManager->setNumTurns( 0 );
-    animationEngine->registerGame( this, this );
-    
+
+    setup();
+
+    Frame turn;
+        
+    SmartPointer<Board> board = new Board();
+    board->addKeyFrame( new DrawBoard() );
+    turn.addAnimatable( board );
+
+    addFrame( turn );
+      
+
   
   } // Chess::conn() 
 
   void Chess::loadGamelog( std::string gamelog )
   {
+
     // BEGIN: Initial Setup
     cout << "Load Chess Gamelog" << endl;
+
+    setup();
     m_player = false;
-    
-    renderer->setCamera( 0, 0, 8.5, 8.5 );
-    renderer->setGridDimensions( 8.5, 8.5 );
-    
-    resourceManager->loadResourceFile( "./plugins/chess/textures.r" );
-    
+   
     m_game = new Game;
 
     if( !parseString( *m_game, gamelog.c_str() ) )
@@ -163,7 +184,6 @@ namespace visualizer
 
     if( m_spectating )
     {
-      client::networkLoop( c );
       cout << "Looping" << endl;
     }
 
@@ -178,7 +198,6 @@ namespace visualizer
     SmartPointer<Board> board = new Board();
 
     timeManager->setNumTurns( m_game->states.size() );
-    animationEngine->registerGame( this, this );
     
     // Loop through each state in the gamelog
     for(int state = 0; state < m_game->states.size(); state++)

@@ -13,6 +13,10 @@ namespace visualizer
 
       void run();
 
+    private:
+      client::BaseAI& ai;
+      client::Connection* c;
+
   };
 } // visualizer
 
