@@ -96,7 +96,7 @@ namespace visualizer
     }
 
     addFrame( turn );
-    timeManager->setNumTurns( turnNumber()+2);
+    timeManager->setNumTurns( size() );
     timeManager->play();
     
     // We'll want to wait for user input.
@@ -134,12 +134,15 @@ namespace visualizer
     resourceManager->loadResourceFile( "./plugins/chess/textures.r" );
 
     animationEngine->registerGame( this, this );
+
+    m_playerMoved = m_spectating = m_player = false;
+    lastX = lastY = -1;
  
   }
 
   void Chess::conn( int button )
   {
-    m_playerMoved = m_spectating = m_player = false;
+    setup();
     cout << "Connecting to: " <<  m_ipAddress << " as " << button << endl;
     c = client::createConnection();
 
@@ -180,7 +183,6 @@ namespace visualizer
 
     timeManager->setNumTurns( 0 );
 
-    setup();
 
     NetworkLoop* n = new NetworkLoop( this, c );
     n->start();
@@ -233,10 +235,32 @@ namespace visualizer
     {
       if( m_player )
       {
+
+
         int x = floor( input.x - 0.5 );
         int y = floor( input.y - 0.5 );
-        cout << x << ", " << y << endl;
-        cout << "LEFT: " << input.leftRelease << ", RIGHT: " << input.rightRelease << endl;
+        if( lastX >= 0 && lastX < 8 && lastY >= 0 && lastY < 8 )
+        {
+          if( x >= 0 && x < 8 && y >= 0 && y < 8 )
+          {
+            for( vector<client::Piece>::iterator p = pieces.begin(); p != pieces.end(); p++ )
+            {
+              if( p->file() == lastX+1 && p->rank() == lastY+1 )
+              {
+                p->move( x+1, y+1, 'Q' );
+                inputMutex.lock();
+                m_playerMoved = true;
+                inputMutex.unlock();
+                break;
+              }
+
+            }
+          
+          }
+        }
+
+        lastX = x;
+        lastY = y;
       }
     }
 
@@ -248,6 +272,20 @@ namespace visualizer
 
   void Chess::postDraw()
   {
+    if( m_player )
+    {
+      if( lastY >= 0 && lastY < 8 )
+      {
+        if( lastX >= 0 && lastX < 8 )
+        {
+          renderer->setColor( Color( 0, 0.2, 0.7, 0.3f ) );
+          renderer->drawProgressBar( lastX, lastY, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
+
+        }
+      }
+    }
+
+
   }
   
   void Chess::load()
