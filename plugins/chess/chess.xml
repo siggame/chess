@@ -11,4 +11,14 @@
     <type>String</type>
     <value>127.0.0.2</value>
   </option>
+  <option>
+    <key>Username</key>
+    <type>String</type>
+    <value>Shell AI</value>
+  </option>
+  <option>
+    <key>Password</key>
+    <type>String</type>
+    <value>password</value>
+  </option>
 </options>
