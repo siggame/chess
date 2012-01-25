@@ -59,12 +59,14 @@ namespace visualizer
 
   void Chess::beSpectator()
   {
+    m_player = false;
     cout << "Connecting to: " <<  m_ipAddress << "as spectator." << endl;
     cout << "GAME NUMBER: " << qPrintable( m_gameNumber->text() ) << endl;
   } // Chess::beSpectator() 
 
   void Chess::bePlayer()
   {
+    m_player = true;
     cout << "Connecting to: " <<  m_ipAddress << "as player." << endl;
     cout << "GAME NUMBER: " << qPrintable( m_gameNumber->text() ) << endl;
   } // Chess::bePlayer()
@@ -73,6 +75,7 @@ namespace visualizer
   {
     // BEGIN: Initial Setup
     cout << "Load Chess Gamelog" << endl;
+    m_player = false;
     
     renderer->setCamera( 0, 0, 8, 8 );
     renderer->setGridDimensions( 8, 8 );
@@ -102,10 +105,13 @@ namespace visualizer
   {
     const Input& input = gui->getInput();
     
-    if( input.leftRelease || input.rightRelease )
+    if( input.leftRelease )
     {
-      cout << input.x << ", " << input.y << ", " << input.sx << ", " << input.sy << endl;
-      cout << "LEFT: " << input.leftRelease << ", RIGHT: " << input.rightRelease << endl;
+      if( m_player )
+      {
+        cout << input.x << ", " << input.y << ", " << input.sx << ", " << input.sy << endl;
+        cout << "LEFT: " << input.leftRelease << ", RIGHT: " << input.rightRelease << endl;
+      }
     }
 
   }
