@@ -65,6 +65,19 @@ namespace visualizer
 
   }
 
+  void Chess::init()
+  {
+  }
+
+  bool Chess::run()
+  {
+
+  }
+
+  void Chess::end()
+  {
+  }
+
   void Chess::conn( int button )
   {
     m_spectating = m_player = false;
