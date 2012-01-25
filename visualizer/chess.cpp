@@ -112,6 +112,9 @@ namespace visualizer
 
     m_spectating = true;
 
+    timeManager->setNumTurns( 0 );
+    animationEngine->registerGame( this, this );
+    
   
   } // Chess::conn() 
 
@@ -161,6 +164,7 @@ namespace visualizer
     if( m_spectating )
     {
       client::networkLoop( c );
+      cout << "Looping" << endl;
     }
 
   }
@@ -171,38 +175,38 @@ namespace visualizer
   
   void Chess::load()
   {
-      SmartPointer<Board> board = new Board();
+    SmartPointer<Board> board = new Board();
 
-      timeManager->setNumTurns( m_game->states.size() );
-      animationEngine->registerGame( this, this );
-      
-      // Loop through each state in the gamelog
-      for(int state = 0; state < m_game->states.size(); state++)
-      {
-          Frame turn;
-          
-          SmartPointer<Board> board = new Board();
-          board->addKeyFrame( new DrawBoard() );
-          turn.addAnimatable( board );
-          
-          // Loop though each Piece in the current state
-          for(std::map<int, Piece>::iterator i = m_game->states[ state ].pieces.begin(); i != m_game->states[ state ].pieces.end(); i++)
-          {
-              SmartPointer<ChessPiece> piece = new ChessPiece();
-              
-              piece->x = i->second.file - 1;
-              piece->y = i->second.rank - 1;
-              piece->type = i->second.type;
-              piece->owner = i->second.owner;
-              
-              board->addKeyFrame( new DrawChessPiece( piece ) );
-              turn.addAnimatable( piece );
-          }
-          
-          addFrame( turn );
-      }
-      
-      timeManager->play();
+    timeManager->setNumTurns( m_game->states.size() );
+    animationEngine->registerGame( this, this );
+    
+    // Loop through each state in the gamelog
+    for(int state = 0; state < m_game->states.size(); state++)
+    {
+        Frame turn;
+        
+        SmartPointer<Board> board = new Board();
+        board->addKeyFrame( new DrawBoard() );
+        turn.addAnimatable( board );
+        
+        // Loop though each Piece in the current state
+        for(std::map<int, Piece>::iterator i = m_game->states[ state ].pieces.begin(); i != m_game->states[ state ].pieces.end(); i++)
+        {
+            SmartPointer<ChessPiece> piece = new ChessPiece();
+            
+            piece->x = i->second.file - 1;
+            piece->y = i->second.rank - 1;
+            piece->type = i->second.type;
+            piece->owner = i->second.owner;
+            
+            board->addKeyFrame( new DrawChessPiece( piece ) );
+            turn.addAnimatable( piece );
+        }
+        
+        addFrame( turn );
+    }
+    
+    timeManager->play();
   }
     
 } // visualizer

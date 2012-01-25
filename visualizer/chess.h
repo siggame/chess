@@ -11,6 +11,8 @@
 
 #include "visclient/BaseAI.h"
 
+#include "networkloop.h"
+
 namespace visualizer
 {
 
