@@ -18,11 +18,11 @@ namespace visualizer
         //game->renderer->setColor( Color (!((x + y ) % 2), !((x + y ) % 2), !((x + y ) % 2)) );
         if( (x+y)%2 )
         {
-          game->renderer->setColor( Color( 1, 1, 1 ) );
+          game->renderer->setColor( Color( 0.05, 0.05, 0.05 ) );
         }
         else
         {
-          game->renderer->setColor( Color( 0, 0, 0 ) );
+          game->renderer->setColor( Color( 85.0f/255, 107.0f/255, 47.0f/255 ) );
         }
         game->renderer->drawQuad(x, y, 1, 1);
       }
@@ -38,7 +38,11 @@ namespace visualizer
     ss << piece.owner << "-" << (char)piece.type;
     
     game->renderer->setColor( Color( 1, 1, 1 ) );
-    game->renderer->drawTexturedQuad(piece.x, piece.y, 1, 1, ss.str());
+    if( game->options->getNumber( "RotateBoard" ) )
+      game->renderer->drawTexturedQuad(7-piece.x, 7-piece.y, 1, 1, ss.str());
+    else
+      game->renderer->drawTexturedQuad(piece.x, piece.y, 1, 1, ss.str());
+
   }
 
 }
