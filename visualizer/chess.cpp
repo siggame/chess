@@ -4,6 +4,7 @@
 #include "animations.h"
 
 #include <QDialog>
+#include <QSignalMapper>
 
 namespace visualizer
 {
@@ -38,6 +39,8 @@ namespace visualizer
     QGridLayout *layout = new QGridLayout();
     chooseGame->setLayout( layout );
 
+    QSignalMapper *mapper = new QSignalMapper(this);
+
     QLabel* gameNumber = new QLabel( "Game Number: (Enter Nothing For New Game)" );
     m_gameNumber = new QLineEdit();
     QPushButton *spectate = new QPushButton( "Spectate" );
@@ -48,28 +51,31 @@ namespace visualizer
     layout->addWidget( spectate, 2, 0 );
     layout->addWidget( play, 2, 1 );
 
-    connect( spectate, SIGNAL( clicked() ), this, SLOT( beSpectator() ) );
+    mapper->setMapping( spectate, 0 );
+    mapper->setMapping( play, 1 );
+
+    connect( spectate, SIGNAL( clicked() ), mapper, SLOT( map() ) );
     connect( spectate, SIGNAL( clicked() ), chooseGame, SLOT( close() ) );
-    connect( play, SIGNAL( clicked() ), this, SLOT( bePlayer() ) );
+    connect( play, SIGNAL( clicked() ), mapper, SLOT( map() ) );
     connect( play, SIGNAL( clicked() ), chooseGame, SLOT( close() ) );
+
+    connect( mapper, SIGNAL( mapped( int ) ), this, SLOT( conn( int ) ) );
 
     chooseGame->exec();
 
   }
 
-  void Chess::beSpectator()
+  void Chess::conn( int button )
   {
     m_player = false;
-    cout << "Connecting to: " <<  m_ipAddress << "as spectator." << endl;
+    cout << "Connecting to: " <<  m_ipAddress << " as " << button << endl;
     cout << "GAME NUMBER: " << qPrintable( m_gameNumber->text() ) << endl;
-  } // Chess::beSpectator() 
 
-  void Chess::bePlayer()
-  {
-    m_player = true;
-    cout << "Connecting to: " <<  m_ipAddress << "as player." << endl;
-    cout << "GAME NUMBER: " << qPrintable( m_gameNumber->text() ) << endl;
-  } // Chess::bePlayer()
+    Connection* c;
+    c = createConnection();
+    AI ai(c);
+
+  } // Chess::conn() 
 
   void Chess::loadGamelog( std::string gamelog )
   {

@@ -4,7 +4,7 @@
 #define MOVE_H
 
 #include <iostream>
-#include "structures.h"
+#include "vc_structures.h"
 
 
 namespace client
