@@ -51,6 +51,10 @@ namespace visualizer
 
       bool m_player;
       bool m_spectating;
+    
+      bool m_playerMoved;
+
+      QMutex inputMutex;
 
   }; 
 

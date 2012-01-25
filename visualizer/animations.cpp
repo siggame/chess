@@ -10,7 +10,7 @@ namespace visualizer
   
   void DrawBoard::animate( const float& /* t */, AnimData * /* d */, IGame* game )
   {
-    game->renderer->translate( 0.5f, 0 );
+    game->renderer->translate( 0.5f, 0.5f );
     for(int x = 0; x < 8; x++)
     {
       for(int y = 0; y < 8; y++)

@@ -4,6 +4,7 @@
 #include "animations.h"
 
 #include <QDialog>
+#include <cmath>
 #include <QSignalMapper>
 #include "networkloop.h"
 
@@ -76,7 +77,11 @@ namespace visualizer
   {
     cout << "RUNNING" << endl;
     Frame turn;
-
+        
+    SmartPointer<Board> board = new Board();
+    board->addKeyFrame( new DrawBoard() );
+    turn.addAnimatable( board );
+      
     for( vector<client::Piece>::iterator p = pieces.begin(); p != pieces.end(); p++ )
     {
       SmartPointer<ChessPiece> piece = new ChessPiece();
@@ -91,10 +96,26 @@ namespace visualizer
     }
 
     addFrame( turn );
-    timeManager->setNumTurns( turnNumber()+2 );
+    timeManager->setNumTurns( turnNumber()+2);
     timeManager->play();
     
     // We'll want to wait for user input.
+    bool input = false;
+    while( !input )
+    {
+      inputMutex.lock();
+
+      if( m_playerMoved )
+      {
+        input = true;
+        m_playerMoved = false;
+      }
+
+      inputMutex.unlock();
+    }
+
+
+    // Once we get it, we'll create the same board, but with the moved piece. 
 
     return true;
 
@@ -107,8 +128,8 @@ namespace visualizer
   void Chess::setup()
   {
     
-    renderer->setCamera( 0, 0, 8.5, 8.5 );
-    renderer->setGridDimensions( 8.5, 8.5 );
+    renderer->setCamera( 0, 0, 9, 9 );
+    renderer->setGridDimensions( 9, 9 );
     
     resourceManager->loadResourceFile( "./plugins/chess/textures.r" );
 
@@ -118,9 +139,15 @@ namespace visualizer
 
   void Chess::conn( int button )
   {
-    m_spectating = m_player = false;
+    m_playerMoved = m_spectating = m_player = false;
     cout << "Connecting to: " <<  m_ipAddress << " as " << button << endl;
     c = client::createConnection();
+
+    if( button )
+    {
+      // we're a player
+      m_player = true;
+    }
 
     if( !client::serverConnect( c, m_ipAddress.c_str(), "19000" ) )
     {
@@ -206,7 +233,9 @@ namespace visualizer
     {
       if( m_player )
       {
-        cout << input.x << ", " << input.y << ", " << input.sx << ", " << input.sy << endl;
+        int x = floor( input.x - 0.5 );
+        int y = floor( input.y - 0.5 );
+        cout << x << ", " << y << endl;
         cout << "LEFT: " << input.leftRelease << ", RIGHT: " << input.rightRelease << endl;
       }
     }
@@ -246,7 +275,7 @@ namespace visualizer
             piece->type = i->second.type;
             piece->owner = i->second.owner;
             
-            board->addKeyFrame( new DrawChessPiece( piece ) );
+            piece->addKeyFrame( new DrawChessPiece( piece ) );
             turn.addAnimatable( piece );
         }
         
