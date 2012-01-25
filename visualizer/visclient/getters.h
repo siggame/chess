@@ -1,6 +1,6 @@
 #ifndef GETTERS_H 
 #define GETTERS_H
-#include "structures.h"
+#include "vc_structures.h"
 
 #ifdef _WIN32
 #define DLLEXPORT extern "C" __declspec(dllexport)

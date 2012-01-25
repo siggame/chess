@@ -5,7 +5,7 @@
 #define GAME_H
 
 #include "network.h"
-#include "structures.h"
+#include "vc_structures.h"
 
 #ifdef _WIN32
 #define DLLEXPORT extern "C" __declspec(dllexport)

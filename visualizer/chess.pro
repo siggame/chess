@@ -1,6 +1,6 @@
 INCLUDEPATH +=  ../interfaces \
-                ../common/ 
-
+                ../common/ \
+                ./parser/
 
 DEPENDPATH += ../common/ 
 

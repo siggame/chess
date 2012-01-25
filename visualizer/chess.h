@@ -25,7 +25,8 @@ namespace visualizer
       PluginInfo getPluginInfo();
       void spectate( std::string ipAddress );
       void loadGamelog( std::string gamelog );
-      void run();
+
+      bool run();
 
     public slots:
       void preDraw();

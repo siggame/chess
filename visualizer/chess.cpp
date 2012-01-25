@@ -9,7 +9,7 @@
 namespace visualizer
 {
 
-  Chess::Chess()
+  Chess::Chess() : BaseAI( 0 )
   {
   } // Chess::Chess()
 
@@ -70,10 +70,6 @@ namespace visualizer
     m_player = false;
     cout << "Connecting to: " <<  m_ipAddress << " as " << button << endl;
     cout << "GAME NUMBER: " << qPrintable( m_gameNumber->text() ) << endl;
-
-    Connection* c;
-    c = createConnection();
-    AI ai(c);
 
   } // Chess::conn() 
 

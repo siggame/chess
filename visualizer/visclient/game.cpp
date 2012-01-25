@@ -13,7 +13,7 @@
 
 #include "game.h"
 #include "network.h"
-#include "structures.h"
+#include "vc_structures.h"
 
 #include "sexp/sfcompat.h"
 
