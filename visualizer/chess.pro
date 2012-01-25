@@ -1,5 +1,6 @@
-INCLUDEPATH += ../interfaces \
- ../common/ 
+INCLUDEPATH +=  ../interfaces \
+                ../common/ \
+                ./parser/
 
 DEPENDPATH += ../common/ 
 
@@ -9,7 +10,11 @@ SOURCES = *.cpp \
           ./parser/*.cpp \
           ./parser/sexp/*.cpp \
           ./visclient/*.cpp 
-HEADERS += *.h ./parser/*.h ./parser/sexp/*.h
+
+HEADERS +=  *.h \
+            ./parser/*.h \
+            ./parser/sexp/*.h \
+            ./visclient/*.h
 
 CONFIG += debug plugin dll
 debug:DEFINES += __DEBUG__
