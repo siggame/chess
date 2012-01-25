@@ -5,7 +5,10 @@ DEPENDPATH += ../common/
 
 TEMPLATE = lib
 TARGET = chess
-SOURCES = *.cpp ./parser/*.cpp ./parser/sexp/*.cpp
+SOURCES = *.cpp \
+          ./parser/*.cpp \
+          ./parser/sexp/*.cpp \
+          ./visclient/*.cpp 
 HEADERS += *.h ./parser/*.h ./parser/sexp/*.h
 
 CONFIG += debug plugin dll

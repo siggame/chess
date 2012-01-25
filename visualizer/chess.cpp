@@ -77,8 +77,8 @@ namespace visualizer
     cout << "Load Chess Gamelog" << endl;
     m_player = false;
     
-    renderer->setCamera( 0, 0, 8, 8 );
-    renderer->setGridDimensions( 8, 8 );
+    renderer->setCamera( 0, 0, 8.5, 8.5 );
+    renderer->setGridDimensions( 8.5, 8.5 );
     
     resourceManager->loadResourceFile( "./plugins/chess/textures.r" );
     
