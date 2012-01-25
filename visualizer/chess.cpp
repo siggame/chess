@@ -70,7 +70,8 @@ namespace visualizer
     m_player = false;
     cout << "Connecting to: " <<  m_ipAddress << " as " << button << endl;
     cout << "GAME NUMBER: " << qPrintable( m_gameNumber->text() ) << endl;
-
+    c = client::createConnection();
+  
   } // Chess::conn() 
 
   void Chess::loadGamelog( std::string gamelog )
@@ -100,7 +101,7 @@ namespace visualizer
     }
     // END: Initial Setup
     
-    run();
+    load();
   } // Chess::loadGamelog()
 
   void Chess::preDraw()
@@ -122,7 +123,7 @@ namespace visualizer
   {
   }
   
-  void Chess::run()
+  void Chess::load()
   {
       SmartPointer<Board> board = new Board();
 

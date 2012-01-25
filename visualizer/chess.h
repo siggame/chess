@@ -26,7 +26,15 @@ namespace visualizer
       void spectate( std::string ipAddress );
       void loadGamelog( std::string gamelog );
 
+      const char* username() { return options->getString( "Username" ).c_str(); }
+      const char* password() { return options->getString( "Password" ).c_str(); }
+
+      void load();
+
+    public:
+      void init();
       bool run();
+      void end();
 
     public slots:
       void preDraw();
