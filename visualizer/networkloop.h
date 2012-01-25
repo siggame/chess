@@ -12,6 +12,7 @@ namespace visualizer
       NetworkLoop( client::BaseAI* baseai, client::Connection* );
 
       void run();
+      int exec() { return QThread::exec(); }
 
     private:
       client::BaseAI& ai;

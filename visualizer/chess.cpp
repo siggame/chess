@@ -5,6 +5,7 @@
 
 #include <QDialog>
 #include <QSignalMapper>
+#include "networkloop.h"
 
 namespace visualizer
 {
@@ -33,6 +34,7 @@ namespace visualizer
 
   void Chess::spectate( std::string ipAddress )
   {
+    // TODO: Cleanup This Code.  It's terrible
     m_ipAddress = ipAddress;
     QDialog *chooseGame = new QDialog();
 
@@ -67,11 +69,14 @@ namespace visualizer
 
   void Chess::init()
   {
+    cout << "INIT" << endl;
   }
 
   bool Chess::run()
   {
     cout << "RUNNING" << endl;
+
+    return true;
 
   }
 
@@ -95,7 +100,6 @@ namespace visualizer
   {
     m_spectating = m_player = false;
     cout << "Connecting to: " <<  m_ipAddress << " as " << button << endl;
-    cout << "GAME NUMBER: " << qPrintable( m_gameNumber->text() ) << endl;
     c = client::createConnection();
 
     if( !client::serverConnect( c, m_ipAddress.c_str(), "19000" ) )
@@ -123,11 +127,17 @@ namespace visualizer
       gameNumber = client::createGame( c );
     }
 
+    cout << "Connected to game: " << gameNumber << endl;
+
     m_spectating = true;
 
     timeManager->setNumTurns( 0 );
 
     setup();
+
+    NetworkLoop* n = new NetworkLoop( this, c );
+    n->start();
+    
 
     Frame turn;
         
@@ -184,7 +194,6 @@ namespace visualizer
 
     if( m_spectating )
     {
-      cout << "Looping" << endl;
     }
 
   }
