@@ -135,8 +135,8 @@ namespace visualizer
   void Chess::setup()
   {
     
-    renderer->setCamera( 0, 0, 9, 9 );
-    renderer->setGridDimensions( 9, 9 );
+    renderer->setCamera( 0, 0, 8, 8 );
+    renderer->setGridDimensions( 8, 8 );
     
     resourceManager->loadResourceFile( "./plugins/chess/textures.r" );
 
@@ -244,8 +244,8 @@ namespace visualizer
       {
 
 
-        int x = floor( input.x - 0.5 );
-        int y = floor( input.y - 0.5 );
+        int x = floor( input.x );
+        int y = floor( input.y );
         bool moved = false;
         if( lastX >= 0 && lastX < 8 && lastY >= 0 && lastY < 8 )
         {
