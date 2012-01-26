@@ -27,7 +27,7 @@ namespace visualizer
         }
         game->renderer->drawQuad(x, y, 1, 1);
 		
-		game->renderer->setColor( Color(0.5, 0.5, 0.5) );
+		game->renderer->setColor( Color(1.0, 0.0, 0.0) );
 		
 		ss << (char)(x + 97) << (8 - y);
 		

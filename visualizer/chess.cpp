@@ -8,6 +8,8 @@
 #include <QSignalMapper>
 #include "networkloop.h"
 
+#include "frcperft/MoveParser.h"
+
 namespace visualizer
 {
 
@@ -77,7 +79,7 @@ namespace visualizer
   {
 
     Frame turn;
-    SmartPointer<Board> board = new Board();
+    SmartPointer<ChessBoard> board = new ChessBoard();
     board->addKeyFrame( new DrawBoard() );
     turn.addAnimatable( board );
       
@@ -196,13 +198,11 @@ namespace visualizer
     
     Frame turn;
         
-    SmartPointer<Board> board = new Board();
+    SmartPointer<ChessBoard> board = new ChessBoard();
     board->addKeyFrame( new DrawBoard() );
     turn.addAnimatable( board );
 
     addFrame( turn );
-      
-
   
   } // Chess::conn() 
 
@@ -291,19 +291,37 @@ namespace visualizer
       {
         if( lastX >= 0 && lastX < 8 )
         {
+          // If the selector is in a valid position
+          // Draw the box
           renderer->setColor( Color( 0, 0.2, 0.7, 0.3f ) );
           renderer->drawProgressBar( lastX, lastY, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
+
+          // Get valid moves for this board
+          Board board;
+          board.setstartpos();
+
+          MoveParser parser( board );
+
+          for( vector<client::Move>::iterator m = moves.begin(); m != moves.end(); m++ )
+          {
+            string move = "";
+            move += m->fromFile() + 'a' - 1;
+            move += m->fromRank();
+            move += m->toFile() + 'a' - 1;
+            move += m->toRank();
+
+            board.move( parser.parse( move.c_str() ) );
+          }
 
         }
       }
     }
 
-
   }
   
   void Chess::load()
   {
-    SmartPointer<Board> board = new Board();
+    SmartPointer<ChessBoard> board = new ChessBoard();
 
     timeManager->setNumTurns( m_game->states.size() );
     
@@ -312,7 +330,7 @@ namespace visualizer
     {
         Frame turn;
         
-        SmartPointer<Board> board = new Board();
+        SmartPointer<ChessBoard> board = new ChessBoard();
         board->addKeyFrame( new DrawBoard() );
         turn.addAnimatable( board );
         

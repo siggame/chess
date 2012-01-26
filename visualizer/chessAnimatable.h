@@ -6,7 +6,7 @@
 
 namespace visualizer
 {
-    struct Board: public Animatable
+    struct ChessBoard: public Animatable
     {
     };
   

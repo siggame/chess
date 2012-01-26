@@ -6,6 +6,7 @@
 #include <limits>
 
 using namespace std;
+using namespace parser;
 
 int main(int argc, char** argv)
 {

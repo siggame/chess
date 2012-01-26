@@ -11,6 +11,9 @@
 
 using namespace std;
 
+namespace parser
+{
+
 char *ToLower( char *str )
 {
   for( int i = 0; i < strlen( str ); i++ )
@@ -358,3 +361,5 @@ bool parseString(Game& game, const char* string)
 
   return true;
 }
+
+} // parser

@@ -9,12 +9,16 @@ TARGET = chess
 SOURCES = *.cpp \
           ./parser/*.cpp \
           ./parser/sexp/*.cpp \
-          ./visclient/*.cpp 
+          ./visclient/*.cpp \
+          ./frcperft/magicmoves.cpp \
+          ./frcperft/MoveParser.cpp \
+          ./frcperft/Bitboard.cpp 
 
 HEADERS +=  *.h \
             ./parser/*.h \
             ./parser/sexp/*.h \
-            ./visclient/*.h
+            ./visclient/*.h \
+            ./frcperft/*.h
 
 CONFIG += debug plugin dll
 debug:DEFINES += __DEBUG__

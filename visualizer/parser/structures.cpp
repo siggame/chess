@@ -4,6 +4,9 @@
 
 #include <iostream>
 
+namespace parser
+{
+
 
 std::ostream& operator<<(std::ostream& stream, Move ob)
 {
@@ -78,3 +81,5 @@ Game::Game()
 {
   winner = -1;
 }
+
+} // parser
