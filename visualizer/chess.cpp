@@ -215,9 +215,9 @@ namespace visualizer
     setup();
     m_player = false;
    
-    m_game = new Game;
+    m_game = new parser::Game;
 
-    if( !parseString( *m_game, gamelog.c_str() ) )
+    if( !parser::parseGameFromString( *m_game, gamelog.c_str() ) )
     {
       delete m_game;
       m_game = 0;
@@ -335,7 +335,7 @@ namespace visualizer
         turn.addAnimatable( board );
         
         // Loop though each Piece in the current state
-        for(std::map<int, Piece>::iterator i = m_game->states[ state ].pieces.begin(); i != m_game->states[ state ].pieces.end(); i++)
+        for(std::map<int, parser::Piece>::iterator i = m_game->states[ state ].pieces.begin(); i != m_game->states[ state ].pieces.end(); i++)
         {
             SmartPointer<ChessPiece> piece = new ChessPiece();
             

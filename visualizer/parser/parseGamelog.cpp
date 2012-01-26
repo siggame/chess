@@ -342,7 +342,7 @@ bool parseFile(Game& game, const char* filename)
 }
 
 
-bool parseString(Game& game, const char* string)
+bool parseGameFromString(Game& game, const char* string)
 {
 
   parseString( string );

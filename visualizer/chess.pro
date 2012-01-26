@@ -8,17 +8,17 @@ TEMPLATE = lib
 TARGET = chess
 SOURCES = *.cpp \
           ./parser/*.cpp \
-          ./parser/sexp/*.cpp \
           ./visclient/*.cpp \
           ./frcperft/magicmoves.cpp \
           ./frcperft/MoveParser.cpp \
-          ./frcperft/Bitboard.cpp 
+          ./frcperft/Bitboard.cpp \
+          ./parser/sexp/*.cpp
 
 HEADERS +=  *.h \
             ./parser/*.h \
             ./parser/sexp/*.h \
             ./visclient/*.h \
-            ./frcperft/*.h
+            ./frcperft/*.h 
 
 CONFIG += debug plugin dll
 debug:DEFINES += __DEBUG__
