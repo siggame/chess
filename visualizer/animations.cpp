@@ -23,7 +23,7 @@ namespace visualizer
         }
         else
         {
-          game->renderer->setColor( Color( 85.0f/255, 107.0f/255, 47.0f/255 ) );
+          game->renderer->setColor( Color( 0.95, 0.9, 0.95 ) );
         }
         game->renderer->drawQuad(x, y, 1, 1);
 		
