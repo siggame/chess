@@ -12,6 +12,7 @@ SOURCES = *.cpp \
           ./frcperft/magicmoves.cpp \
           ./frcperft/MoveParser.cpp \
           ./frcperft/Bitboard.cpp \
+          ./frcperft/Board.cpp \
           ./parser/sexp/*.cpp
 
 HEADERS +=  *.h \

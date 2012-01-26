@@ -310,6 +310,7 @@ namespace visualizer
             move += m->toFile() + 'a' - 1;
             move += m->toRank();
 
+            cout << move << endl;
             board.move( parser.parse( move.c_str() ) );
           }
 
