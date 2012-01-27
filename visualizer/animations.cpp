@@ -10,27 +10,29 @@ namespace visualizer
   
   void DrawBoard::animate( const float& /* t */, AnimData * /* d */, IGame* game )
   {
+    game->renderer->translate( 0.5f, 0.5f );
+	Color black = Color( 0.1255, 0.125, 0.12 );
+	Color white = Color( 0.875, 0.875, 0.88 );
+
     for(int x = 0; x < 8; x++)
     {
       for(int y = 0; y < 8; y++)
       {
         stringstream ss;
 		
-        //game->renderer->setColor( Color (!((x + y ) % 2), !((x + y ) % 2), !((x + y ) % 2)) );
-        if( (x+y)%2 )
-        {
-          game->renderer->setColor( Color( 0.05, 0.05, 0.05 ) );
-        }
-        else
-        {
-          game->renderer->setColor( Color( 0.95, 0.9, 0.95 ) );
-        }
+		// Set the tile's color to white or black based on it's location
+		game->renderer->setColor( (x+y)%2 ? black : white  );
+		
+		// Draw the background of the tile
         game->renderer->drawQuad(x, y, 1, 1);
 		
-		game->renderer->setColor( Color(1.0, 0.0, 0.0) );
+		// Set the color to gray for the rank & file text to be drawn in
+		game->renderer->setColor( Color(0.5, 0.5, 0.5) );
 		
-		ss << (char)(x + 97) << (8 - y);
+		// Build the tile's rank & file string
+		ss << (char)(x + 97) << (game->options->getNumber( "RotateBoard" ) ? (y + 1) : (8 - y));
 		
+		// And raw the rank and file on the tile
 		game->renderer->drawText(x, y, "DroidSansMono", ss.str(), 1.0 );
       }
     }
