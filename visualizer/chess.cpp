@@ -253,7 +253,7 @@ namespace visualizer
               if( piece->file() == lastP.x+1 && piece->rank() == lastP.y+1 )
               {
                 cout << "MOVED" << endl;
-                piece->move( x+1, y+1, 'Q' );
+                piece->move( p.x+1, p.y+1, 'Q' );
                 inputMutex.lock();
                 m_playerMoved = true;
                 moved = true;
@@ -292,9 +292,9 @@ namespace visualizer
           // Draw the box
           renderer->setColor( Color( 0, 0.2, 0.7, 0.3f ) );
           if( options->getNumber( "RotateBoard" ) )
-            renderer->drawProgressBar( 7-lastP.x, 7-lastP.y, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
+            renderer->drawProgressBar( 7-lastP.x, lastP.y, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
           else
-            renderer->drawProgressBar( lastP.x, lastP.y, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
+            renderer->drawProgressBar( lastP.x, 7-lastP.y, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
 
 
           // Get valid moves for this board
