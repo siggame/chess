@@ -258,6 +258,7 @@ DLLEXPORT int networkLoop(Connection* c)
     expression = base->list;
     if(expression->val != NULL && strcmp(expression->val, "game-winner") == 0)
     {
+      c->drawMutex.lock();
       expression = expression->next->next->next;
       int winnerID = atoi(expression->val);
       if(winnerID == c->playerID)
@@ -272,10 +273,12 @@ DLLEXPORT int networkLoop(Connection* c)
       expr << "(request-log " << c->gameNumber << ")";
       send_string(c->socket, expr.str().c_str());
       destroy_sexp(base);
+      c->drawMutex.unlock();
       return 0;
     }
     else if(expression->val != NULL && strcmp(expression->val, "log") == 0)
     {
+      c->drawMutex.lock();
       ofstream out;
       stringstream filename;
       expression = expression->next;
@@ -289,25 +292,31 @@ DLLEXPORT int networkLoop(Connection* c)
         cerr << "Error : Could not create log." << endl;
       out.close();
       destroy_sexp(base);
+      c->drawMutex.unlock();
       return 0;
     }
     else if(expression->val != NULL && strcmp(expression->val, "game-accepted")==0)
     {
+      c->drawMutex.lock();
       char gameID[30];
 
       expression = expression->next;
       strcpy(gameID, expression->val);
       cout << "Created game " << gameID << endl;
+      c->drawMutex.unlock();
     }
     else if(expression->val != NULL && strstr(expression->val, "denied"))
     {
+      c->drawMutex.lock();
       cout << expression->val << endl;
       cout << expression->next->val << endl;
+      c->drawMutex.unlock();
     }
     else if(expression->val != NULL && strcmp(expression->val, "status") == 0)
     {
       while(expression->next != NULL)
       {
+        c->drawMutex.lock();
         expression = expression->next;
         sub = expression->list;
         if(string(sub->val) == "game")
@@ -360,6 +369,7 @@ DLLEXPORT int networkLoop(Connection* c)
             parsePiece(c, c->Pieces+i, sub);
           }
         }
+        c->drawMutex.unlock();
       }
       destroy_sexp(base);
       return 1;
@@ -371,6 +381,7 @@ DLLEXPORT int networkLoop(Connection* c)
 #endif
     }
     destroy_sexp(base);
+
   }
 }
 

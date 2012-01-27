@@ -8,8 +8,6 @@
 #include <QSignalMapper>
 #include "networkloop.h"
 
-#include "frcperft/MoveParser.h"
-
 namespace visualizer
 {
 
@@ -72,7 +70,6 @@ namespace visualizer
 
   void Chess::init()
   {
-    cout << "INIT" << endl;
   }
 
   void Chess::addCurrentBoard()
@@ -86,11 +83,12 @@ namespace visualizer
     for( vector<client::Piece>::iterator p = pieces.begin(); p != pieces.end(); p++ )
     {
       SmartPointer<ChessPiece> piece = new ChessPiece();
-
+      
       piece->x = p->file()-1;
       piece->y = p->rank()-1;
       piece->type = p->type();
       piece->owner = p->owner();
+
 
       piece->addKeyFrame( new DrawChessPiece( piece ) );
       turn.addAnimatable( piece );
@@ -103,7 +101,6 @@ namespace visualizer
 
   bool Chess::run()
   {
-    cout << "RUNNING" << endl;
 
     
     addCurrentBoard();
@@ -145,7 +142,7 @@ namespace visualizer
     animationEngine->registerGame( this, this );
 
     m_playerMoved = m_spectating = m_player = false;
-    lastX = lastY = -1;
+    lastP.x = lastP.y = -1;
  
   }
 
@@ -243,25 +240,25 @@ namespace visualizer
       if( m_player )
       {
 
+        Coord p = getCoord();
 
-        int x = floor( input.x );
-        int y = floor( input.y );
+
         bool moved = false;
-        if( lastX >= 0 && lastX < 8 && lastY >= 0 && lastY < 8 )
+        if( lastP.x >= 0 && lastP.x < 8 && lastP.y >= 0 && lastP.y < 8 )
         {
-          if( x >= 0 && x < 8 && y >= 0 && y < 8 )
+          if( p.x >= 0 && p.x < 8 && p.y >= 0 && p.y < 8 )
           {
-            for( vector<client::Piece>::iterator p = pieces.begin(); p != pieces.end() && !moved; p++ )
+            for( vector<client::Piece>::iterator piece = pieces.begin(); piece != pieces.end() && !moved; piece++ )
             {
-              if( p->file() == lastX+1 && p->rank() == lastY+1 )
+              if( piece->file() == lastP.x+1 && piece->rank() == lastP.y+1 )
               {
-                p->move( x+1, y+1, 'Q' );
+                cout << "MOVED" << endl;
+                piece->move( x+1, y+1, 'Q' );
                 inputMutex.lock();
                 m_playerMoved = true;
                 moved = true;
                 inputMutex.unlock();
-                lastX = lastY = -1;
-                break;
+                lastP.x = lastP.y = -1;
               }
 
             }
@@ -271,8 +268,8 @@ namespace visualizer
 
         if( !moved )
         {
-          lastX = x;
-          lastY = y;
+          lastP.x = p.x;
+          lastP.y = p.y;
         }
       }
     }
@@ -287,14 +284,18 @@ namespace visualizer
   {
     if( m_player )
     {
-      if( lastY >= 0 && lastY < 8 )
+      if( lastP.y >= 0 && lastP.y < 8 )
       {
-        if( lastX >= 0 && lastX < 8 )
+        if( lastP.x >= 0 && lastP.x < 8 )
         {
           // If the selector is in a valid position
           // Draw the box
           renderer->setColor( Color( 0, 0.2, 0.7, 0.3f ) );
-          renderer->drawProgressBar( lastX, lastY, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
+          if( options->getNumber( "RotateBoard" ) )
+            renderer->drawProgressBar( 7-lastP.x, 7-lastP.y, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
+          else
+            renderer->drawProgressBar( lastP.x, lastP.y, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
+
 
           // Get valid moves for this board
           Board board;
@@ -302,17 +303,26 @@ namespace visualizer
 
           MoveParser parser( board );
 
+          c->drawMutex.lock();
           for( vector<client::Move>::iterator m = moves.begin(); m != moves.end(); m++ )
           {
+#if 1
             string move = "";
             move += m->fromFile() + 'a' - 1;
-            move += m->fromRank();
+            move += m->fromRank() + '0';
             move += m->toFile() + 'a' - 1;
-            move += m->toRank();
+            move += m->toRank() + '0';
+#endif
 
-            cout << move << endl;
-            board.move( parser.parse( move.c_str() ) );
+            printMove( *m, board );
+
+//            cout << move << endl;
+//            board.move( parser.parse( move.c_str() ) );
+
+            board.print( stdout );
+
           }
+          c->drawMutex.unlock();
 
         }
       }
@@ -348,11 +358,43 @@ namespace visualizer
             piece->addKeyFrame( new DrawChessPiece( piece ) );
             turn.addAnimatable( piece );
         }
-        
+
         addFrame( turn );
     }
     
     timeManager->play();
+  }
+
+  string Chess::printMove( client::Move& m, Board &board )
+  {
+
+    for( size_t i = 0; i < 64; i++ )
+    {
+      cout << i << ", " << board.piecechar( i ) << endl;
+    }
+
+    //switch( m.id() )
+
+    return "MOVE";
+    
+
+  }
+
+  Coord Chess::getCoord() const
+  {
+    const Input& input = gui->getInput();
+    Coord i;
+    i.x = floor( input.x );
+    i.y = 7-floor( input.y );
+
+    if( options->getNumber( "RotateBoard" ) )
+    {
+      i.x = 7-i.x;
+      i.y = 7-i.y;
+    }
+
+    return i;
+
   }
     
 } // visualizer

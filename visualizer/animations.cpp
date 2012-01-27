@@ -10,7 +10,6 @@ namespace visualizer
   
   void DrawBoard::animate( const float& /* t */, AnimData * /* d */, IGame* game )
   {
-    game->renderer->translate( 0.5f, 0.5f );
 	Color black = Color( 0.1255, 0.125, 0.12 );
 	Color white = Color( 0.875, 0.875, 0.88 );
 
@@ -44,13 +43,13 @@ namespace visualizer
     
     stringstream ss;
     
-    ss << piece.owner << "-" << (char)piece.type;
+    ss << 1-piece.owner << "-" << (char)piece.type;
     
     game->renderer->setColor( Color( 1, 1, 1 ) );
     if( game->options->getNumber( "RotateBoard" ) )
-      game->renderer->drawTexturedQuad(7-piece.x, 7-piece.y, 1, 1, ss.str());
+      game->renderer->drawTexturedQuad(7-piece.x, piece.y, 1, 1, ss.str());
     else
-      game->renderer->drawTexturedQuad(piece.x, piece.y, 1, 1, ss.str());
+      game->renderer->drawTexturedQuad(piece.x, 7-piece.y, 1, 1, ss.str());
 
   }
 

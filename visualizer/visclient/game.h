@@ -23,6 +23,8 @@
 
 #endif
 
+#include <QMutex>
+
 namespace client
 {
 
@@ -41,6 +43,7 @@ struct Connection
   char* player0Name;
   char* player1Name;
 
+  QMutex drawMutex;
   _Move* Moves;
   int MoveCount;
   _Piece* Pieces;
