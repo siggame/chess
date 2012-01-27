@@ -13,7 +13,7 @@ namespace visualizer
     game->renderer->translate( 0.5f, 0.5f );
 	Color black = Color( 0.1255, 0.125, 0.12 );
 	Color white = Color( 0.875, 0.875, 0.88 );
-	
+
     for(int x = 0; x < 8; x++)
     {
       for(int y = 0; y < 8; y++)

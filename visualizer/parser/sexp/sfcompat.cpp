@@ -3,6 +3,9 @@
 
 #include "lex.yy.h"
 
+namespace parser
+{
+
 void destroy_sexp(Sexp* s)
 {
   destroySexp(s);
@@ -27,4 +30,6 @@ int sexp_list_length(Sexp* s)
     child = child->next;
   }
   return length;
+}
+
 }

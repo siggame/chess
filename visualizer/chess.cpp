@@ -8,6 +8,8 @@
 #include <QSignalMapper>
 #include "networkloop.h"
 
+#include "frcperft/MoveParser.h"
+
 namespace visualizer
 {
 
@@ -77,7 +79,7 @@ namespace visualizer
   {
 
     Frame turn;
-    SmartPointer<Board> board = new Board();
+    SmartPointer<ChessBoard> board = new ChessBoard();
     board->addKeyFrame( new DrawBoard() );
     turn.addAnimatable( board );
       
@@ -135,8 +137,8 @@ namespace visualizer
   void Chess::setup()
   {
     
-    renderer->setCamera( 0, 0, 9, 9 );
-    renderer->setGridDimensions( 9, 9 );
+    renderer->setCamera( 0, 0, 8, 8 );
+    renderer->setGridDimensions( 8, 8 );
     
     resourceManager->loadResourceFile( "./plugins/chess/textures.r" );
 
@@ -196,13 +198,11 @@ namespace visualizer
     
     Frame turn;
         
-    SmartPointer<Board> board = new Board();
+    SmartPointer<ChessBoard> board = new ChessBoard();
     board->addKeyFrame( new DrawBoard() );
     turn.addAnimatable( board );
 
     addFrame( turn );
-      
-
   
   } // Chess::conn() 
 
@@ -215,9 +215,9 @@ namespace visualizer
     setup();
     m_player = false;
    
-    m_game = new Game;
+    m_game = new parser::Game;
 
-    if( !parseString( *m_game, gamelog.c_str() ) )
+    if( !parser::parseGameFromString( *m_game, gamelog.c_str() ) )
     {
       delete m_game;
       m_game = 0;
@@ -244,8 +244,8 @@ namespace visualizer
       {
 
 
-        int x = floor( input.x - 0.5 );
-        int y = floor( input.y - 0.5 );
+        int x = floor( input.x );
+        int y = floor( input.y );
         bool moved = false;
         if( lastX >= 0 && lastX < 8 && lastY >= 0 && lastY < 8 )
         {
@@ -291,19 +291,37 @@ namespace visualizer
       {
         if( lastX >= 0 && lastX < 8 )
         {
+          // If the selector is in a valid position
+          // Draw the box
           renderer->setColor( Color( 0, 0.2, 0.7, 0.3f ) );
           renderer->drawProgressBar( lastX, lastY, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
+
+          // Get valid moves for this board
+          Board board;
+          board.setstartpos();
+
+          MoveParser parser( board );
+
+          for( vector<client::Move>::iterator m = moves.begin(); m != moves.end(); m++ )
+          {
+            string move = "";
+            move += m->fromFile() + 'a' - 1;
+            move += m->fromRank();
+            move += m->toFile() + 'a' - 1;
+            move += m->toRank();
+
+            board.move( parser.parse( move.c_str() ) );
+          }
 
         }
       }
     }
 
-
   }
   
   void Chess::load()
   {
-    SmartPointer<Board> board = new Board();
+    SmartPointer<ChessBoard> board = new ChessBoard();
 
     timeManager->setNumTurns( m_game->states.size() );
     
@@ -312,12 +330,12 @@ namespace visualizer
     {
         Frame turn;
         
-        SmartPointer<Board> board = new Board();
+        SmartPointer<ChessBoard> board = new ChessBoard();
         board->addKeyFrame( new DrawBoard() );
         turn.addAnimatable( board );
         
         // Loop though each Piece in the current state
-        for(std::map<int, Piece>::iterator i = m_game->states[ state ].pieces.begin(); i != m_game->states[ state ].pieces.end(); i++)
+        for(std::map<int, parser::Piece>::iterator i = m_game->states[ state ].pieces.begin(); i != m_game->states[ state ].pieces.end(); i++)
         {
             SmartPointer<ChessPiece> piece = new ChessPiece();
             

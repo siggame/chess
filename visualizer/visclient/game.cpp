@@ -40,6 +40,7 @@ namespace Windows
 #endif
 
 using namespace std;
+using namespace parser;
 
 namespace client
 {

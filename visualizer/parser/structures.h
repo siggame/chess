@@ -11,6 +11,9 @@
 
 #include "smartpointer.h"
 
+namespace parser
+{
+
 const int MOVE = 0;
 
 struct Move
@@ -83,5 +86,7 @@ struct Game
 
   Game();
 };
+
+} // parser
 
 #endif
