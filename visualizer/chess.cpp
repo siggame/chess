@@ -70,6 +70,7 @@ namespace visualizer
 
   void Chess::init()
   {
+    Bitboard::init();
   }
 
   void Chess::addCurrentBoard()
@@ -304,24 +305,18 @@ namespace visualizer
           MoveParser parser( board );
 
           c->drawMutex.lock();
-          for( vector<client::Move>::iterator m = moves.begin(); m != moves.end(); m++ )
+          cout << "----------------------------" << endl;
+          for( vector<client::Move>::reverse_iterator m = moves.rbegin(); m != moves.rend(); m++ )
           {
-#if 1
-            string move = "";
-            move += m->fromFile() + 'a' - 1;
-            move += m->fromRank() + '0';
-            move += m->toFile() + 'a' - 1;
-            move += m->toRank() + '0';
-#endif
+            Move mv = parser.parse( printMove( *m, board ).c_str() );
+            if( mv == 0 )
+              cout << "Invalid Move!" << endl;
+            board.move( mv );
 
-            printMove( *m, board );
-
-//            cout << move << endl;
-//            board.move( parser.parse( move.c_str() ) );
-
-            board.print( stdout );
+            board.print( );
 
           }
+          cout << "----------------------------" << endl;
           c->drawMutex.unlock();
 
         }
@@ -368,6 +363,60 @@ namespace visualizer
   string Chess::printMove( client::Move& m, Board &board )
   {
 
+#if 1
+    string move;
+    char piece = board.piecechar( m.fromFile()-1 + 8*(m.fromRank()-1) );
+    move += piece;
+    move += m.fromFile()+'a'-1;
+    move += m.fromRank()+'0';
+    move += m.toFile()+'a'-1;
+    move += m.toRank()+'0';
+
+    if( piece == 'P' )
+    {
+      if( m.toRank() == 1 || m.toRank() == 8 )
+      {
+        move += (char)m.promoteType();
+      }
+    }
+    cout << move << endl;
+  
+    return move;
+
+#else
+    char piece = board.piecechar( m.fromFile()-1 + 8*(m.fromRank()-1) );
+
+    string move = "";
+    switch( piece )
+    {
+      case 'P':
+      {
+        move += m.fromFile()-1+'a';
+        if( m.fromFile() == m.toFile() )
+        {
+          move += m.toRank()+'0';
+        }
+        else
+        {
+          // Only happens on kills
+          move += 'x';
+          move += m.toFile()-1+'a';
+          move += m.toRank()+'0';
+        }
+
+        if( m.toRank() == 1 || m.toRank() == 8 )
+        {
+          move += (char)m.promoteType();
+        }
+
+      } break;
+      case 'N':
+      {
+        move += 'N';
+      }
+    }
+    
+
     for( size_t i = 0; i < 64; i++ )
     {
       cout << i << ", " << board.piecechar( i ) << endl;
@@ -377,6 +426,7 @@ namespace visualizer
 
     return "MOVE";
     
+#endif
 
   }
 
