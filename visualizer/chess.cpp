@@ -340,17 +340,39 @@ namespace visualizer
           // If the selector is in a valid position
           // Draw the box
           renderer->setColor( Color( 0, 0.2, 0.7, 0.3f ) );
+          Coord select = lastP;
+          select.y = 7-select.y;
           if( options->getNumber( "RotateBoard" ) )
-            renderer->drawProgressBar( 7-lastP.x, lastP.y, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
-          else
-            renderer->drawProgressBar( lastP.x, 7-lastP.y, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
+          {
+            select.y = 7-select.y;
+            select.x = 7-select.x;
+          }
 
+          renderer->drawProgressBar( select.x, select.y, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
 
           Board b = buildBoardState();
-
           Move moves[MaxMoves];
-
           Move* last = b.genmoves(moves);
+          for( Move*m=moves;m<last;m++ )
+          {
+            if( (lastP.x+8*lastP.y) == m->from() )
+            {
+              int to = m->to();
+              int y = to/8;
+              int x = to-8*y;
+              y = 7-y;
+
+              if( options->getNumber( "RotateBoard" ) )
+              {
+                x = 7-x;
+                y = 7-y;
+              }
+
+              renderer->setColor( Color( 0, 0.2, 0.7, 0.3f ) );
+              renderer->drawProgressBar( x, y, 1, 1, 1, Color( 0.6, 0.2, 0.1, 0.7f ), 2 );
+
+            }
+          }
 
         }
       }
