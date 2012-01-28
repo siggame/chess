@@ -103,8 +103,6 @@ namespace visualizer
   bool Chess::run()
   {
     m_playerMoved = false;
-
-    cout << "RUN" << endl;
     
     addCurrentBoard();
     // We'll want to wait for user input.
@@ -124,7 +122,6 @@ namespace visualizer
     addCurrentBoard();
 
     // Once we get it, we'll create the same board, but with the moved piece. 
-
     return true;
 
   }

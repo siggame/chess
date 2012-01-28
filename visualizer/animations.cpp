@@ -26,7 +26,7 @@ namespace visualizer
         game->renderer->drawQuad(x, y, 1, 1);
 		
 		// Set the color to gray for the rank & file text to be drawn in
-		game->renderer->setColor( Color(0.5, 0.5, 0.5) );
+		game->renderer->setColor( Color(0.8, 0.1, 0.1) );
 		
 		// Build the tile's rank & file string
 		ss << (char)(x + 97) << (game->options->getNumber( "RotateBoard" ) ? (y + 1) : (8 - y));
