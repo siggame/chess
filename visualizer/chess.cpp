@@ -102,7 +102,9 @@ namespace visualizer
 
   bool Chess::run()
   {
+    m_playerMoved = false;
 
+    cout << "RUN" << endl;
     
     addCurrentBoard();
     // We'll want to wait for user input.
@@ -114,7 +116,6 @@ namespace visualizer
       if( m_playerMoved )
       {
         input = true;
-        m_playerMoved = false;
       }
 
       inputMutex.unlock();
@@ -299,8 +300,6 @@ namespace visualizer
         cout << "Invalid Move!" << endl;
       board.move( mv );
 
-      board.print( );
-
     }
     c->drawMutex.unlock();
 
@@ -310,6 +309,9 @@ namespace visualizer
 
   bool Chess::moveIfValid( client::Piece& piece, int x, int y, int p )
   {
+    if( m_playerMoved )
+      return false;
+
     Board b = buildBoardState();
     Move moves[MaxMoves];
     Move *last = b.genmoves(moves);
@@ -320,6 +322,7 @@ namespace visualizer
         if( (x+8*y) == m->to() )
         {
           piece.move( x+1, y+1, p );
+
           return true;
         }
       }
@@ -350,27 +353,30 @@ namespace visualizer
 
           renderer->drawProgressBar( select.x, select.y, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
 
-          Board b = buildBoardState();
-          Move moves[MaxMoves];
-          Move* last = b.genmoves(moves);
-          for( Move*m=moves;m<last;m++ )
+          if( !m_playerMoved )
           {
-            if( (lastP.x+8*lastP.y) == m->from() )
+            Board b = buildBoardState();
+            Move moves[MaxMoves];
+            Move* last = b.genmoves(moves);
+            for( Move*m=moves;m<last;m++ )
             {
-              int to = m->to();
-              int y = to/8;
-              int x = to-8*y;
-              y = 7-y;
-
-              if( options->getNumber( "RotateBoard" ) )
+              if( (lastP.x+8*lastP.y) == m->from() )
               {
-                x = 7-x;
+                int to = m->to();
+                int y = to/8;
+                int x = to-8*y;
                 y = 7-y;
+
+                if( options->getNumber( "RotateBoard" ) )
+                {
+                  x = 7-x;
+                  y = 7-y;
+                }
+
+                renderer->setColor( Color( 0, 0.2, 0.7, 0.3f ) );
+                renderer->drawProgressBar( x, y, 1, 1, 1, Color( 0.6, 0.2, 0.1, 0.7f ), 2 );
+
               }
-
-              renderer->setColor( Color( 0, 0.2, 0.7, 0.3f ) );
-              renderer->drawProgressBar( x, y, 1, 1, 1, Color( 0.6, 0.2, 0.1, 0.7f ), 2 );
-
             }
           }
 
@@ -418,7 +424,6 @@ namespace visualizer
   string Chess::printMove( client::Move& m, Board &board ) 
   {
 
-#if 1
     string move;
     char piece = board.piecechar( m.fromFile()-1 + 8*(m.fromRank()-1) );
     move += piece;
@@ -434,55 +439,8 @@ namespace visualizer
         move += (char)m.promoteType();
       }
     }
-    cout << move << endl;
   
     return move;
-
-#else
-    char piece = board.piecechar( m.fromFile()-1 + 8*(m.fromRank()-1) );
-
-    string move = "";
-    switch( piece )
-    {
-      case 'P':
-      {
-        move += m.fromFile()-1+'a';
-        if( m.fromFile() == m.toFile() )
-        {
-          move += m.toRank()+'0';
-        }
-        else
-        {
-          // Only happens on kills
-          move += 'x';
-          move += m.toFile()-1+'a';
-          move += m.toRank()+'0';
-        }
-
-        if( m.toRank() == 1 || m.toRank() == 8 )
-        {
-          move += (char)m.promoteType();
-        }
-
-      } break;
-      case 'N':
-      {
-        move += 'N';
-      }
-    }
-    
-
-    for( size_t i = 0; i < 64; i++ )
-    {
-      cout << i << ", " << board.piecechar( i ) << endl;
-    }
-
-    //switch( m.id() )
-
-    return "MOVE";
-    
-#endif
-
   }
 
   Coord Chess::getCoord() const
