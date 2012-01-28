@@ -145,6 +145,14 @@ namespace visualizer
  
   }
 
+  const char PieceNames[] =
+  { 
+    'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R',
+    'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',
+    'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',
+    'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R',
+  };
+
   void Chess::conn( int button )
   {
     setup();
@@ -197,6 +205,27 @@ namespace visualizer
     SmartPointer<ChessBoard> board = new ChessBoard();
     board->addKeyFrame( new DrawBoard() );
     turn.addAnimatable( board );
+
+    for( size_t i = 0; i < 32; i++ )
+    {
+      SmartPointer<ChessPiece> piece = new ChessPiece();
+      
+      piece->x = i-(i/8)*8;
+      piece->y = i/8;
+      piece->type = PieceNames[ i ];
+      if( i < 16 )
+      {
+        piece->owner = 0;
+      }
+      else
+      {
+        piece->owner = 1;
+        piece->y += 4;
+      }
+      
+      piece->addKeyFrame( new DrawChessPiece( piece ) );
+      turn.addAnimatable( piece );
+    }
 
     addFrame( turn );
   
