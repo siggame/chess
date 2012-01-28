@@ -254,11 +254,13 @@ namespace visualizer
               if( piece->file() == lastP.x+1 && piece->rank() == lastP.y+1 )
               {
                 cout << "MOVED" << endl;
-                piece->move( p.x+1, p.y+1, 'Q' );
-                inputMutex.lock();
-                m_playerMoved = true;
-                moved = true;
-                inputMutex.unlock();
+                if( moveIfValid( *piece, p.x, p.y, 'Q' ) )
+                {
+                  inputMutex.lock();
+                  m_playerMoved = true;
+                  moved = true;
+                  inputMutex.unlock();
+                }
                 lastP.x = lastP.y = -1;
               }
 
@@ -281,6 +283,52 @@ namespace visualizer
 
   }
 
+  Board Chess::buildBoardState() 
+  {
+    // Get valid moves for this board
+    Board board;
+    board.setstartpos();
+
+    MoveParser parser( board );
+
+    c->drawMutex.lock();
+    for( vector<client::Move>::reverse_iterator m = moves.rbegin(); m != moves.rend(); m++ )
+    {
+      Move mv = parser.parse( printMove( *m, board ).c_str() );
+      if( mv == 0 )
+        cout << "Invalid Move!" << endl;
+      board.move( mv );
+
+      board.print( );
+
+    }
+    c->drawMutex.unlock();
+
+    return board;
+
+  }
+
+  bool Chess::moveIfValid( client::Piece& piece, int x, int y, int p )
+  {
+    Board b = buildBoardState();
+    Move moves[MaxMoves];
+    Move *last = b.genmoves(moves);
+    for( Move*m=moves; m<last; m++ )
+    {
+      if( (piece.file()-1 + 8*(piece.rank()-1)) == m->from() )
+      {
+        if( (x+8*y) == m->to() )
+        {
+          piece.move( x+1, y+1, p );
+          return true;
+        }
+      }
+    }
+    
+    return false;
+
+  }
+
   void Chess::postDraw()
   {
     if( m_player )
@@ -298,26 +346,11 @@ namespace visualizer
             renderer->drawProgressBar( lastP.x, 7-lastP.y, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
 
 
-          // Get valid moves for this board
-          Board board;
-          board.setstartpos();
+          Board b = buildBoardState();
 
-          MoveParser parser( board );
+          Move moves[MaxMoves];
 
-          c->drawMutex.lock();
-          cout << "----------------------------" << endl;
-          for( vector<client::Move>::reverse_iterator m = moves.rbegin(); m != moves.rend(); m++ )
-          {
-            Move mv = parser.parse( printMove( *m, board ).c_str() );
-            if( mv == 0 )
-              cout << "Invalid Move!" << endl;
-            board.move( mv );
-
-            board.print( );
-
-          }
-          cout << "----------------------------" << endl;
-          c->drawMutex.unlock();
+          Move* last = b.genmoves(moves);
 
         }
       }
@@ -360,7 +393,7 @@ namespace visualizer
     timeManager->play();
   }
 
-  string Chess::printMove( client::Move& m, Board &board )
+  string Chess::printMove( client::Move& m, Board &board ) 
   {
 
 #if 1
