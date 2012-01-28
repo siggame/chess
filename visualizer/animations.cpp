@@ -26,10 +26,10 @@ namespace visualizer
         game->renderer->drawQuad(x, y, 1, 1);
 		
 		// Set the color to gray for the rank & file text to be drawn in
-		game->renderer->setColor( Color(0.8, 0.1, 0.1) );
+		game->renderer->setColor( Color(0.5, 0.5, 0.525) );
 		
 		// Build the tile's rank & file string
-		ss << (char)(x + 97) << (game->options->getNumber( "RotateBoard" ) ? (y + 1) : (8 - y));
+		ss << (char)(game->options->getNumber( "RotateBoard" ) ? (104 - x) : (x + 97)) << (game->options->getNumber( "RotateBoard" ) ? (y + 1) : (8 - y));
 		
 		// And raw the rank and file on the tile
 		game->renderer->drawText(x, y, "DroidSansMono", ss.str(), 1.0 );
