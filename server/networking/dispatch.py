@@ -1,8 +1,5 @@
 # -*- coding: iso-8859-1 -*-
 
-#from twisted.internet import epollreactor
-#epollreactor.install()
-# Kenneth Perry(thothonegan): switching to selectreactor cause it actually works on more platforms
 from twisted.internet import selectreactor
 selectreactor.install()
 
@@ -22,7 +19,6 @@ class SexpProtocol(Int32StringReceiver):
     self.app = self.__class__.app(self)
 
   def connectionLost(self, reason):
-    print reason
     self.app.disconnect(reason)
       
   def stringReceived(self, string):

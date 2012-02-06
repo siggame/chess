@@ -57,7 +57,6 @@ class Piece:
     makeMoveVal = self.makeMove(file,rank,type)
     
     if makeMoveVal is not True:
-      Debug.out(makeMoveVal + " : move was to : " + str(file) + "," + str(rank))
       self.game.declareWinner(self.game.players[self.game.playerID^1],makeMoveVal)
       
     printableState = ""
@@ -78,10 +77,8 @@ class Piece:
     
     if self.game.noLegalMoves(self.owner^1):
       if self.game.inCheck(self.owner^1):
-        Debug.out ("No legal moves : " + ("White" if self.owner == 0 else "Black") + " Wins by Checkmate")
         self.game.declareWinner(self.game.players[self.owner],("White" if self.owner is 0 else "Black") + " Wins by Checkmate")
       else:
-        Debug.out ("No legal moves : " + ("White" if self.owner == 0 else "Black") + " Stalemated")
         self.game.declareDraw("No legal moves availible for " + ("White" if self.owner is 1 else "Black") + ", Stalemate!")
     
     return True
