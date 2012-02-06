@@ -30,7 +30,7 @@ public class Main
     }
     else
     {
-      Client.INSTANCE.joinGame(connection, Integer.parseInt(args[1]));
+      Client.INSTANCE.joinGame(connection, Integer.parseInt(args[1]), "player");
     }
     while(Client.INSTANCE.networkLoop(connection) != 0)
     {

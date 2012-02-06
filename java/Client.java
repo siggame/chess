@@ -9,7 +9,7 @@ public interface Client extends Library {
 
   boolean serverLogin(Pointer connection, String username, String password);
   int createGame(Pointer connection);
-  int joinGame(Pointer connection, int id);
+  int joinGame(Pointer connection, int id, String playerType);
 
   void endTurn(Pointer connection);
   void getStatus(Pointer connection);
@@ -25,13 +25,13 @@ public interface Client extends Library {
   int getPlayerID(Pointer connection);
   int getGameNumber(Pointer connection);
   int getTurnsToStalemate(Pointer connection);
-  int getPlayer0Time(Pointer connection);
-  int getPlayer1Time(Pointer connection);
 
   Pointer getMove(Pointer connection, int num);
   int getMoveCount(Pointer connection);
   Pointer getPiece(Pointer connection, int num);
   int getPieceCount(Pointer connection);
+  Pointer getPlayer(Pointer connection, int num);
+  int getPlayerCount(Pointer connection);
 
 
     //getters
@@ -48,6 +48,10 @@ public interface Client extends Library {
   int pieceGetRank(Pointer ptr);
   int pieceGetHasMoved(Pointer ptr);
   int pieceGetType(Pointer ptr);
+
+  int playerGetId(Pointer ptr);
+  String playerGetPlayerName(Pointer ptr);
+  float playerGetTime(Pointer ptr);
 
 
     //properties

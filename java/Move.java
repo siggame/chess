@@ -12,7 +12,6 @@ class Move
     ID = Client.INSTANCE.moveGetId(ptr);
     iteration = BaseAI.iteration;
   }
-
   boolean validify()
   {
     if(iteration == BaseAI.iteration) return true;

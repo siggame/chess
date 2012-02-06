@@ -9,6 +9,7 @@ public abstract class BaseAI
 {
   static Move[] moves;
   static Piece[] pieces;
+  static Player[] players;
   Pointer connection;
   static int iteration;
   boolean initialized;
@@ -54,6 +55,12 @@ public abstract class BaseAI
     {
       pieces[i] = new Piece(Client.INSTANCE.getPiece(connection, i));
     }
+    count = Client.INSTANCE.getPlayerCount(connection);
+    players = new Player[count];
+    for(int i = 0; i < count; i++)
+    {
+      players[i] = new Player(Client.INSTANCE.getPlayer(connection, i));
+    }
 
     if(!initialized)
     {
@@ -83,15 +90,5 @@ public abstract class BaseAI
   int TurnsToStalemate()
   {
     return Client.INSTANCE.getTurnsToStalemate(connection);
-  }
-  ///Player 0's time remaining
-  int player0Time()
-  {
-    return Client.INSTANCE.getPlayer0Time(connection);
-  }
-  ///Player 1's time remaining
-  int player1Time()
-  {
-    return Client.INSTANCE.getPlayer1Time(connection);
   }
 }
