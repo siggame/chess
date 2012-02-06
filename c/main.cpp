@@ -41,7 +41,7 @@ int main(int argc, char** argv)
   }
   else
   {
-    if(!joinGame(c, atoi(argv[2])))
+    if(!joinGame(c, atoi(argv[2]), "player"))
     {
       cerr << "Error joining game." << endl;
       return 1;
@@ -63,5 +63,6 @@ int main(int argc, char** argv)
   networkLoop(c);
   //Grab the end game status
   networkLoop(c);
+  destroyConnection(c);
   return 0;
 }

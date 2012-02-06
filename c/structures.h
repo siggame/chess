@@ -7,6 +7,7 @@
 struct Connection;
 struct _Move;
 struct _Piece;
+struct _Player;
 
 
 struct _Move
@@ -28,6 +29,13 @@ struct _Piece
   int rank;
   int hasMoved;
   int type;
+};
+struct _Player
+{
+  Connection* _c;
+  int id;
+  char* playerName;
+  float time;
 };
 
 #endif
