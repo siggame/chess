@@ -26,7 +26,7 @@ library.createGame.restype = c_int
 library.createGame.argtypes = [c_void_p]
 
 library.joinGame.restype = c_int
-library.joinGame.argtypes = [c_void_p, c_int]
+library.joinGame.argtypes = [c_void_p, c_int, c_char_p]
 
 library.endTurn.restype = None
 library.endTurn.argtypes = [c_void_p]
@@ -56,12 +56,6 @@ library.getGameNumber.argtypes = [c_void_p]
 library.getTurnsToStalemate.restype = c_int
 library.getTurnsToStalemate.argtypes = [c_void_p]
 
-library.getPlayer0Time.restype = c_int
-library.getPlayer0Time.argtypes = [c_void_p]
-
-library.getPlayer1Time.restype = c_int
-library.getPlayer1Time.argtypes = [c_void_p]
-
 library.getMove.restype = c_void_p
 library.getMove.argtypes = [c_void_p, c_int]
 
@@ -73,6 +67,12 @@ library.getPiece.argtypes = [c_void_p, c_int]
 
 library.getPieceCount.restype = c_int
 library.getPieceCount.argtypes = [c_void_p]
+
+library.getPlayer.restype = c_void_p
+library.getPlayer.argtypes = [c_void_p, c_int]
+
+library.getPlayerCount.restype = c_int
+library.getPlayerCount.argtypes = [c_void_p]
 
 # getters
 
@@ -112,6 +112,15 @@ library.pieceGetHasMoved.argtypes = [c_void_p]
 
 library.pieceGetType.restype = c_int
 library.pieceGetType.argtypes = [c_void_p]
+
+library.playerGetId.restype = c_int
+library.playerGetId.argtypes = [c_void_p]
+
+library.playerGetPlayerName.restype = c_char_p
+library.playerGetPlayerName.argtypes = [c_void_p]
+
+library.playerGetTime.restype = c_float
+library.playerGetTime.argtypes = [c_void_p]
 
 
 #Properties

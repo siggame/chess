@@ -28,7 +28,7 @@ def main():
   if len(sys.argv) < 3:
     library.createGame(connection)
   else:
-    library.joinGame(connection, int(sys.argv[2]))
+    library.joinGame(connection, int(sys.argv[2]), "player")
   while library.networkLoop(connection):
     if ai.startTurn():
       library.endTurn(connection)
