@@ -1,3 +1,4 @@
+from ObjectHolder import ObjectHolder
 class GameWorld(object):
   """
   Base class for a game world object
@@ -12,13 +13,19 @@ class GameWorld(object):
              #None before and after the game.
     self.winner = None #the player who won the game;
                #None before and during the game
-    self.objects = dict() #key: object's id
+    self.objects = ObjectHolder() #key: object's id
                 #value: instance of the object
     self.animations = ["animations"]
 
-  def addObject(self, newObject):
-    self.animations += [["add", newObject.id]]
-    self.objects[newObject.id] = newObject
+  def addObject(self, objType, arguments=[]):
+    """
+    Used to create new objects
+    """
+    id = self.nextid
+    self.nextid+=1
+    self.animations.append(["add", id])
+    self.objects[id] = objType(*([self, id]+arguments))
+    return self.objects[id]
 
   def removeObject(self, oldObject):
     self.animations += [["remove", oldObject.id]]

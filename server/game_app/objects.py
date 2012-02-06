@@ -1,6 +1,3 @@
-# -*- coding: iso-8859-1 -*-
-from debug import *
-
 class Move:
   def __init__(self, game, id, fromFile, fromRank, toFile, toRank, promoteType):
     self.game = game
@@ -50,9 +47,8 @@ class Piece:
 
   def nextTurn(self):
     pass
-  
-  #this bit does moves without consequences for failure
-  def move(self,file,rank,type):
+
+  def move(self, file, rank, type):
     if self.game.moves is 0:
       return "You already moved"
     self.game.moves = 0 
@@ -89,8 +85,6 @@ class Piece:
         self.game.declareDraw("No legal moves availible for " + ("White" if self.owner is 1 else "Black") + ", Stalemate!")
     
     return True
-  
-  
   def makeMove(self,file,rank,type):  
     oldfile = self.file
     oldrank = self.rank
@@ -354,6 +348,23 @@ class Piece:
           board[object.rank-1][object.file-1] = object
     return board
 
+class Player:
+  def __init__(self, game, id, playerName, time):
+    self.game = game
+    self.id = id
+    self.playerName = playerName
+    self.time = time
+
+  def toList(self):
+    value = [
+      self.id,
+      self.playerName,
+      self.time,
+      ]
+    return value
+
+  def nextTurn(self):
+    pass
 
 
 
