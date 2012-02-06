@@ -6,3 +6,7 @@ libclient.so
 *.class
 *.jar
 *.pyc
+*.exe
+*.gamelog
+*.glog
+client
