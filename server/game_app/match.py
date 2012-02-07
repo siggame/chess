@@ -27,6 +27,7 @@ class Match(DefaultGameWorld):
     self.addPlayer(self.scribe, "spectator")
 
     #TODO: INITIALIZE THESE!
+    self.moves = 0
     self.turnNumber = 0
     self.playerID = 0
     self.gameNumber = id
@@ -66,14 +67,13 @@ class Match(DefaultGameWorld):
     
     #TODO: START STUFF
     self.turn = self.players[-1]
-    self.turnNumber = -1
-    self.moves = 0
+    self.turnNumber = 0
     with open("config/initBoardState.txt",'r') as f:
       board = f.read().split()
     for rank, row in enumerate(board):
       for file, piece in enumerate(row):
         if piece != '.':
-          self.addObject(Piece, [str.istitle(piece), file, rank, False, ord(string.upper(piece))])
+          self.addObject(Piece, [str.istitle(piece), file+1, 8-rank, 0, ord(string.upper(piece))])
 
     self.nextTurn()
     return True
@@ -146,7 +146,7 @@ class Match(DefaultGameWorld):
       self.declareDraw("With only Kings and Bishops, with all of the Bishops on the same color, Checkmate is impossible, Stalemate!")
       return
     moveList = sorted(self.objects.moves) #all moves, earlier in the array means later in the game
-    moveList = [i[1:5] for i in reversed(moveList)] #we only care about the start and end positions
+    moveList = [i.toList()[1:5] for i in reversed(moveList)] #we only care about the start and end positions
     if len(moveList) >= 8 and self.TurnsToStalemate <= 92:
       #print "Debugging info: " + `len(moveList[0])`+ ", " + `self.TurnsToStalemate` + `moveList[0:8]`
       if moveList[0:4] == moveList[4:8]:
@@ -226,7 +226,7 @@ class Match(DefaultGameWorld):
     msg.append(["game", self.turnNumber, self.playerID, self.gameNumber, self.TurnsToStalemate])
 
     typeLists = []
-    typeLists.append(["Move"] + sorted([i.toList() for i in self.objects.values() if i.__class__ is Move]))
+    typeLists.append(["Move"] + sorted([i.toList() for i in self.objects.values() if i.__class__ is Move], reverse = True))
     typeLists.append(["Piece"] + [i.toList() for i in self.objects.values() if i.__class__ is Piece])
     typeLists.append(["Player"] + [i.toList() for i in self.objects.values() if i.__class__ is Player])
 

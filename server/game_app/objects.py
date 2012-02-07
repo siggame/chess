@@ -52,7 +52,7 @@ class Piece:
     if self.game.moves is 0:
       return "You already moved"
     self.game.moves = 0 
-    self.game.addObject(Move(self.game,self.game.nextid,self.file,self.rank,file,rank,type))
+    self.game.addObject(Move, [self.file, self.rank, file, rank, type])
     self.game.nextid += 1
     makeMoveVal = self.makeMove(file,rank,type)
     
