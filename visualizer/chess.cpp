@@ -89,8 +89,6 @@ namespace visualizer
       piece->y = p->rank()-1;
       piece->type = p->type();
       piece->owner = p->owner();
-      cout << piece->owner << endl;
-
 
       piece->addKeyFrame( new DrawChessPiece( piece ) );
       turn.addAnimatable( piece );
