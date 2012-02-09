@@ -2,6 +2,7 @@
 #define NETWORKLOOP_H
 
 #include <QThread>
+#include <QMutex>
 #include "visclient/BaseAI.h"
 
 namespace visualizer
@@ -14,9 +15,12 @@ namespace visualizer
       void run();
       int exec() { return QThread::exec(); }
 
+      QMutex drawMutex;
+
     private:
       client::BaseAI& ai;
       client::Connection* c;
+
 
   };
 } // visualizer

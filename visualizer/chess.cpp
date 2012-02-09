@@ -180,7 +180,7 @@ namespace visualizer
     if( m_gameNumber->text().size() )
     {
       gameNumber = QVariant( m_gameNumber->text() ).toInt(); 
-      if( !client::joinGame( c, gameNumber ) )
+      if( !client::joinGame( c, gameNumber, "player" ) )
       {
         THROW( Exception, "Error Joining Game!" );
       }
@@ -197,7 +197,7 @@ namespace visualizer
     timeManager->setNumTurns( 0 );
 
 
-    NetworkLoop* n = new NetworkLoop( this, c );
+    n = new NetworkLoop( this, c );
     n->start();
     
     Frame turn;
@@ -318,7 +318,7 @@ namespace visualizer
 
     MoveParser parser( board );
 
-    c->drawMutex.lock();
+    n->drawMutex.lock();
     for( vector<client::Move>::reverse_iterator m = moves.rbegin(); m != moves.rend(); m++ )
     {
       Move mv = parser.parse( printMove( *m, board ).c_str() );
@@ -327,7 +327,7 @@ namespace visualizer
       board.move( mv );
 
     }
-    c->drawMutex.unlock();
+    n->drawMutex.unlock();
 
     return board;
 
