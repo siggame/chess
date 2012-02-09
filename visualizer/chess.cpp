@@ -357,6 +357,17 @@ namespace visualizer
         if( (x+8*y) == m->to() )
         {
           piece.move( x+1, y+1, p );
+          for( vector<client::Piece>::iterator i = pieces.begin(); i != pieces.end(); i++ )
+          {
+            if( 
+              i->file() == x+1 &&
+              i->rank() == y+1 &&
+              i->id() != piece.id() )
+            {
+              pieces.erase( i );
+              break;
+            }
+          }
 
           return true;
         }
