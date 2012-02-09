@@ -203,6 +203,8 @@ DLLEXPORT int pieceMove(_Piece* object, int file, int rank, int type)
        << ")";
   LOCK( &object->_c->mutex);
   send_string(object->_c->socket, expr.str().c_str());
+  object->file = file;
+  object->rank = rank;
   UNLOCK( &object->_c->mutex);
   return 1;
 }
