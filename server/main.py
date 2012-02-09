@@ -137,7 +137,7 @@ class GameApp(AccountsAppMixin, BaseApp):
     
     # -arena in the command line means:
     # "nobody is ever going to see the log, don't send it, it's huge"
-    if emptyLog:
+    if emptyLog or logID == '0':
       return ['log', logID, ""]
     
     #with bz2.BZ2File("logs/" + logID + ".glog", "r") as infile:

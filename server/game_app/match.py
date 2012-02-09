@@ -172,7 +172,6 @@ class Match(DefaultGameWorld):
     self.turn = None
 
   def declareWinner(self, winner, reason=''):
-    print "Player", self.getPlayerIndex(self.winner), "wins game", self.id
     self.winner = winner
 
     msg = ["game-winner", self.id, self.winner.user, self.getPlayerIndex(self.winner), reason]
