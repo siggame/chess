@@ -35,7 +35,7 @@ bool AI::run()
       for(size_t p=0; !found && p<pieces.size(); p++)
       {
         // determines if that piece is at the current rank and file
-        if(pieces[p].rank() == rank and pieces[p].file() == file)
+        if(pieces[p].rank() == rank && pieces[p].file() == file)
         {
           found = true;
           // Checks if the piece is black
