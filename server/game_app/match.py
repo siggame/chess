@@ -73,7 +73,7 @@ class Match(DefaultGameWorld):
     for rank, row in enumerate(board):
       for file, piece in enumerate(row):
         if piece != '.':
-          self.addObject(Piece, [str.istitle(piece), file+1, 8-rank, 0, ord(string.upper(piece))])
+          self.addObject(Piece, [int(str.istitle(piece)), file+1, 8-rank, 0, ord(string.upper(piece))])
 
     self.nextTurn()
     return True
