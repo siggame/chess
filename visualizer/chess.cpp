@@ -89,6 +89,7 @@ namespace visualizer
       piece->y = p->rank()-1;
       piece->type = p->type();
       piece->owner = p->owner();
+      cout << piece->owner << endl;
 
 
       piece->addKeyFrame( new DrawChessPiece( piece ) );
@@ -180,9 +181,19 @@ namespace visualizer
     if( m_gameNumber->text().size() )
     {
       gameNumber = QVariant( m_gameNumber->text() ).toInt(); 
-      if( !client::joinGame( c, gameNumber, "player" ) )
+      if( m_player )
       {
-        THROW( Exception, "Error Joining Game!" );
+        if( !client::joinGame( c, gameNumber, "player" ) )
+        {
+          THROW( Exception, "Error Joining Game!" );
+        }
+      }
+      else
+      {
+        if( !client::joinGame( c, gameNumber, "spectator" ) )
+        {
+          THROW( Exception, "Error Joining Game!" );
+        }
       }
     }
     else
