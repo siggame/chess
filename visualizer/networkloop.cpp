@@ -13,15 +13,15 @@ namespace visualizer
     {
       if( ai.startTurn() )
       {
-        c->drawMutex.lock();
+        drawMutex.lock();
         client::endTurn(c);
-        c->drawMutex.unlock();
+        drawMutex.unlock();
       }
       else
       {
-        c->drawMutex.lock();
+        drawMutex.lock();
         client::getStatus(c);
-        c->drawMutex.unlock();
+        drawMutex.unlock();
       }
     }
     ai.end();

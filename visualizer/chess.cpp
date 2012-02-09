@@ -89,6 +89,7 @@ namespace visualizer
       piece->y = p->rank()-1;
       piece->type = p->type();
       piece->owner = p->owner();
+      cout << piece->owner << endl;
 
 
       piece->addKeyFrame( new DrawChessPiece( piece ) );
@@ -180,9 +181,19 @@ namespace visualizer
     if( m_gameNumber->text().size() )
     {
       gameNumber = QVariant( m_gameNumber->text() ).toInt(); 
-      if( !client::joinGame( c, gameNumber ) )
+      if( m_player )
       {
-        THROW( Exception, "Error Joining Game!" );
+        if( !client::joinGame( c, gameNumber, "player" ) )
+        {
+          THROW( Exception, "Error Joining Game!" );
+        }
+      }
+      else
+      {
+        if( !client::joinGame( c, gameNumber, "spectator" ) )
+        {
+          THROW( Exception, "Error Joining Game!" );
+        }
       }
     }
     else
@@ -197,7 +208,7 @@ namespace visualizer
     timeManager->setNumTurns( 0 );
 
 
-    NetworkLoop* n = new NetworkLoop( this, c );
+    n = new NetworkLoop( this, c );
     n->start();
     
     Frame turn;
@@ -318,7 +329,7 @@ namespace visualizer
 
     MoveParser parser( board );
 
-    c->drawMutex.lock();
+    n->drawMutex.lock();
     for( vector<client::Move>::reverse_iterator m = moves.rbegin(); m != moves.rend(); m++ )
     {
       Move mv = parser.parse( printMove( *m, board ).c_str() );
@@ -327,7 +338,7 @@ namespace visualizer
       board.move( mv );
 
     }
-    c->drawMutex.unlock();
+    n->drawMutex.unlock();
 
     return board;
 

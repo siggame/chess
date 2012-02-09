@@ -40,6 +40,15 @@ struct Piece
   friend std::ostream& operator<<(std::ostream& stream, Piece obj);
 };
 
+struct Player
+{
+  int id;
+  char* playerName;
+  float time;
+
+  friend std::ostream& operator<<(std::ostream& stream, Player obj);
+};
+
 
 struct Animation
 {
@@ -67,6 +76,7 @@ struct GameState
 {
   std::map<int,Move> moves;
   std::map<int,Piece> pieces;
+  std::map<int,Player> players;
 
   int turnNumber;
   int playerID;

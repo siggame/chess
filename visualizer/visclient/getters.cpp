@@ -51,5 +51,17 @@ DLLEXPORT int pieceGetType(_Piece* ptr)
 {
   return ptr->type;
 }
+DLLEXPORT int playerGetId(_Player* ptr)
+{
+  return ptr->id;
+}
+DLLEXPORT char* playerGetPlayerName(_Player* ptr)
+{
+  return ptr->playerName;
+}
+DLLEXPORT float playerGetTime(_Player* ptr)
+{
+  return ptr->time;
+}
 
 }

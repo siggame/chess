@@ -3,9 +3,6 @@
 
 #include "sexp.h"
 
-namespace parser
-{
-
 typedef Sexp sexp_t;
 
 void destroy_sexp(Sexp*);
@@ -13,7 +10,5 @@ void destroy_sexp(Sexp*);
 Sexp* extract_sexpr(const char*);
 
 int sexp_list_length(Sexp*);
-
-}
 
 #endif

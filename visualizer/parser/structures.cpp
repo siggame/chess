@@ -32,6 +32,15 @@ std::ostream& operator<<(std::ostream& stream, Piece ob)
 }
 
 
+std::ostream& operator<<(std::ostream& stream, Player ob)
+{
+  stream << "id: " << ob.id  <<'\n';
+  stream << "playerName: " << ob.playerName  <<'\n';
+  stream << "time: " << ob.time  <<'\n';
+  return stream;
+}
+
+
 
 std::ostream& operator<<(std::ostream& stream, move ob)
 {
@@ -57,6 +66,9 @@ std::ostream& operator<<(std::ostream& stream, GameState ob)
     stream << i->second << '\n';
   stream << "\n\nPieces:\n";
   for(std::map<int,Piece>::iterator i = ob.pieces.begin(); i != ob.pieces.end(); i++)
+    stream << i->second << '\n';
+  stream << "\n\nPlayers:\n";
+  for(std::map<int,Player>::iterator i = ob.players.begin(); i != ob.players.end(); i++)
     stream << i->second << '\n';
   stream << "\nAnimation\n";
   for
