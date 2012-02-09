@@ -150,6 +150,44 @@ static bool parsePiece(Piece& object, sexp_t* expression)
   return true;
 
 }
+static bool parsePlayer(Player& object, sexp_t* expression)
+{
+  sexp_t* sub;
+  if ( !expression ) return false;
+  sub = expression->list;
+
+  if ( !sub ) 
+  {
+    cerr << "Error in parsePlayer.\n Parsing: " << *expression << endl;
+    return false;
+  }
+
+  object.id = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) 
+  {
+    cerr << "Error in parsePlayer.\n Parsing: " << *expression << endl;
+    return false;
+  }
+
+  object.playerName = new char[strlen(sub->val)+1];
+  strncpy(object.playerName, sub->val, strlen(sub->val));
+  object.playerName[strlen(sub->val)] = 0;
+  sub = sub->next;
+
+  if ( !sub ) 
+  {
+    cerr << "Error in parsePlayer.\n Parsing: " << *expression << endl;
+    return false;
+  }
+
+  object.time = atof(sub->val);
+  sub = sub->next;
+
+  return true;
+
+}
 
 static bool parseMove(move& object, sexp_t* expression)
 {
@@ -248,6 +286,19 @@ static bool parseSexp(Game& game, sexp_t* expression)
           Piece object;
           flag = parsePiece(object, sub);
           gs.pieces[object.id] = object;
+          sub = sub->next;
+        }
+        if ( !flag ) return false;
+      }
+      else if(string(sub->val) == "Player")
+      {
+        sub = sub->next;
+        bool flag = true;
+        while(sub && flag)
+        {
+          Player object;
+          flag = parsePlayer(object, sub);
+          gs.players[object.id] = object;
           sub = sub->next;
         }
         if ( !flag ) return false;
