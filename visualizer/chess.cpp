@@ -102,23 +102,31 @@ namespace visualizer
   bool Chess::run()
   {
     m_playerMoved = false;
-    
-    addCurrentBoard();
-    // We'll want to wait for user input.
-    bool input = false;
-    while( !input )
-    {
-      inputMutex.lock();
 
-      if( m_playerMoved )
+
+    if( m_player )
+    {
+      addCurrentBoard();
+      // We'll want to wait for user input.
+      bool input = false;
+      while( !input )
       {
-        input = true;
+        inputMutex.lock();
+
+        if( m_playerMoved )
+        {
+          input = true;
+        }
+
+        inputMutex.unlock();
       }
 
-      inputMutex.unlock();
+      addCurrentBoard();
+    } 
+    else
+    {
+      addCurrentBoard();
     }
-
-    addCurrentBoard();
 
     // Once we get it, we'll create the same board, but with the moved piece. 
     return true;
