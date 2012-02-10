@@ -208,7 +208,7 @@ class Piece:
         elif rank - self.rank + 2*self.owner is not 1:
           return ("White" if self.game.playerID is 0 else "Black") + " Attempted to make an illegal move with a Pawn"
       elif abs(self.file-file) is not 1 or (rank - self.rank + 2*self.owner != 1):
-        return ("White" if self.game.playerID is 0 else "Black") + "Attempted to take a piece with a Pawn in a manner that Pawns cannot"
+        return ("White" if self.game.playerID is 0 else "Black") + " Attempted to take a piece with a Pawn in a manner that Pawns cannot"
       if rank is 1 + 7 * (self.owner^1):
         if type != ord('R') and type != ord('N') and type != ord('B') and type != ord('Q'):
           return ("White" if self.game.playerID is 0 else "Black") + " Attempted to move a Pawn into the far row without providing a valid Pawn Upgrade Identifier, instead providing " + chr(type)
