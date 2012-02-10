@@ -8,11 +8,11 @@ public class Player
   public IntPtr ptr;
   protected int ID;
   protected int iteration;
-  
+
   public Player()
   {
   }
-  
+
   public Player(IntPtr p)
   {
     ptr = p;
@@ -34,12 +34,12 @@ public class Player
     }
     throw new ExistentialError();
   }
-    
+
     //commands
-    
-    
+
+
     //getters
-    
+
   ///Unique Identifier
   public int getId()
   {
@@ -50,7 +50,7 @@ public class Player
   public string getPlayerName()
   {
     validify();
-    return Client.playerGetPlayerName(ptr);
+    return Marshal.PtrToStringAuto(Client.playerGetPlayerName(ptr));
   }
   ///Time remaining, updated at start of turn
   public float getTime()

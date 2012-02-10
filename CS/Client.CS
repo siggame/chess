@@ -81,7 +81,7 @@ public class Client {
   [DllImport("client")]
   public static extern int playerGetId(IntPtr ptr);
   [DllImport("client")]
-  public static extern string playerGetPlayerName(IntPtr ptr);
+  public static extern IntPtr playerGetPlayerName(IntPtr ptr);
   [DllImport("client")]
   public static extern float playerGetTime(IntPtr ptr);
 
