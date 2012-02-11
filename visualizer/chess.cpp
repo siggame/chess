@@ -11,6 +11,8 @@
 namespace visualizer
 {
 
+  Log errorLog( "chess.log" ); 
+
   Chess::Chess() : BaseAI( 0 )
   {
   } // Chess::Chess()
