@@ -69,7 +69,7 @@ class AI extends BaseAI
     // if there has been a move, print the most recent move
     if(moves.length > 0)
     {
-      System.out.println("Last Move Was:\n"+moves[moves.length-1]);
+      System.out.println("Last Move Was:\n"+moves[0]);
     }
     // select a random piece and move it to a random position on the board.  Attempts to promote to queen if a promotion happens
     pieces[generator.nextInt(pieces.length-1)].move(generator.nextInt(7)+1, generator.nextInt(7)+1, (int)'Q');

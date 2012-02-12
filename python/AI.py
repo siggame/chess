@@ -53,7 +53,7 @@ class AI(BaseAI):
 
     # if there has been a move, print the most recent move
     if len(self.moves):
-      print "Last Move Was:\n", self.moves[-1]
+      print "Last Move Was:\n", self.moves[0]
     # select a random piece and move it to a random position on the board.  Attempts to promote to queen if a promotion happens
     random.choice(self.pieces).move(random.randint(1, 8), random.randint(1, 8), ord('Q'))
     return 1

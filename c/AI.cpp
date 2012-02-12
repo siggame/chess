@@ -75,7 +75,7 @@ bool AI::run()
   // if there has been a move, print the most recent move
   if(moves.size() > 0)
   {
-    cout<<"Last Move Was: "<<endl<<moves[moves.size()-1]<<endl;
+    cout<<"Last Move Was: "<<endl<<moves[0]<<endl;
   }
   // select a random piece and move it to a random position on the board.  Attempts to promote to queen if a promotion happens
   pieces[rand()%pieces.size()].move(rand()%8+1, rand()%8+1, int('Q'));

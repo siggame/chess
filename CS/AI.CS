@@ -68,7 +68,7 @@ class AI : BaseAI
     // if there has been a move, print the most recent move
     if(moves.Length > 0)
     {
-      Console.WriteLine("Last Move Was:\n"+moves[moves.Length-1]);
+      Console.WriteLine("Last Move Was:\n"+moves[0]);
     }
     // select a random piece and move it to a random position on the board.  Attempts to promote to queen if a promotion happens
     pieces[generator.Next(pieces.Length-1)].move(generator.Next(7)+1, generator.Next(7)+1, (int)'Q');
