@@ -1,6 +1,3 @@
-# -*- coding: iso-8859-1 -*-
-from debug import *
-
 class Move:
   def __init__(self, game, id, fromFile, fromRank, toFile, toRank, promoteType):
     self.game = game
@@ -50,18 +47,16 @@ class Piece:
 
   def nextTurn(self):
     pass
-  
-  #this bit does moves without consequences for failure
-  def move(self,file,rank,type):
+
+  def move(self, file, rank, type):
     if self.game.moves is 0:
       return "You already moved"
     self.game.moves = 0 
-    self.game.addObject(Move(self.game,self.game.nextid,self.file,self.rank,file,rank,type))
+    self.game.addObject(Move, [self.file, self.rank, file, rank, type])
     self.game.nextid += 1
     makeMoveVal = self.makeMove(file,rank,type)
     
     if makeMoveVal is not True:
-      Debug.out(makeMoveVal + " : move was to : " + str(file) + "," + str(rank))
       self.game.declareWinner(self.game.players[self.game.playerID^1],makeMoveVal)
       
     printableState = ""
@@ -82,15 +77,11 @@ class Piece:
     
     if self.game.noLegalMoves(self.owner^1):
       if self.game.inCheck(self.owner^1):
-        Debug.out ("No legal moves : " + ("White" if self.owner == 0 else "Black") + " Wins by Checkmate")
         self.game.declareWinner(self.game.players[self.owner],("White" if self.owner is 0 else "Black") + " Wins by Checkmate")
       else:
-        Debug.out ("No legal moves : " + ("White" if self.owner == 0 else "Black") + " Stalemated")
         self.game.declareDraw("No legal moves availible for " + ("White" if self.owner is 1 else "Black") + ", Stalemate!")
     
     return True
-  
-  
   def makeMove(self,file,rank,type):  
     oldfile = self.file
     oldrank = self.rank
@@ -217,7 +208,7 @@ class Piece:
         elif rank - self.rank + 2*self.owner is not 1:
           return ("White" if self.game.playerID is 0 else "Black") + " Attempted to make an illegal move with a Pawn"
       elif abs(self.file-file) is not 1 or (rank - self.rank + 2*self.owner != 1):
-        return ("White" if self.game.playerID is 0 else "Black") + "Attempted to take a piece with a Pawn in a manner that Pawns cannot"
+        return ("White" if self.game.playerID is 0 else "Black") + " Attempted to take a piece with a Pawn in a manner that Pawns cannot"
       if rank is 1 + 7 * (self.owner^1):
         if type != ord('R') and type != ord('N') and type != ord('B') and type != ord('Q'):
           return ("White" if self.game.playerID is 0 else "Black") + " Attempted to move a Pawn into the far row without providing a valid Pawn Upgrade Identifier, instead providing " + chr(type)
@@ -354,6 +345,23 @@ class Piece:
           board[object.rank-1][object.file-1] = object
     return board
 
+class Player:
+  def __init__(self, game, id, playerName, time):
+    self.game = game
+    self.id = id
+    self.playerName = playerName
+    self.time = time
+
+  def toList(self):
+    value = [
+      self.id,
+      self.playerName,
+      self.time,
+      ]
+    return value
+
+  def nextTurn(self):
+    pass
 
 
 

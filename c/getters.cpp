@@ -48,4 +48,16 @@ int pieceGetType(_Piece* ptr)
 {
   return ptr->type;
 }
+int playerGetId(_Player* ptr)
+{
+  return ptr->id;
+}
+char* playerGetPlayerName(_Player* ptr)
+{
+  return ptr->playerName;
+}
+float playerGetTime(_Player* ptr)
+{
+  return ptr->time;
+}
 

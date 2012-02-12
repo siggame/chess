@@ -12,9 +12,6 @@ import time
 import struct
 import bz2
 import sys
-from debug import *
-
-cfgFile = "config/initBoardState.txt"
 
 class GameApp(AccountsAppMixin, BaseApp):
   games = {}
@@ -37,7 +34,7 @@ class GameApp(AccountsAppMixin, BaseApp):
       print "Creating game %d"%(GameApp.nextid,)
       self.user = self.name
       self.screenName = self.name
-      self.game = Match(GameApp.nextid, self, cfgFile)
+      self.game = Match(GameApp.nextid, self)
       self.game.addPlayer(self)
       GameApp.games[GameApp.nextid] = self.game
       GameApp.nextid += 1
@@ -45,8 +42,8 @@ class GameApp(AccountsAppMixin, BaseApp):
 
   @protocolmethod
   @requireLogin
-  @requireTypes(None, int)
-  def joinGame(self, gameNumber):
+  @requireTypes(None, int, str)
+  def joinGame(self, gameNumber, playerType):
     """ Joins the specified game"""    
     if self.game is not None:
       return ["join-game-denied", "You are already in a game"]
@@ -56,7 +53,7 @@ class GameApp(AccountsAppMixin, BaseApp):
       if gameNumber == 0: #join any option, joins available game with lowest number
         for game in GameApp.games:
           self.game = GameApp.games[game]
-          temp = self.game.addPlayer(self)
+          temp = self.game.addPlayer(self, playerType)
           if temp and type(temp) == type(bool()):
             gameNumber = game
             break
@@ -66,7 +63,7 @@ class GameApp(AccountsAppMixin, BaseApp):
           return ["join-game-denied", "No games available"]
       else: #join a specific game, gameNumber >= 1
         self.game = GameApp.games[gameNumber]
-        temp = self.game.addPlayer(self)
+        temp = self.game.addPlayer(self, playerType)
         if type(temp) != type(bool()) or not temp:
           self.game = None
           return ["join-game-denied", "Game is full"]
@@ -107,7 +104,11 @@ class GameApp(AccountsAppMixin, BaseApp):
   def endTurn(self):
     """ Attempts to end your turn """
     return self.game.nextTurn()
-
+  
+  # TODO Determine if this should have decorators
+  def disconnect(self, reason):
+    self.leaveGame()
+   
   @protocolmethod
   @errorBuffer
   @requireTurn
@@ -132,8 +133,19 @@ class GameApp(AccountsAppMixin, BaseApp):
   @requireTypes(None, str)
   def requestLog(self, logID):
     """ Requests a specific gamelog """ 
-    infile = bz2.BZ2File("logs/" + logID + ".gamelog.bz2", "r")
-    return ['log', logID, infile.read()]
+    global emptyLog
+    
+    # -arena in the command line means:
+    # "nobody is ever going to see the log, don't send it, it's huge"
+    if emptyLog or logID == '0':
+      return ['log', logID, ""]
+    
+    #with bz2.BZ2File("logs/" + logID + ".glog", "r") as infile:
+    #  return ['log', logID, infile.read()]
+    infile = open("logs/" + logID + ".glog", "r")
+    data = ['log', logID, infile.read()]
+    infile.close()
+    return data
 
   def writeSExpr(self, message):
     """ Adds backward compatibility with game logic written for the old
@@ -145,23 +157,15 @@ class GameApp(AccountsAppMixin, BaseApp):
 class TestGameServer(SexpProtocol):
   app = GameApp
 
+emptyLog = False  
+
 if __name__ == "__main__":
   import timer
   timer.install()
+  portNumber = 19000
   if '-arena' in sys.argv:
-    import arena
-    arena.install()
-   
-  if '-debug' in sys.argv:
-	  Debug.enable()
-
-  found = 0;
-  for arg in sys.argv:
-    if arg == '-config':
-      found = 1
-      
-    elif found == 1:
-      found = 0
-      cfgFile = arg
-   
+    emptyLog = True
+  if '-port' in sys.argv:
+    indexNumber = sys.argv.index('-port') + 1
+    portNumber = int(sys.argv[indexNumber])
   TestGameServer.main(19000)

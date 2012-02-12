@@ -12,7 +12,6 @@ class Move
     ID = Client.INSTANCE.moveGetId(ptr);
     iteration = BaseAI.iteration;
   }
-
   boolean validify()
   {
     if(iteration == BaseAI.iteration) return true;
@@ -68,6 +67,18 @@ class Move
   {
     validify();
     return Client.INSTANCE.moveGetPromoteType(ptr);
+  }
+
+  public String toString()
+  {
+    validify();
+    String ret = "id: " + Client.INSTANCE.moveGetId(ptr) + '\n';
+    ret += "fromFile: " + Client.INSTANCE.moveGetFromFile(ptr) + '\n';
+    ret += "fromRank: " + Client.INSTANCE.moveGetFromRank(ptr) + '\n';
+    ret += "toFile: " + Client.INSTANCE.moveGetToFile(ptr) + '\n';
+    ret += "toRank: " + Client.INSTANCE.moveGetToRank(ptr) + '\n';
+    ret += "promoteType: " + Client.INSTANCE.moveGetPromoteType(ptr) + '\n';
+    return ret;
   }
 
 }

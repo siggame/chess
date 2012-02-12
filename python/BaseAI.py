@@ -15,13 +15,16 @@ class BaseAI:
   connection = None
   moves = []
   pieces = []
+  players = []
 
   def startTurn(self):
     from GameObject import Move
     from GameObject import Piece
+    from GameObject import Player
 
     BaseAI.moves = [Move(library.getMove(self.connection, i)) for i in xrange(library.getMoveCount(self.connection))]
     BaseAI.pieces = [Piece(library.getPiece(self.connection, i)) for i in xrange(library.getPieceCount(self.connection))]
+    BaseAI.players = [Player(library.getPlayer(self.connection, i)) for i in xrange(library.getPlayerCount(self.connection))]
 
     if not self.initialized:
       self.initialized = True
@@ -49,12 +52,6 @@ class BaseAI:
 
   def TurnsToStalemate(self):
     return library.getTurnsToStalemate(self.connection)
-
-  def player0Time(self):
-    return library.getPlayer0Time(self.connection)
-
-  def player1Time(self):
-    return library.getPlayer1Time(self.connection)
 
   def __init__(self, connection):
     self.connection = connection

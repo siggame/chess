@@ -1,4 +1,3 @@
-# -*- coding: iso-8859-1 -*-
 from base import *
 from matchUtils import *
 from objects import *
@@ -9,6 +8,7 @@ import os
 import itertools
 import scribe
 from copy import deepcopy
+import string
 
 Scribe = scribe.Scribe
 
@@ -19,23 +19,19 @@ def loadClassDefaults(cfgFile = "config/defaults.cfg"):
       setattr(eval(className), attr, cfg[className][attr])
 
 class Match(DefaultGameWorld):
-  def __init__(self, id, controller, cfgFile="config/initBoardState.txt"):
+  def __init__(self, id, controller):
     self.id = int(id)
     self.controller = controller
     DefaultGameWorld.__init__(self)
     self.scribe = Scribe(self.logPath())
     self.addPlayer(self.scribe, "spectator")
-    self.cfgFile = cfgFile
 
     #TODO: INITIALIZE THESE!
     self.moves = 0
     self.turnNumber = 0
     self.playerID = 0
-    self.gameNumber = id 
+    self.gameNumber = id
     self.TurnsToStalemate = 100
-    self.timeInc = 1
-    self.player0Time = 90000
-    self.player1Time = 90000 #15 minutes in centiseconds
 
   def addPlayer(self, connection, type="player"):
     connection.type = type
@@ -43,6 +39,10 @@ class Match(DefaultGameWorld):
       return "Game is full"
     if type == "player":
       self.players.append(connection)
+      try:
+        self.addObject(Player, [connection.screenName, self.startTime])
+      except TypeError:
+        raise TypeError("Someone forgot to add the extra attributes to the Player object initialization")
     elif type == "spectator":
       self.spectators.append(connection)
       #If the game has already started, send them the ident message
@@ -54,7 +54,7 @@ class Match(DefaultGameWorld):
     if connection in self.players:
       if self.turn is not None:
         winner = self.players[1 - self.getPlayerIndex(connection)]
-        self.declareWinner(winner,"Opponent Dropped")
+        self.declareWinner(winner, 'Opponent Disconnected')
       self.players.remove(connection)
     else:
       self.spectators.remove(connection)
@@ -66,69 +66,15 @@ class Match(DefaultGameWorld):
       return "Game has already begun"
     
     #TODO: START STUFF
-    board = file(self.cfgFile, 'r').read() #reads in the initial board state
-    assert (len(board) >= 64 )
+    self.turn = self.players[-1]
+    self.turnNumber = 0
+    with open("config/initBoardState.txt",'r') as f:
+      board = f.read().split()
+    for rank, row in enumerate(board):
+      for file, piece in enumerate(row):
+        if piece != '.':
+          self.addObject(Piece, [int(str.istitle(piece)), file+1, 8-rank, 0, ord(string.upper(piece))])
 
-    self.turnNumber = -1
-    self.turn = 0
-    #Creates all of the pieces
-    curRank = 0
-    curFile = 1
-    for square in board:
-      if square == '\n':
-        curFile = 1
-        curRank += 1
-      if square == 'R':
-        self.addObject(Piece(self, self.nextid, 1, curFile, 8-curRank, 0, ord('R')))
-        self.nextid += 1
-        curFile += 1
-      if square == 'N':
-        self.addObject(Piece(self, self.nextid, 1, curFile, 8-curRank, 0, ord('N')))
-        self.nextid += 1
-        curFile += 1
-      if square == 'B':
-        self.addObject(Piece(self, self.nextid, 1, curFile, 8-curRank, 0, ord('B')))
-        self.nextid += 1
-        curFile += 1
-      if square == 'K':
-        self.addObject(Piece(self, self.nextid, 1, curFile, 8-curRank, 0, ord('K')))
-        self.nextid += 1
-        curFile += 1
-      if square == 'Q':
-        self.addObject(Piece(self, self.nextid, 1, curFile, 8-curRank, 0, ord('Q')))
-        self.nextid += 1
-        curFile += 1
-      if square == 'P':
-        self.addObject(Piece(self, self.nextid, 1, curFile, 8-curRank, 0, ord('P')))
-        self.nextid += 1
-        curFile += 1
-      if square == 'r':
-        self.addObject(Piece(self, self.nextid, 0, curFile, 8-curRank, 0, ord('R')))
-        self.nextid += 1
-        curFile += 1
-      if square == 'n':
-        self.addObject(Piece(self, self.nextid, 0, curFile, 8-curRank, 0, ord('N')))
-        self.nextid += 1
-        curFile += 1
-      if square == 'b':
-        self.addObject(Piece(self, self.nextid, 0, curFile, 8-curRank, 0, ord('B')))
-        self.nextid += 1
-        curFile += 1
-      if square == 'k':
-        self.addObject(Piece(self, self.nextid, 0, curFile, 8-curRank, 0, ord('K')))
-        self.nextid += 1
-        curFile += 1
-      if square == 'q':
-        self.addObject(Piece(self, self.nextid, 0, curFile, 8-curRank, 0, ord('Q')))
-        self.nextid += 1
-        curFile += 1
-      if square == 'p':
-        self.addObject(Piece(self, self.nextid, 0, curFile, 8-curRank, 0, ord('P')))
-        self.nextid += 1
-        curFile += 1
-      if square == '.':
-        curFile += 1
-    self.turn = self.players[1]
     self.nextTurn()
     return True
 
@@ -148,7 +94,6 @@ class Match(DefaultGameWorld):
     for obj in self.objects.values():
       obj.nextTurn()
 
-
     self.checkWinner()
     self.moves = 1
     if self.winner is None:
@@ -159,7 +104,7 @@ class Match(DefaultGameWorld):
     return True
 
   def checkWinner(self):
-    #TODO: Make this check if a player won, and call declareWinner with a player if they did, illegal move defaulting is handled at the end of the piece move function
+    #TODO: Make this check if a player won, and call declareWinner with a player if they did
     #if they didn't make a move, they lose
     if self.moves != 0:
       message = ""
@@ -173,44 +118,41 @@ class Match(DefaultGameWorld):
     if self.TurnsToStalemate == 0:
       self.declareDraw("100 moves without a capture or pawn advancement, Stalemate!")
       return
-    if len( [ i for i in self.objects.values() if isinstance(i, Piece)] ) == 2:
+    if len(self.objects.pieces) == 2:
       self.declareDraw("Only Kings Left, Stalemate!")
       return
-    if len( [ i for i in self.objects.values() if isinstance(i, Piece)] ) == 3:
-      for p in self.objects.values():
-        if isinstance(p,Piece):
-          if p.type == ord('B'):
-            self.declareDraw("With a King Vs a King and a Bishop it is impossible to checkmate, Stalemate!")
-            return
-          if p.type == ord('N'):
-            self.declareDraw("With a King Vs a King and a Knight it is impossible to checkmate, Stalemate!")
-            return
+    if len(self.objects.pieces) == 3:
+      for p in self.objects.pieces:
+        if p.type == ord('B'):
+          self.declareDraw("With a King Vs a King and a Bishop it is impossible to checkmate, Stalemate!")
+          return
+        if p.type == ord('N'):
+          self.declareDraw("With a King Vs a King and a Knight it is impossible to checkmate, Stalemate!")
+          return
     stalemate = True
     bColor = -1
-    for i in self.objects.values():
-      if isinstance(i,Piece):
-        if i.type != ord('K') and i.type != ord('B'):
-          stalemate = False
-          break
-        if i.type is ord('B'):
-          if bColor == -1:
-            bColor = (i.rank+i.file)%2
-          else:
-            if (i.rank+i.file)%2 != bColor:
-              stalemate = False
-              break
+    for i in self.objects.pieces:
+      if i.type != ord('K') and i.type != ord('B'):
+        stalemate = False
+        break
+      if i.type is ord('B'):
+        if bColor == -1:
+          bColor = (i.rank+i.file)%2
+        else:
+          if (i.rank+i.file)%2 != bColor:
+            stalemate = False
+            break
     if stalemate is True:
       self.declareDraw("With only Kings and Bishops, with all of the Bishops on the same color, Checkmate is impossible, Stalemate!")
       return
-    moveList = sorted([i.toList() for i in self.objects.values() if i.__class__ is Move]) #all moves, earlier in the array means later in the game
-    moveList = [i[1:5] for i in reversed(moveList)] #we only care about the start and end positions
+    moveList = sorted(self.objects.moves) #all moves, earlier in the array means later in the game
+    moveList = [i.toList()[1:5] for i in reversed(moveList)] #we only care about the start and end positions
     if len(moveList) >= 8 and self.TurnsToStalemate <= 92:
       #print "Debugging info: " + `len(moveList[0])`+ ", " + `self.TurnsToStalemate` + `moveList[0:8]`
       if moveList[0:4] == moveList[4:8]:
         self.declareDraw("Board state repeated three times in a row, Stalemate Declared!")
         return
 
-  
   def declareDraw(self, reason=''):
     self.winner = 'No one.'
     
@@ -247,7 +189,7 @@ class Match(DefaultGameWorld):
     self.turn = None
     
   def logPath(self):
-    return "logs/" + str(self.id) + ".gamelog"
+    return "logs/" + str(self.id) + ".glog"
 
   @derefArgs(Piece, None, None, None)
   def move(self, object, file, rank, type):
@@ -280,12 +222,12 @@ class Match(DefaultGameWorld):
   def status(self):
     msg = ["status"]
 
-    msg.append(["game", self.turnNumber, self.playerID, self.gameNumber, self.TurnsToStalemate, self.player0Time, self.player1Time])
+    msg.append(["game", self.turnNumber, self.playerID, self.gameNumber, self.TurnsToStalemate])
 
     typeLists = []
     typeLists.append(["Move"] + sorted([i.toList() for i in self.objects.values() if i.__class__ is Move], reverse = True))
-    
     typeLists.append(["Piece"] + [i.toList() for i in self.objects.values() if i.__class__ is Piece])
+    typeLists.append(["Player"] + [i.toList() for i in self.objects.values() if i.__class__ is Player])
 
     msg.extend(typeLists)
 
@@ -297,7 +239,7 @@ class Match(DefaultGameWorld):
     temp2 = self.moves
     self.playerID = owner^1
     self.moves = 1
-    king = [ i for i in self.objects.values() if isinstance(i, Piece) and i.type == ord('K') and i.owner == owner][0]
+    king = [ i for i in self.objects.pieces if i.type == ord('K') and i.owner == owner][0]
     #print "Checking for Check!, King at Rank " + `king.rank` + " File " + `king.file`
     for i in self.objects.values():
       if isinstance(i,Piece) and i.owner is not owner:
@@ -330,6 +272,7 @@ class Match(DefaultGameWorld):
               return False
     #if no possible move gets out of check, then they are in checkmate
     return True
+
 
 loadClassDefaults()
 

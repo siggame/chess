@@ -12,6 +12,8 @@
 namespace visualizer
 {
 
+  Log errorLog( "chess.log" ); 
+
   Chess::Chess() : BaseAI( 0 )
   {
   } // Chess::Chess()
@@ -91,7 +93,6 @@ namespace visualizer
       piece->type = p->type();
       piece->owner = p->owner();
 
-
       piece->addKeyFrame( new DrawChessPiece( piece ) );
       turn.addAnimatable( piece );
     }
@@ -105,23 +106,31 @@ namespace visualizer
   {
     m_playerMoved = false;
     promotion = 'Q';
-    
-    addCurrentBoard();
-    // We'll want to wait for user input.
-    bool input = false;
-    while( !input )
-    {
-      inputMutex.lock();
 
-      if( m_playerMoved )
+
+    if( m_player )
+    {
+      addCurrentBoard();
+      // We'll want to wait for user input.
+      bool input = false;
+      while( !input )
       {
-        input = true;
+        inputMutex.lock();
+
+        if( m_playerMoved )
+        {
+          input = true;
+        }
+
+        inputMutex.unlock();
       }
 
-      inputMutex.unlock();
+      addCurrentBoard();
+    } 
+    else
+    {
+      addCurrentBoard();
     }
-
-    addCurrentBoard();
 
     // Once we get it, we'll create the same board, but with the moved piece. 
     return true;
@@ -182,9 +191,19 @@ namespace visualizer
     if( m_gameNumber->text().size() )
     {
       gameNumber = QVariant( m_gameNumber->text() ).toInt(); 
-      if( !client::joinGame( c, gameNumber ) )
+      if( m_player )
       {
-        THROW( Exception, "Error Joining Game!" );
+        if( !client::joinGame( c, gameNumber, "player" ) )
+        {
+          THROW( Exception, "Error Joining Game!" );
+        }
+      }
+      else
+      {
+        if( !client::joinGame( c, gameNumber, "spectator" ) )
+        {
+          THROW( Exception, "Error Joining Game!" );
+        }
       }
     }
     else
@@ -199,7 +218,7 @@ namespace visualizer
     timeManager->setNumTurns( 0 );
 
 
-    NetworkLoop* n = new NetworkLoop( this, c );
+    n = new NetworkLoop( this, c );
     n->start();
     
     Frame turn;
@@ -320,7 +339,7 @@ namespace visualizer
 
     MoveParser parser( board );
 
-    c->drawMutex.lock();
+    n->drawMutex.lock();
     for( vector<client::Move>::reverse_iterator m = moves.rbegin(); m != moves.rend(); m++ )
     {
       Move mv = parser.parse( printMove( *m, board ).c_str() );
@@ -329,7 +348,7 @@ namespace visualizer
       board.move( mv );
 
     }
-    c->drawMutex.unlock();
+    n->drawMutex.unlock();
 
     return board;
 
@@ -350,6 +369,17 @@ namespace visualizer
         if( (x+8*y) == m->to() )
         {
           piece.move( x+1, y+1, p );
+          for( vector<client::Piece>::iterator i = pieces.begin(); i != pieces.end(); i++ )
+          {
+            if( 
+              i->file() == x+1 &&
+              i->rank() == y+1 &&
+              i->id() != piece.id() )
+            {
+              pieces.erase( i );
+              break;
+            }
+          }
 
           return true;
         }

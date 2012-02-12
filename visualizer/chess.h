@@ -74,6 +74,7 @@ namespace visualizer
       Coord lastP;
 
       QMutex inputMutex;
+      NetworkLoop* n;
 
   }; 
 

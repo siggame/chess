@@ -10,6 +10,7 @@
 
 #include "Move.h"
 #include "Piece.h"
+#include "Player.h"
 
 /// \brief A basic AI interface.
 
@@ -22,6 +23,7 @@ protected:
   Connection* c;
   std::vector<Move> moves;
   std::vector<Piece> pieces;
+  std::vector<Player> players;
 public:
   ///How many turns it has been since the beginning of the game
   int turnNumber();
@@ -31,14 +33,6 @@ public:
   int gameNumber();
   ///How many turns until the game ends because no pawn has moved and no piece has been taken
   int TurnsToStalemate();
-  ///Player 0's time remaining
-  int player0Time();
-  ///Player 1's time remaining
-  int player1Time();
-  ///Player 0's name
-  char* player0Name();
-  ///Player 1's name
-  char* player1Name();
   
   BaseAI(Connection* c);
   virtual ~BaseAI();

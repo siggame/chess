@@ -141,3 +141,48 @@ class Piece(GameObject):
     ret += "hasMoved: %s\n" % self.getHasMoved()
     ret += "type: %s\n" % self.getType()
     return ret
+
+##
+class Player(GameObject):
+  def __init__(self, ptr):
+    from BaseAI import BaseAI
+    self.ptr = ptr
+    self.iteration = BaseAI.iteration
+    
+    self.id = library.playerGetId(ptr)
+
+  def validify(self):
+    from BaseAI import BaseAI
+    #if this class is pointing to an object from before the current turn it's probably
+    #somewhere else in memory now
+    if self.iteration == BaseAI.iteration:
+      return True
+    for i in BaseAI.players:
+      if i.id == self.id:
+        self.ptr = i.ptr
+        self.iteration = BaseAI.iteration
+        return True
+    raise ExistentialError()
+  ##Unique Identifier
+  def getId(self):
+    self.validify()
+    return library.playerGetId(self.ptr)
+
+  ##Player's Name
+  def getPlayerName(self):
+    self.validify()
+    return library.playerGetPlayerName(self.ptr)
+
+  ##Time remaining, updated at start of turn
+  def getTime(self):
+    self.validify()
+    return library.playerGetTime(self.ptr)
+
+
+  def __str__(self):
+    self.validify()
+    ret = ""
+    ret += "id: %s\n" % self.getId()
+    ret += "playerName: %s\n" % self.getPlayerName()
+    ret += "time: %s\n" % self.getTime()
+    return ret

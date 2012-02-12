@@ -35,15 +35,13 @@ struct Connection
   int playerID;
   int gameNumber;
   int TurnsToStalemate;
-  int player0Time;
-  int player1Time;
-  char* player0Name;
-  char* player1Name;
 
   _Move* Moves;
   int MoveCount;
   _Piece* Pieces;
   int PieceCount;
+  _Player* Players;
+  int PlayerCount;
 };
 
 #ifdef __cplusplus
@@ -51,11 +49,12 @@ extern "C"
 {
 #endif
   DLLEXPORT Connection* createConnection();
+  DLLEXPORT void destroyConnection(Connection* c);
   DLLEXPORT int serverConnect(Connection* c, const char* host, const char* port);
 
   DLLEXPORT int serverLogin(Connection* c, const char* username, const char* password);
   DLLEXPORT int createGame(Connection* c);
-  DLLEXPORT int joinGame(Connection* c, int id);
+  DLLEXPORT int joinGame(Connection* c, int id, const char* playerType);
 
   DLLEXPORT void endTurn(Connection* c);
   DLLEXPORT void getStatus(Connection* c);
@@ -76,16 +75,15 @@ DLLEXPORT int getTurnNumber(Connection* c);
 DLLEXPORT int getPlayerID(Connection* c);
 DLLEXPORT int getGameNumber(Connection* c);
 DLLEXPORT int getTurnsToStalemate(Connection* c);
-DLLEXPORT int getPlayer0Time(Connection* c);
-DLLEXPORT int getPlayer1Time(Connection* c);
-DLLEXPORT char* getPlayer0Name(Connection* c);
-DLLEXPORT char* getPlayer1Name(Connection* c);
 
 DLLEXPORT _Move* getMove(Connection* c, int num);
 DLLEXPORT int getMoveCount(Connection* c);
 
 DLLEXPORT _Piece* getPiece(Connection* c, int num);
 DLLEXPORT int getPieceCount(Connection* c);
+
+DLLEXPORT _Player* getPlayer(Connection* c, int num);
+DLLEXPORT int getPlayerCount(Connection* c);
 
 
 

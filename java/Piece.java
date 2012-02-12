@@ -12,7 +12,6 @@ class Piece
     ID = Client.INSTANCE.pieceGetId(ptr);
     iteration = BaseAI.iteration;
   }
-
   boolean validify()
   {
     if(iteration == BaseAI.iteration) return true;

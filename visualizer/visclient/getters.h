@@ -31,6 +31,11 @@ DLLEXPORT int pieceGetHasMoved(_Piece* ptr);
 DLLEXPORT int pieceGetType(_Piece* ptr);
 
 
+DLLEXPORT int playerGetId(_Player* ptr);
+DLLEXPORT char* playerGetPlayerName(_Player* ptr);
+DLLEXPORT float playerGetTime(_Player* ptr);
+
+
 
 #ifdef __cplusplus
 }

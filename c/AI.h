@@ -2,6 +2,9 @@
 #define AI_H
 
 #include "BaseAI.h"
+#include <iostream>
+#include <cstdlib>
+using namespace std;
 
 ///The class implementing gameplay logic.
 class AI: public BaseAI

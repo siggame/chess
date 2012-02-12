@@ -22,6 +22,11 @@ int pieceGetHasMoved(_Piece* ptr);
 int pieceGetType(_Piece* ptr);
 
 
+int playerGetId(_Player* ptr);
+char* playerGetPlayerName(_Player* ptr);
+float playerGetTime(_Player* ptr);
+
+
 
 #ifdef __cplusplus
 }

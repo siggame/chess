@@ -24,14 +24,6 @@ int BaseAI::TurnsToStalemate()
 {
   return getTurnsToStalemate(c);
 }
-char* BaseAI::player0Name()
-{
-  return getPlayer0Name(c);
-}
-char* BaseAI::player1Name()
-{
-  return getPlayer1Name(c);
-}
 
 bool BaseAI::startTurn()
 {
@@ -51,6 +43,14 @@ bool BaseAI::startTurn()
   for(int i = 0; i < count; i++)
   {
     pieces[i] = Piece(getPiece(c, i));
+  }
+
+  count = getPlayerCount(c);
+  players.clear();
+  players.resize(count);
+  for(int i = 0; i < count; i++)
+  {
+    players[i] = Player(getPlayer(c, i));
   }
 
   if(!initialized)
