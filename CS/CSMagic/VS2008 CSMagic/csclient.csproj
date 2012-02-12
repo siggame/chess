@@ -65,19 +65,14 @@
     <Compile Include="Client.CS" />
     <Compile Include="ExistentialError.CS" />
     <Compile Include="Main.CS" />
-    <Compile Include="Mappable.CS" />
-    <Compile Include="Pirate.CS" />
+    <Compile Include="Piece.CS" />
     <Compile Include="Player.CS" />
-    <Compile Include="Port.CS" />
+    <Compile Include="Move.CS" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Ship.CS" />
-    <Compile Include="Tile.CS" />
-    <Compile Include="Treasure.CS" />
-    <Compile Include="Unit.CS" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\Settings.settings">

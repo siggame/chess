@@ -72,15 +72,14 @@
     <Compile Include="Client.CS" />
     <Compile Include="ExistentialError.CS" />
     <Compile Include="Main.CS" />
-    <Compile Include="Mappable.CS" />
+    <Compile Include="Move.CS" />
+    <Compile Include="Piece.CS" />
     <Compile Include="Player.CS" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Tile.CS" />
-    <Compile Include="Virus.CS" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\Settings.settings">
