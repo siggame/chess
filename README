@@ -38,8 +38,8 @@ successful, you can move on to starting a game.
 If you do plan to use an alternative build system, you'll need to incorporate the construction of the shared object 
 library, who's source files exist in the c/ folder.
 
-<<<C#>>> Since C# is a Microsoft based language, we do provide Visual Studio 2010 project files.  For other versions of 
-visual studio, you may need to modify the project files.
+<<<C#>>> Since C# is a Microsoft based language, we do provide Visual Studio 2008 and 2010 project files.  To use,
+copy the contents of the CS/CSMagic/VS20## CSMagic/ folder up to the CS/ folder.
 
 == Starting a game ==
 First you need a chess server running.  This requires python2.7 with the twisted package installed, which is available 
