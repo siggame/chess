@@ -39,7 +39,12 @@ namespace Windows
 #define UNLOCK(X)
 #endif
 
-using namespace std;
+using std::cout;
+using std::cerr;
+using std::endl;
+using std::stringstream;
+using std::string;
+using std::ofstream;
 
 DLLEXPORT Connection* createConnection()
 {
