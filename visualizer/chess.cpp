@@ -147,8 +147,8 @@ namespace visualizer
   void Chess::setup()
   {
     
-    renderer->setCamera( 0, 0, 12, 8 );
-    renderer->setGridDimensions( 8, 8 );
+    renderer->setCamera( 0, 0, 8, 12 );
+    renderer->setGridDimensions( 8, 12 );
     
     resourceManager->loadResourceFile( "./plugins/chess/textures.r" );
 
@@ -413,8 +413,8 @@ namespace visualizer
         player1 << min << ":" << setw(2) << setfill( '0' ) << sec;
       } else
       {
-        player1 << "GAME NOT YET STARTED";
-        player2 << "GAME NOT YET STARTED";
+        player1 << "WAITING";
+        player2 << "WAITING";
       }
 
       bool rotate = options->getNumber( "RotateBoard" );
@@ -441,7 +441,7 @@ namespace visualizer
       }
 
 
-      renderer->drawText( 10, 6.7, "DroidSansMono", "Current Promotion:", 1 );
+      renderer->drawText( 9.5, 6.7, "DroidSansMono", "Current Promotion:", 1 );
 
       
       if( lastP.y >= 0 && lastP.y < 8 )
