@@ -148,7 +148,7 @@ namespace visualizer
   {
     
     renderer->setCamera( 0, 0, 8, 12 );
-    renderer->setGridDimensions( 8, 12 );
+    renderer->setGridDimensions( 8, 8 );
     
     resourceManager->loadResourceFile( "./plugins/chess/textures.r" );
 
