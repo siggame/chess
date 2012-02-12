@@ -71,3 +71,32 @@ connected to something that isn't a chess server.
 
 For those not using Linux to handle their clients, pass the executable you built the same arguments as "run", and 
 everything should work similarly.
+
+== The Visualizer ==
+
+Getting the latest visualizer.
+
+Windows: ftp://r99acm.device.mst.edu:2121/chess-window.zip
+Linux: ftp://r99acm.device.mst.edu:2121/chess-linux.zip
+
+=== Building The Chess Visualizer On Linux/Mac ===
+
+Just because the most popular linux distribution is ubuntu, these instructions are taylored for that.  It shouldn't 
+be too hard to follow for any other distribution or mac. 
+
+Install Prerequisites: 
+Ubuntu-
+  sudo apt-get install libqt-dev libqt-opengl-dev
+
+Mac- 
+  http://qt.nokia.com/downloads
+
+Building:
+  qmake
+  make
+
+  cd chess
+  qmake
+  make
+
+  After building, the there should be a visualizer built in the root directory. 
