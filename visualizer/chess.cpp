@@ -5,9 +5,12 @@
 
 #include <QDialog>
 #include <sstream>
+#include <iomanip>
 #include <cmath>
 #include <QSignalMapper>
 #include "networkloop.h"
+
+using namespace std;
 
 namespace visualizer
 {
@@ -291,7 +294,6 @@ namespace visualizer
 
         Coord p = getCoord();
 
-
         bool moved = false;
         if( lastP.x >= 0 && lastP.x < 8 && lastP.y >= 0 && lastP.y < 8 )
         {
@@ -301,12 +303,11 @@ namespace visualizer
             {
               if( piece->file() == lastP.x+1 && piece->rank() == lastP.y+1 )
               {
-                cout << "MOVED" << endl;
                 if( moveIfValid( *piece, p.x, p.y, promotion ) )
                 {
                   if( piece->type() == 'P' && ( p.y == 1 || p.y == 8 ) )
                   {
-                    piece->ptr->type = promotion;
+                    ((client::_Piece*)piece->ptr)->type = promotion;
                   }
                   inputMutex.lock();
                   m_playerMoved = true;
@@ -402,8 +403,15 @@ namespace visualizer
       stringstream player1;
       stringstream player2;
 
-      player1 << "THE TIME HERE";
-      player2 << "OTHER TIME HERE";
+      if( players.size() )
+      {
+        int min = players[0].time()/60;
+        int sec = players[0].time()-min*60;
+        player2 << min << ":" << setw(2) << setfill( '0' ) << sec;
+        min = players[1].time()/60;
+        sec = players[1].time()-min*60;
+        player1 << min << ":" << setw(2) << setfill( '0' ) << sec;
+      }
 
       bool rotate = options->getNumber( "RotateBoard" );
       renderer->setColor( Color( 0, 0, 0, 1 ) );
