@@ -40,6 +40,7 @@ namespace visualizer
   {
     // TODO: Cleanup This Code.  It's terrible
     m_ipAddress = ipAddress;
+    promotion = 'Q';
     QDialog *chooseGame = new QDialog();
 
     QGridLayout *layout = new QGridLayout();
@@ -105,7 +106,6 @@ namespace visualizer
   bool Chess::run()
   {
     m_playerMoved = false;
-    promotion = 'Q';
 
 
     if( m_player )
@@ -302,7 +302,7 @@ namespace visualizer
               if( piece->file() == lastP.x+1 && piece->rank() == lastP.y+1 )
               {
                 cout << "MOVED" << endl;
-                if( moveIfValid( *piece, p.x, p.y, 'Q' ) )
+                if( moveIfValid( *piece, p.x, p.y, promotion ) )
                 {
                   inputMutex.lock();
                   m_playerMoved = true;
