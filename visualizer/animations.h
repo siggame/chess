@@ -38,6 +38,20 @@ namespace visualizer
         
     }; // DrawChessPiece
 
-}
+    class DrawTime: public Anim
+    {
+      public:
+        DrawTime( int time, int player ) { m_time = time; m_player = player; }
+
+        void animate( const float& t, AnimData* d, IGame* game );
+
+      private:
+        int m_time;
+        int m_player;
+        
+
+    }; // DrawScore
+
+} // visualizer
 
 #endif // ANIMATION_H

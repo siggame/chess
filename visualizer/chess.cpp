@@ -4,6 +4,7 @@
 #include "animations.h"
 
 #include <QDialog>
+#include <sstream>
 #include <cmath>
 #include <QSignalMapper>
 #include "networkloop.h"
@@ -103,6 +104,7 @@ namespace visualizer
   bool Chess::run()
   {
     m_playerMoved = false;
+    promotion = 'Q';
     
     addCurrentBoard();
     // We'll want to wait for user input.
@@ -133,7 +135,7 @@ namespace visualizer
   void Chess::setup()
   {
     
-    renderer->setCamera( 0, 0, 8, 8 );
+    renderer->setCamera( 0, 0, 12, 8 );
     renderer->setGridDimensions( 8, 8 );
     
     resourceManager->loadResourceFile( "./plugins/chess/textures.r" );
@@ -362,6 +364,40 @@ namespace visualizer
   {
     if( m_player )
     {
+      
+      stringstream player1;
+      stringstream player2;
+
+      player1 << "THE TIME HERE";
+      player2 << "OTHER TIME HERE";
+
+      bool rotate = options->getNumber( "RotateBoard" );
+      renderer->setColor( Color( 0, 0, 0, 1 ) );
+      renderer->drawProgressBar( promotion == 'Q' ? 10 : 11, 7, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
+      renderer->setColor( Color( 1, 1, 1 ) );
+
+      if( playerID() )
+      {
+        renderer->drawText( 8, ( rotate ? 7.7 : 0 ), "DroidSansMono", player1.str(), 1 );
+        renderer->drawText( 8, ( rotate ? 0 : 7.7 ), "DroidSansMono", player2.str(), 1 );
+
+        renderer->drawTexturedQuad( 10, 6, 1, 1, "0-Q" );
+        renderer->drawTexturedQuad( 11, 6, 1, 1, "0-N" );
+
+      }
+      else
+      {
+        renderer->drawText( 8, ( rotate ? 0 : 7.7 ), "DroidSansMono", player1.str(), 1 );
+        renderer->drawText( 8, ( rotate ? 7.7 : 0 ), "DroidSansMono", player2.str(), 1 );
+
+        renderer->drawTexturedQuad( 10, 7, 1, 1, "1-Q" );
+        renderer->drawTexturedQuad( 11, 7, 1, 1, "1-N" );
+      }
+
+
+      renderer->drawText( 10, 6.7, "DroidSansMono", "Current Promotion:", 1 );
+
+      
       if( lastP.y >= 0 && lastP.y < 8 )
       {
         if( lastP.x >= 0 && lastP.x < 8 )
@@ -406,6 +442,19 @@ namespace visualizer
             }
           }
 
+        }
+        else if( lastP.x < 0 && floor(lastP.y) == 7 )
+        {
+          if( lastP.x == -3 )
+          {
+            // Queen
+            promotion = 'Q';
+          }
+          else if( lastP.x == -4 )
+          {
+            // Knight
+            promotion = 'N';
+          }
         }
       }
     }

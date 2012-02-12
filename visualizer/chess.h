@@ -69,6 +69,7 @@ namespace visualizer
       bool m_spectating;
     
       bool m_playerMoved;
+      char promotion;
 
       Coord lastP;
 

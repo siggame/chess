@@ -54,4 +54,24 @@ namespace visualizer
 
   }
 
+  void DrawTime::animate( const float& t, AnimData* d, IGame* game )
+  {
+    game->renderer->setColor( Color( 1, 1, 1 ) );
+
+    stringstream ss;
+
+    int min = m_time/60;
+    int sec = m_time-min*60;
+
+    ss << min << ":" << sec;
+
+    bool rotate = game->options->getNumber( "RotateBoard" );
+
+    if( m_player )
+      game->renderer->drawText( 8, ( rotate ? 0 : 7.7 ), "DroidSansMono", ss.str() );
+    else
+      game->renderer->drawText( 8, ( rotate ? 7.7 : 0 ), "DroidSansMono", ss.str() );
+
+  }
+
 }
