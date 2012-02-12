@@ -411,6 +411,10 @@ namespace visualizer
         min = players[1].time()/60;
         sec = players[1].time()-min*60;
         player1 << min << ":" << setw(2) << setfill( '0' ) << sec;
+      } else
+      {
+        player1 << "GAME NOT YET STARTED";
+        player2 << "GAME NOT YET STARTED";
       }
 
       bool rotate = options->getNumber( "RotateBoard" );
