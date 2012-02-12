@@ -304,6 +304,10 @@ namespace visualizer
                 cout << "MOVED" << endl;
                 if( moveIfValid( *piece, p.x, p.y, promotion ) )
                 {
+                  if( piece->type() == 'P' && ( p.y == 1 || p.y == 8 ) )
+                  {
+                    piece->ptr->type = promotion;
+                  }
                   inputMutex.lock();
                   m_playerMoved = true;
                   moved = true;
