@@ -208,8 +208,8 @@ namespace visualizer
   void Chess::setup()
   {
     
-    renderer->setCamera( 0, 0, 8, 8);
-    renderer->setGridDimensions( 8, 8 );
+    renderer->setCamera( 0, 0, 12, 8);
+    renderer->setGridDimensions( 12, 8 );
     
     resourceManager->loadResourceFile( "./plugins/chess/textures.r" );
 
