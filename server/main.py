@@ -79,7 +79,7 @@ class GameApp(AccountsAppMixin, BaseApp):
     if self.game is None:
       return "Not in a game"
     reply = self.game.removePlayer(self)
-    if (len(self.game.players) == 0):
+    if (len(self.game.players) == 0) and self.game.id in GameApp.games:
       del GameApp.games[self.game.id]
     self.game = None
     return reply
