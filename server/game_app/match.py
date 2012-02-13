@@ -46,8 +46,9 @@ class Match(DefaultGameWorld):
     elif type == "spectator":
       self.spectators.append(connection)
       #If the game has already started, send them the ident message
-      if (self.turn is not None):
-        self.sendIdent([connection])
+      #TODO Figure out if this is actually supposed to be here
+      #if (self.turn is not None):
+      #  self.sendIdent([connection])
     return True
 
   def removePlayer(self, connection):
