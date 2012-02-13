@@ -167,7 +167,7 @@ DLLEXPORT int joinGame(Connection* c, int gameNum, const char* playerType)
 
   if(strcmp(expression->list->val, "join-accepted") != 0)
   {
-    cerr << "Game " << c->gameNumber << " doesn't exist." << endl;
+    cerr << "Cannot join game "<< c->gameNumber << ": " << expression->list->next->val << endl;
     destroy_sexp(expression);
     return 0;
   }
