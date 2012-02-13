@@ -156,8 +156,6 @@ namespace visualizer
     
     resourceManager->loadResourceFile( "./plugins/chess/textures.r" );
 
-    animationEngine->registerGame( this, this );
-
     m_playerMoved = m_spectating = m_player = false;
     lastP.x = lastP.y = -1;
  
@@ -185,12 +183,14 @@ namespace visualizer
 
     if( !client::serverConnect( c, m_ipAddress.c_str(), "19000" ) )
     {
-      THROW( Exception, "Could Not Connect To Server" );
+      WARNING( "Could Not Connect To Server" );
+      return;
     }
 
     if( !client::serverLogin( c, username(), password() ) )
     {
-      THROW( Exception, "Invalid Login Credentials" );
+      WARNING( "Invalid Login Credentials" );
+      return;
     }
 
     int gameNumber;
@@ -202,14 +202,16 @@ namespace visualizer
       {
         if( !client::joinGame( c, gameNumber, "player" ) )
         {
-          THROW( Exception, "Error Joining Game!" );
+          WARNING( "Error Joining Game! See Console For Output" );
+          return;
         }
       }
       else
       {
         if( !client::joinGame( c, gameNumber, "spectator" ) )
         {
-          THROW( Exception, "Error Joining Game!" );
+          WARNING( "Error Joining Game!" );
+          return;
         }
       }
     }
@@ -217,8 +219,11 @@ namespace visualizer
     {
       gameNumber = client::createGame( c );
     }
+    
+    stringstream ss;
+    ss << "Successfully connected to game: " << gameNumber << endl;
 
-    cout << "Connected to game: " << gameNumber << endl;
+    QMessageBox::information( 0, "Game Connection", ss.str().c_str() );
 
     m_spectating = true;
 
@@ -256,6 +261,8 @@ namespace visualizer
     }
 
     addFrame( turn );
+
+    animationEngine->registerGame( this, this );
   
   } // Chess::conn() 
 
@@ -275,15 +282,15 @@ namespace visualizer
       delete m_game;
       m_game = 0;
       errorLog << gamelog;
-      THROW
-        (
-        GameException,
+      WARNING(
         "Cannot load gamelog, %s", 
         gamelog.c_str()
         );
     }
     // END: Initial Setup
     
+    animationEngine->registerGame( this, this );
+
     load();
   } // Chess::loadGamelog()
 
