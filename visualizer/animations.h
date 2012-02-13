@@ -27,6 +27,17 @@ namespace visualizer
 
     }; // DrawBoard
   
+    class DrawDeadPiece: public Anim
+    {
+      public:
+        DrawDeadPiece( ChessPiece* piece ) { m_piece = piece; }
+
+        void animate( const float& t, AnimData* d, IGame* game );
+      private:
+        ChessPiece* m_piece;
+      
+    };
+  
     class DrawChessPiece: public Anim
     {
       public:

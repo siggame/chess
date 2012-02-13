@@ -12,8 +12,8 @@ namespace visualizer
   
     struct ChessPiece: public Animatable
     {
-        int x;
-        int y;
+        float x;
+        float y;
         int owner;
         int type;
         

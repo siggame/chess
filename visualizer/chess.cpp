@@ -84,14 +84,28 @@ namespace visualizer
     Bitboard::init();
   }
 
+  map<char, int> Chess::populatePieces()
+  {
+    map<char, int> p;
+    p['K'] = p['Q'] = 1;
+    p['B'] = p['N'] = p['R'] = 2;
+    p['P'] = 8;
+
+    return p;
+
+  }
+
   void Chess::addCurrentBoard()
   {
-
     Frame turn;
     SmartPointer<ChessBoard> board = new ChessBoard();
     board->addKeyFrame( new DrawBoard() );
     turn.addAnimatable( board );
-      
+    
+    map< char, int > killed[2];
+    killed[0] = populatePieces();
+    killed[1] = populatePieces();
+
     for( vector<client::Piece>::iterator p = pieces.begin(); p != pieces.end(); p++ )
     {
       SmartPointer<ChessPiece> piece = new ChessPiece();
@@ -101,13 +115,57 @@ namespace visualizer
       piece->type = p->type();
       piece->owner = p->owner();
 
+      killed[piece->owner][piece->type]--;
+
       piece->addKeyFrame( new DrawChessPiece( piece ) );
       turn.addAnimatable( piece );
+
     }
 
+    cout << "=====================" << endl;
+    for( size_t i = 0; i < 2; i++ )
+    {
+      float x = 7.95;
+      float y = 3.5+0.5*i;
+      for( map< char, int >::iterator p = killed[i].begin(); p != killed[i].end(); p++ )
+      {
+        //cout << (char)p->first << ":" << p->second << endl;
+        while( p->second-- )
+        {
+          SmartPointer<ChessPiece> piece = new ChessPiece();
+          piece->x = x;
+          x+=0.3;
+          piece->y = y;
+          if( x > 10 )
+          {
+            if( i )
+            {
+              y+=0.5;
+            }
+            else
+            {
+              y-=0.5;
+            }
+            x = 7.95;
+          }
+          piece->type = p->first;
+          piece->owner = i;
+
+          cout << "(" << piece->x << ", " << piece->y << ")" << endl;
+          cout << (char)piece->type << ":" << piece->owner << endl;
+
+
+          piece->addKeyFrame( new DrawDeadPiece( piece ) );
+          turn.addAnimatable( piece );
+          
+        }
+
+      }
+    }
+ 
     addFrame( turn );
     timeManager->setNumTurns( size() );
-    timeManager->play();
+    timeManager->play();   
   }
 
   bool Chess::run()

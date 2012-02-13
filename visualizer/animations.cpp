@@ -37,7 +37,25 @@ namespace visualizer
       }
     }
   }
-  
+   
+  void DrawDeadPiece::animate( const float& /* t */, AnimData * /* d */, IGame* game )
+  {
+    ChessPiece &piece = *m_piece;
+    
+    stringstream ss;
+    
+    ss << 1-piece.owner << "-" << (char)piece.type;
+    
+    game->renderer->setColor( Color( 1, 1, 1 ) );
+    if( game->options->getNumber( "RotateBoard" ) )
+      game->renderer->drawTexturedQuad(piece.x, piece.y, 0.5, 0.5, ss.str());
+    else
+      game->renderer->drawTexturedQuad(piece.x, 7-piece.y, 0.5, 0.5, ss.str());
+
+  }
+
+
+
   void DrawChessPiece::animate( const float& /* t */, AnimData * /* d */, IGame* game )
   {
     ChessPiece &piece = *m_piece;
