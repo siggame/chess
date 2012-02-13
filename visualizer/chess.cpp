@@ -438,8 +438,8 @@ namespace visualizer
         renderer->drawText( 8, ( rotate ? 7.7 : 0 ), "DroidSansMono", player1.str(), 1 );
         renderer->drawText( 8, ( rotate ? 0 : 7.7 ), "DroidSansMono", player2.str(), 1 );
 
-        renderer->drawTexturedQuad( 10, 6, 1, 1, "0-Q" );
-        renderer->drawTexturedQuad( 11, 6, 1, 1, "0-N" );
+        renderer->drawTexturedQuad( 10, 7, 1, 1, "0-Q" );
+        renderer->drawTexturedQuad( 11, 7, 1, 1, "0-N" );
 
       }
       else
@@ -450,7 +450,6 @@ namespace visualizer
         renderer->drawTexturedQuad( 10, 7, 1, 1, "1-Q" );
         renderer->drawTexturedQuad( 11, 7, 1, 1, "1-N" );
       }
-
 
       renderer->drawText( 9.5, 6.7, "DroidSansMono", "Current Promotion:", 1 );
 

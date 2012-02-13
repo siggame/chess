@@ -76,7 +76,7 @@ everything should work similarly.
 
 Getting the latest visualizer.
 
-Windows: ftp://r99acm.device.mst.edu:2121/chess-window.zip
+Windows: ftp://r99acm.device.mst.edu:2121/chess-windows.zip
 Linux: ftp://r99acm.device.mst.edu:2121/chess-linux.zip
 
 === Building The Chess Visualizer On Linux/Mac ===
