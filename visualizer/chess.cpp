@@ -122,7 +122,6 @@ namespace visualizer
 
     }
 
-    cout << "=====================" << endl;
     for( size_t i = 0; i < 2; i++ )
     {
       float x = 7.95;
@@ -151,8 +150,8 @@ namespace visualizer
           piece->type = p->first;
           piece->owner = i;
 
-          cout << "(" << piece->x << ", " << piece->y << ")" << endl;
-          cout << (char)piece->type << ":" << piece->owner << endl;
+          //cout << "(" << piece->x << ", " << piece->y << ")" << endl;
+          //cout << (char)piece->type << ":" << piece->owner << endl;
 
 
           piece->addKeyFrame( new DrawDeadPiece( piece ) );
