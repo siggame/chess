@@ -140,12 +140,8 @@ class GameApp(AccountsAppMixin, BaseApp):
     if emptyLog or logID == '0':
       return ['log', logID, ""]
     
-    #with bz2.BZ2File("logs/" + logID + ".glog", "r") as infile:
-    #  return ['log', logID, infile.read()]
-    infile = open("logs/" + logID + ".glog", "r")
-    data = ['log', logID, infile.read()]
-    infile.close()
-    return data
+    with bz2.BZ2File("logs/" + logID + ".glog", "r") as infile:
+      return ['log', logID, infile.read()]
 
   def writeSExpr(self, message):
     """ Adds backward compatibility with game logic written for the old
