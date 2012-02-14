@@ -10,3 +10,4 @@ libclient.so
 *.gamelog
 *.glog
 client
+!jna.jar
