@@ -1,6 +1,7 @@
 #include "animations.h"
 #include "chess.h"
 #include <sstream>
+#include <iomanip>
 
 namespace visualizer
 {
@@ -78,17 +79,23 @@ namespace visualizer
 
     stringstream ss;
 
-    int min = m_time/60;
-    int sec = m_time-min*60;
+    int min = m_scoreTime->time/60;
+    int sec = m_scoreTime->time-min*60;
 
-    ss << min << ":" << sec;
+    ss << min << ":" << setw(2) << setfill( '0' ) << sec;
 
     bool rotate = game->options->getNumber( "RotateBoard" );
 
     if( m_player )
-      game->renderer->drawText( 8, ( rotate ? 0 : 7.7 ), "DroidSansMono", ss.str() );
+    {
+      game->renderer->drawText( 8, ( rotate ? 0.3 : 7.4 ), "DroidSansMono", ss.str(), 1 );
+      game->renderer->drawText( 8, ( rotate ? 0.0 : 7.7 ), "DroidSansMono", m_scoreTime->playerName, 1 );
+    }
     else
-      game->renderer->drawText( 8, ( rotate ? 7.7 : 0 ), "DroidSansMono", ss.str() );
+    {
+      game->renderer->drawText( 8, ( rotate ? 7.4 : 0.3 ), "DroidSansMono", ss.str(), 1 );
+      game->renderer->drawText( 8, ( rotate ? 7.7 : 0.0 ), "DroidSansMono", m_scoreTime->playerName, 1 );
+    }
 
   }
 

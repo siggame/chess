@@ -12,11 +12,18 @@ namespace visualizer
   
     struct ChessPiece: public Animatable
     {
-        float x;
-        float y;
-        int owner;
-        int type;
-        
+      float x;
+      float y;
+      int owner;
+      int type;
+      
+    };
+
+    struct ScoreTime: public Animatable
+    {
+      string playerName;
+      int time;
+
     };
 
 } // visualizer

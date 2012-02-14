@@ -52,13 +52,13 @@ namespace visualizer
     class DrawTime: public Anim
     {
       public:
-        DrawTime( int time, int player ) { m_time = time; m_player = player; }
+        DrawTime( ScoreTime* st, int player ) { m_scoreTime = st; m_player = player; }
 
         void animate( const float& t, AnimData* d, IGame* game );
 
       private:
-        int m_time;
         int m_player;
+        ScoreTime* m_scoreTime;
         
 
     }; // DrawScore

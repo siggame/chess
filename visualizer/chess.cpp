@@ -488,8 +488,8 @@ namespace visualizer
 
       if( playerID() )
       {
-        renderer->drawText( 8, ( rotate ? 7.7 : 0 ), "DroidSansMono", player1.str(), 1 );
-        renderer->drawText( 8, ( rotate ? 0 : 7.7 ), "DroidSansMono", player2.str(), 1 );
+        renderer->drawText( 8, ( rotate ? 7.4 : 0.3 ), "DroidSansMono", player1.str(), 1 );
+        renderer->drawText( 8, ( rotate ? 0.3 : 7.4 ), "DroidSansMono", player2.str(), 1 );
 
         renderer->drawTexturedQuad( 10, 7, 1, 1, "0-Q" );
         renderer->drawTexturedQuad( 11, 7, 1, 1, "0-N" );
@@ -497,12 +497,29 @@ namespace visualizer
       }
       else
       {
-        renderer->drawText( 8, ( rotate ? 0 : 7.7 ), "DroidSansMono", player1.str(), 1 );
-        renderer->drawText( 8, ( rotate ? 7.7 : 0 ), "DroidSansMono", player2.str(), 1 );
+        renderer->drawText( 8, ( rotate ? 0.3 : 7.4 ), "DroidSansMono", player1.str(), 1 );
+        renderer->drawText( 8, ( rotate ? 7.4 : 0.3 ), "DroidSansMono", player2.str(), 1 );
 
         renderer->drawTexturedQuad( 10, 7, 1, 1, "1-Q" );
         renderer->drawTexturedQuad( 11, 7, 1, 1, "1-N" );
       }
+
+      player1.str("");
+      player2.str("");
+
+      if( players.size() )
+      {
+        player1 << players[0].playerName();
+        player2 << players[1].playerName();
+      }
+      else
+      {
+        player1 << "WAITING";
+        player2 << "WAITING";
+      }
+
+      renderer->drawText( 8, ( rotate ? 0.0 : 7.7 ), "DroidSansMono", player1.str(), 1 );
+      renderer->drawText( 8, ( rotate ? 7.7 : 0.0 ), "DroidSansMono", player2.str(), 1 );
 
       renderer->drawText( 9.5, 6.7, "DroidSansMono", "Current Promotion:", 1 );
 
@@ -584,7 +601,24 @@ namespace visualizer
         SmartPointer<ChessBoard> board = new ChessBoard();
         board->addKeyFrame( new DrawBoard() );
         turn.addAnimatable( board );
-    
+
+        SmartPointer<ScoreTime> score0 = new ScoreTime();
+        SmartPointer<ScoreTime> score1 = new ScoreTime();
+
+        score0->time = m_game->states[ state ].players[0].time;
+        score1->time = m_game->states[ state ].players[1].time;
+
+        if( m_game->states[ state ].players[0].playerName && m_game->states[ state ].players[1].playerName )
+        {
+          score0->playerName = m_game->states[ state ].players[0].playerName;
+          score1->playerName = m_game->states[ state ].players[1].playerName;
+        }
+
+        score0->addKeyFrame( new DrawTime( score0, 0 ) );
+        score1->addKeyFrame( new DrawTime( score1, 1 ) );
+        turn.addAnimatable( score1 );
+        turn.addAnimatable( score0 );
+
         map< char, int > killed[2];
         killed[0] = populatePieces();
         killed[1] = populatePieces();
