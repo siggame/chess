@@ -150,10 +150,6 @@ namespace visualizer
           piece->type = p->first;
           piece->owner = i;
 
-          //cout << "(" << piece->x << ", " << piece->y << ")" << endl;
-          //cout << (char)piece->type << ":" << piece->owner << endl;
-
-
           piece->addKeyFrame( new DrawDeadPiece( piece ) );
           turn.addAnimatable( piece );
           
@@ -588,7 +584,11 @@ namespace visualizer
         SmartPointer<ChessBoard> board = new ChessBoard();
         board->addKeyFrame( new DrawBoard() );
         turn.addAnimatable( board );
-        
+    
+        map< char, int > killed[2];
+        killed[0] = populatePieces();
+        killed[1] = populatePieces();
+
         // Loop though each Piece in the current state
         for(std::map<int, parser::Piece>::iterator i = m_game->states[ state ].pieces.begin(); i != m_game->states[ state ].pieces.end(); i++)
         {
@@ -598,10 +598,50 @@ namespace visualizer
             piece->y = i->second.rank - 1;
             piece->type = i->second.type;
             piece->owner = i->second.owner;
+
+            killed[piece->owner][piece->type]--;
             
             piece->addKeyFrame( new DrawChessPiece( piece ) );
             turn.addAnimatable( piece );
         }
+
+
+        for( size_t i = 0; i < 2; i++ )
+        {
+          float x = 7.95;
+          float y = 3.5+0.5*i;
+          for( map< char, int >::iterator p = killed[i].begin(); p != killed[i].end(); p++ )
+          {
+            //cout << (char)p->first << ":" << p->second << endl;
+            while( p->second-- )
+            {
+              SmartPointer<ChessPiece> piece = new ChessPiece();
+              piece->x = x;
+              x+=0.3;
+              piece->y = y;
+              if( x > 10 )
+              {
+                if( i )
+                {
+                  y+=0.5;
+                }
+                else
+                {
+                  y-=0.5;
+                }
+                x = 7.95;
+              }
+              piece->type = p->first;
+              piece->owner = i;
+
+              piece->addKeyFrame( new DrawDeadPiece( piece ) );
+              turn.addAnimatable( piece );
+              
+            }
+
+          }
+        }
+     
 
         addFrame( turn );
     }
