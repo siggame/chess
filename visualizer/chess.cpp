@@ -35,8 +35,7 @@ namespace visualizer
     i.spectateMode = true;
     i.pluginName = "Chess Plugin v2";
 
-    gui->checkForUpdate( "Chess Update Available At:\n" \
-      "ftp://r99acm.device.mst.edu:2121/", BUILD_NO, VERSION_FILE );
+    gui->checkForUpdate( "Chess", BUILD_NO, VERSION_FILE );
 
     options->loadOptionFile( "./plugins/chess/chess.xml", "chess" );
 
