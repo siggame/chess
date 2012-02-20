@@ -7,6 +7,6 @@
   "Build Number: " BUILD_NO ".\n" \
   "http://megaminerai.com"
 
-#define VERSION_FILE "{VERSION_FILE}"
+#define VERSION_FILE "chess.md5"
 
 #endif // VERSION_H
