@@ -100,15 +100,16 @@ namespace visualizer
     SmartPointer<ChessBoard> board = new ChessBoard();
     board->addKeyFrame( new DrawBoard() );
     turn.addAnimatable( board );
-    
+
     map< char, int > killed[2];
     killed[0] = populatePieces();
     killed[1] = populatePieces();
 
+
     for( vector<client::Piece>::iterator p = pieces.begin(); p != pieces.end(); p++ )
     {
       SmartPointer<ChessPiece> piece = new ChessPiece();
-      
+
       piece->x = p->file()-1;
       piece->y = p->rank()-1;
       piece->type = p->type();
@@ -151,12 +152,12 @@ namespace visualizer
 
           piece->addKeyFrame( new DrawDeadPiece( piece ) );
           turn.addAnimatable( piece );
-          
+
         }
 
       }
     }
- 
+
     addFrame( turn );
     timeManager->setNumTurns( size() );
     timeManager->play();   
@@ -202,15 +203,15 @@ namespace visualizer
 
   void Chess::setup()
   {
-    
+
     renderer->setCamera( 0, 0, 12, 8);
     renderer->setGridDimensions( 12, 8 );
-    
+
     resourceManager->loadResourceFile( "./plugins/chess/textures.r" );
 
     m_playerMoved = m_spectating = m_player = false;
     lastP.x = lastP.y = -1;
- 
+
   }
 
   const char PieceNames[] =
@@ -271,7 +272,7 @@ namespace visualizer
     {
       gameNumber = client::createGame( c );
     }
-    
+
     stringstream ss;
     ss << "Successfully connected to game: " << gameNumber << endl;
 
@@ -284,9 +285,9 @@ namespace visualizer
 
     n = new NetworkLoop( this, c );
     n->start();
-    
+
     Frame turn;
-        
+
     SmartPointer<ChessBoard> board = new ChessBoard();
     board->addKeyFrame( new DrawBoard() );
     turn.addAnimatable( board );
@@ -294,7 +295,7 @@ namespace visualizer
     for( size_t i = 0; i < 32; i++ )
     {
       SmartPointer<ChessPiece> piece = new ChessPiece();
-      
+
       piece->x = i-(i/8)*8;
       piece->y = i/8;
       piece->type = PieceNames[ i ];
@@ -307,7 +308,7 @@ namespace visualizer
         piece->owner = 1;
         piece->y += 4;
       }
-      
+
       piece->addKeyFrame( new DrawChessPiece( piece ) );
       turn.addAnimatable( piece );
     }
@@ -315,7 +316,7 @@ namespace visualizer
     addFrame( turn );
 
     animationEngine->registerGame( this, this );
-  
+
   } // Chess::conn() 
 
   void Chess::loadGamelog( std::string gamelog )
@@ -326,7 +327,7 @@ namespace visualizer
 
     setup();
     m_player = false;
-   
+
     m_game = new parser::Game;
 
     if( !parser::parseGameFromString( *m_game, gamelog.c_str() ) )
@@ -335,13 +336,16 @@ namespace visualizer
       m_game = 0;
       errorLog << gamelog;
       WARNING(
-        "Cannot load gamelog, %s", 
-        gamelog.c_str()
-        );
+          "Cannot load gamelog, %s", 
+          gamelog.c_str()
+          );
     }
     // END: Initial Setup
-    
+
     animationEngine->registerGame( this, this );
+
+    wOffset['P'] = wOffset['Q'] = wOffset['B'] = wOffset['N'] = wOffset['R'] = 0;
+    bOffset['P'] = bOffset['Q'] = bOffset['B'] = bOffset['N'] = bOffset['R'] = 0;
 
     load();
   } // Chess::loadGamelog()
@@ -349,7 +353,7 @@ namespace visualizer
   void Chess::preDraw()
   {
     const Input& input = gui->getInput();
-    
+
     if( input.leftRelease )
     {
       if( m_player )
@@ -381,7 +385,7 @@ namespace visualizer
               }
 
             }
-          
+
           }
         }
 
@@ -440,9 +444,9 @@ namespace visualizer
           for( vector<client::Piece>::iterator i = pieces.begin(); i != pieces.end(); i++ )
           {
             if( 
-              i->file() == x+1 &&
-              i->rank() == y+1 &&
-              i->id() != piece.id() )
+                i->file() == x+1 &&
+                i->rank() == y+1 &&
+                i->id() != piece.id() )
             {
               pieces.erase( i );
               break;
@@ -453,7 +457,7 @@ namespace visualizer
         }
       }
     }
-    
+
     return false;
 
   }
@@ -462,7 +466,7 @@ namespace visualizer
   {
     if( m_player )
     {
-      
+
       stringstream player1;
       stringstream player2;
 
@@ -522,7 +526,7 @@ namespace visualizer
 
       renderer->drawText( 9.5, 6.7, "DroidSansMono", "Current Promotion:", 1 );
 
-      
+
       if( lastP.y >= 0 && lastP.y < 8 )
       {
         if( lastP.x >= 0 && lastP.x < 8 )
@@ -585,100 +589,189 @@ namespace visualizer
     }
 
   }
-  
+
   void Chess::load()
   {
     SmartPointer<ChessBoard> board = new ChessBoard();
 
     timeManager->setNumTurns( m_game->states.size() );
-    
+
+    std::map<int,int> pawns;
+    for( size_t i = 0; i < 34; i++ )
+    {
+      if( i>=10 && i < 26 )
+      {
+        pawns[i] = 1;
+      } 
+      else
+      {
+        pawns[i] = 0;
+      }
+    }
+
     // Loop through each state in the gamelog
     for(int state = 0; state < m_game->states.size(); state++)
     {
-        Frame turn;
-        
-        SmartPointer<ChessBoard> board = new ChessBoard();
-        board->addKeyFrame( new DrawBoard() );
-        turn.addAnimatable( board );
+      Frame turn;
 
-        SmartPointer<ScoreTime> score0 = new ScoreTime();
-        SmartPointer<ScoreTime> score1 = new ScoreTime();
+      SmartPointer<ChessBoard> board = new ChessBoard();
+      board->addKeyFrame( new DrawBoard() );
+      turn.addAnimatable( board );
 
-        score0->time = m_game->states[ state ].players[0].time;
-        score1->time = m_game->states[ state ].players[1].time;
+      SmartPointer<ScoreTime> score0 = new ScoreTime();
+      SmartPointer<ScoreTime> score1 = new ScoreTime();
 
-        if( m_game->states[ state ].players[0].playerName && m_game->states[ state ].players[1].playerName )
+      score0->time = m_game->states[ state ].players[0].time;
+      score1->time = m_game->states[ state ].players[1].time;
+
+      if( m_game->states[ state ].players[0].playerName && m_game->states[ state ].players[1].playerName )
+      {
+        score0->playerName = m_game->states[ state ].players[0].playerName;
+        score1->playerName = m_game->states[ state ].players[1].playerName;
+      }
+
+      for( std::map<int, parser::Piece>::iterator i = m_game->states[ state ].pieces.begin(); i != m_game->states[ state ].pieces.end(); i++ )
+      {
+        //cout << i->first <<":" << (char)i->second.type << ":" << i->second.rank << endl;
+        if( i->first >= 10 && i->first < 26 && pawns[ i->first ] )
         {
-          score0->playerName = m_game->states[ state ].players[0].playerName;
-          score1->playerName = m_game->states[ state ].players[1].playerName;
-        }
-
-        score0->addKeyFrame( new DrawTime( score0, 0 ) );
-        score1->addKeyFrame( new DrawTime( score1, 1 ) );
-        turn.addAnimatable( score1 );
-        turn.addAnimatable( score0 );
-
-        map< char, int > killed[2];
-        killed[0] = populatePieces();
-        killed[1] = populatePieces();
-
-        // Loop though each Piece in the current state
-        for(std::map<int, parser::Piece>::iterator i = m_game->states[ state ].pieces.begin(); i != m_game->states[ state ].pieces.end(); i++)
-        {
-            SmartPointer<ChessPiece> piece = new ChessPiece();
-            
-            piece->x = i->second.file - 1;
-            piece->y = i->second.rank - 1;
-            piece->type = i->second.type;
-            piece->owner = i->second.owner;
-
-            killed[piece->owner][piece->type]--;
-            
-            piece->addKeyFrame( new DrawChessPiece( piece ) );
-            turn.addAnimatable( piece );
-        }
-
-
-        for( size_t i = 0; i < 2; i++ )
-        {
-          float x = 7.95;
-          float y = 3.5+0.5*i;
-          for( map< char, int >::iterator p = killed[i].begin(); p != killed[i].end(); p++ )
+          if( i->second.rank == 1 || i->second.rank == 8 )
           {
-            //cout << (char)p->first << ":" << p->second << endl;
-            while( p->second-- )
+            cout << pawns[ i->first ] << endl;
+            pawns[i->first]--;
+            if( i->first < 18 )
             {
-              SmartPointer<ChessPiece> piece = new ChessPiece();
-              piece->x = x;
-              x+=0.3;
-              piece->y = y;
-              if( x > 10 )
+              bOffset[i->second.type]++;
+              bOffset['P']--;
+            }
+            else
+            {
+              wOffset[i->second.type]++;
+              wOffset['P']--;
+            }
+          }
+        }
+      }
+
+#if 0
+      for( map<int, parser::Move >::iterator i = m_game->states[ state ].moves.begin(); i != m_game->states[ state ].moves.end(); i++ )
+      {
+        for( std::vector< SmartPointer<parser::Animation> >::iterator j = i->second.begin(); j != i->second.end(); j++ )
+        {
+
+          if( (*j)->type == parser::MOVE )
+          {
+            parser::move& a = (parser::move&)*(*j); 
+            cout << i->first << ":" << a.toRank << endl;
+            if( a.toRank == 1 || a.toRank == 8 )
+            {
+              if( pawns[i->first] )
               {
-                if( i )
+                pawns[i->first]--;
+                if( i->first < 16 )
                 {
-                  y+=0.5;
+                  wOffset[a.promoteType]++;
                 }
                 else
                 {
-                  y-=0.5;
+                  bOffset[a.promoteType]++;
                 }
-                x = 7.95;
               }
-              piece->type = p->first;
-              piece->owner = i;
 
-              piece->addKeyFrame( new DrawDeadPiece( piece ) );
-              turn.addAnimatable( piece );
-              
             }
-
           }
         }
-     
+      }
+#endif
 
-        addFrame( turn );
+      score0->addKeyFrame( new DrawTime( score0, 0 ) );
+      score1->addKeyFrame( new DrawTime( score1, 1 ) );
+      turn.addAnimatable( score1 );
+      turn.addAnimatable( score0 );
+
+      map< char, int > killed[2];
+      killed[0] = populatePieces();
+      killed[1] = populatePieces();
+
+#if 1
+      killed[0]['Q'] += wOffset['Q'];
+      killed[0]['B'] += wOffset['B'];
+      killed[0]['N'] += wOffset['N'];
+      killed[0]['R'] += wOffset['R'];
+      killed[0]['P'] += wOffset['P'];
+
+      killed[1]['Q'] += bOffset['Q'];
+      killed[1]['B'] += bOffset['B'];
+      killed[1]['N'] += bOffset['N'];
+      killed[1]['R'] += bOffset['R'];
+      killed[1]['P'] += bOffset['P'];
+#endif
+
+      // Loop though each Piece in the current state
+
+      for(std::map<int, parser::Piece>::iterator i = m_game->states[ state ].pieces.begin(); i != m_game->states[ state ].pieces.end(); i++)
+      {
+        SmartPointer<ChessPiece> piece = new ChessPiece();
+
+        piece->x = i->second.file - 1;
+        piece->y = i->second.rank - 1;
+        piece->type = i->second.type;
+        piece->owner = i->second.owner;
+
+#if 1
+        killed[piece->owner][piece->type]--;
+#endif
+
+        piece->addKeyFrame( new DrawChessPiece( piece ) );
+        turn.addAnimatable( piece );
+      }
+
+      for( size_t i = 0; i < 2; i++ )
+      {
+        float x = 7.95;
+        float y = 3.5+0.5*i;
+        for( map< char, int >::iterator p = killed[i].begin(); p != killed[i].end(); p++ )
+        {
+          if( p->second < 0 )
+          {
+            cout << p->first << endl;
+            continue;
+          }
+
+          while( p->second-- )
+          {
+            SmartPointer<ChessPiece> piece = new ChessPiece();
+            piece->x = x;
+            x+=0.3;
+            piece->y = y;
+            if( x > 10 )
+            {
+              if( i )
+              {
+                y+=0.5;
+              }
+              else
+              {
+                y-=0.5;
+              }
+              x = 7.95;
+            }
+            piece->type = p->first;
+            piece->owner = i;
+
+            piece->addKeyFrame( new DrawDeadPiece( piece ) );
+            turn.addAnimatable( piece );
+
+          }
+
+        }
+      }
+
+      addFrame( turn );
     }
-    
+
+    cout << "LOADED" << endl;
+
     timeManager->play();
   }
 
@@ -700,7 +793,7 @@ namespace visualizer
         move += (char)m.promoteType();
       }
     }
-  
+
     return move;
   }
 
@@ -720,7 +813,7 @@ namespace visualizer
     return i;
 
   }
-    
+
 } // visualizer
 
 Q_EXPORT_PLUGIN2( Chess, visualizer::Chess );

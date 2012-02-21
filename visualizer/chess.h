@@ -73,6 +73,8 @@ namespace visualizer
       bool m_playerMoved;
       char promotion;
 
+      map< char, int > wOffset, bOffset;
+
       Coord lastP;
 
       QMutex inputMutex;
