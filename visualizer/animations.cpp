@@ -86,7 +86,7 @@ namespace visualizer
 
     bool rotate = game->options->getNumber( "RotateBoard" );
 
-    if( m_player )
+    if( 1-m_player )
     {
       game->renderer->drawText( 8, ( rotate ? 0.3 : 7.4 ), "DroidSansMono", ss.str(), 1 );
       game->renderer->drawText( 8, ( rotate ? 0.0 : 7.7 ), "DroidSansMono", m_scoreTime->playerName, 1 );

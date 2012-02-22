@@ -486,7 +486,22 @@ namespace visualizer
 
       bool rotate = options->getNumber( "RotateBoard" );
       renderer->setColor( Color( 0, 0, 0, 1 ) );
-      renderer->drawProgressBar( promotion == 'Q' ? 10 : 11, 7, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
+      switch( promotion )
+      {
+        case 'Q':
+          renderer->drawProgressBar(  8, 6, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
+        break;
+        case 'N':
+          renderer->drawProgressBar(  9, 6, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
+        break;
+        case 'R':
+          renderer->drawProgressBar(  10, 6, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
+        break;
+        case 'B':
+          renderer->drawProgressBar(  11, 6, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
+        break;
+      }
+      //renderer->drawProgressBar( promotion == 'Q' ? 10 : 11, 7, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
       renderer->setColor( Color( 1, 1, 1 ) );
 
       if( playerID() )
@@ -494,17 +509,20 @@ namespace visualizer
         renderer->drawText( 8, ( rotate ? 7.4 : 0.3 ), "DroidSansMono", player1.str(), 1 );
         renderer->drawText( 8, ( rotate ? 0.3 : 7.4 ), "DroidSansMono", player2.str(), 1 );
 
-        renderer->drawTexturedQuad( 10, 7, 1, 1, "0-Q" );
-        renderer->drawTexturedQuad( 11, 7, 1, 1, "0-N" );
-
+        renderer->drawTexturedQuad( 8, 6, 1, 1, "0-Q" );
+        renderer->drawTexturedQuad( 9, 6, 1, 1, "0-N" );
+        renderer->drawTexturedQuad( 10, 6, 1, 1, "0-R" );
+        renderer->drawTexturedQuad( 11, 6, 1, 1, "0-B" );
       }
       else
       {
         renderer->drawText( 8, ( rotate ? 0.3 : 7.4 ), "DroidSansMono", player1.str(), 1 );
         renderer->drawText( 8, ( rotate ? 7.4 : 0.3 ), "DroidSansMono", player2.str(), 1 );
 
-        renderer->drawTexturedQuad( 10, 7, 1, 1, "1-Q" );
-        renderer->drawTexturedQuad( 11, 7, 1, 1, "1-N" );
+        renderer->drawTexturedQuad( 8, 6, 1, 1, "1-Q" );
+        renderer->drawTexturedQuad( 9, 6, 1, 1, "1-N" );
+        renderer->drawTexturedQuad( 10, 6, 1, 1, "1-R" );
+        renderer->drawTexturedQuad( 11, 6, 1, 1, "1-B" );
       }
 
       player1.str("");
@@ -524,7 +542,7 @@ namespace visualizer
       renderer->drawText( 8, ( rotate ? 0.0 : 7.7 ), "DroidSansMono", player1.str(), 1 );
       renderer->drawText( 8, ( rotate ? 7.7 : 0.0 ), "DroidSansMono", player2.str(), 1 );
 
-      renderer->drawText( 9.5, 6.7, "DroidSansMono", "Current Promotion:", 1 );
+      renderer->drawText( 8.0, 5.7, "DroidSansMono", "Current Promotion:", 1 );
 
 
       if( lastP.y >= 0 && lastP.y < 8 )
@@ -572,17 +590,25 @@ namespace visualizer
           }
 
         }
-        else if( lastP.x < 0 && floor(lastP.y) == 7 )
+        else if( lastP.x < 0 && floor(lastP.y) == 6 )
         {
-          if( lastP.x == -3 )
+          if( lastP.x == -1 )
           {
             // Queen
             promotion = 'Q';
           }
-          else if( lastP.x == -4 )
+          else if( lastP.x == -2 )
           {
             // Knight
             promotion = 'N';
+          }
+          else if( lastP.x == -3 )
+          {
+            promotion = 'R';
+          }
+          else if( lastP.x == -4 )
+          {
+            promotion = 'B';
           }
         }
       }
@@ -653,37 +679,6 @@ namespace visualizer
         }
       }
 
-#if 0
-      for( map<int, parser::Move >::iterator i = m_game->states[ state ].moves.begin(); i != m_game->states[ state ].moves.end(); i++ )
-      {
-        for( std::vector< SmartPointer<parser::Animation> >::iterator j = i->second.begin(); j != i->second.end(); j++ )
-        {
-
-          if( (*j)->type == parser::MOVE )
-          {
-            parser::move& a = (parser::move&)*(*j); 
-            cout << i->first << ":" << a.toRank << endl;
-            if( a.toRank == 1 || a.toRank == 8 )
-            {
-              if( pawns[i->first] )
-              {
-                pawns[i->first]--;
-                if( i->first < 16 )
-                {
-                  wOffset[a.promoteType]++;
-                }
-                else
-                {
-                  bOffset[a.promoteType]++;
-                }
-              }
-
-            }
-          }
-        }
-      }
-#endif
-
       score0->addKeyFrame( new DrawTime( score0, 0 ) );
       score1->addKeyFrame( new DrawTime( score1, 1 ) );
       turn.addAnimatable( score1 );
@@ -693,7 +688,6 @@ namespace visualizer
       killed[0] = populatePieces();
       killed[1] = populatePieces();
 
-#if 1
       killed[0]['Q'] += wOffset['Q'];
       killed[0]['B'] += wOffset['B'];
       killed[0]['N'] += wOffset['N'];
@@ -705,11 +699,15 @@ namespace visualizer
       killed[1]['N'] += bOffset['N'];
       killed[1]['R'] += bOffset['R'];
       killed[1]['P'] += bOffset['P'];
-#endif
 
       // Loop though each Piece in the current state
 
-      for(std::map<int, parser::Piece>::iterator i = m_game->states[ state ].pieces.begin(); i != m_game->states[ state ].pieces.end(); i++)
+      for
+        (
+          std::map<int, parser::Piece>::iterator i = m_game->states[ state ].pieces.begin(); 
+          i != m_game->states[ state ].pieces.end(); 
+          i++
+        )
       {
         SmartPointer<ChessPiece> piece = new ChessPiece();
 
@@ -718,9 +716,7 @@ namespace visualizer
         piece->type = i->second.type;
         piece->owner = i->second.owner;
 
-#if 1
         killed[piece->owner][piece->type]--;
-#endif
 
         piece->addKeyFrame( new DrawChessPiece( piece ) );
         turn.addAnimatable( piece );
