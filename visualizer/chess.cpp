@@ -30,7 +30,7 @@ namespace visualizer
   {
     PluginInfo i;
     i.searchLength = 1000;
-    i.gamelogRegexPattern = "Piece";
+    i.gamelogRegexPattern = "(\"gameName\" \"chess\")";
     i.returnFilename = false;
     i.spectateMode = true;
     i.pluginName = "Chess Plugin v2";
