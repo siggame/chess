@@ -38,6 +38,7 @@ class GameApp(AccountsAppMixin, BaseApp):
       self.game = Match(GameApp.nextid, self)
       self.game.addPlayer(self)
       GameApp.games[GameApp.nextid] = self.game
+      GameApp.nextid += 1
       return ("create-game", self.game.id)
 
   @protocolmethod
