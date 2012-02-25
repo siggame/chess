@@ -16,8 +16,6 @@ using namespace std;
 namespace visualizer
 {
 
-  Log errorLog( "chess.log" ); 
-
   Chess::Chess() : BaseAI( 0 )
   {
   } // Chess::Chess()
@@ -334,7 +332,7 @@ namespace visualizer
     {
       delete m_game;
       m_game = 0;
-      errorLog << gamelog;
+      MESSAGE( "%s", gamelog.c_str() );
       WARNING(
           "Cannot load gamelog, %s", 
           gamelog.c_str()
