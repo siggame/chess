@@ -25,7 +25,7 @@
 //Doh, namespace collision.
 namespace Windows
 {
-    #include <Windows.h>
+    #include <windows.h>
 };
 #else
 #include <unistd.h>
