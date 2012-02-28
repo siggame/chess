@@ -7,14 +7,14 @@
   <option>
     <key>RotateBoard</key>
     <type>Integer</type>
-    <value>1</value>
+    <value>0</value>
     <minvalue>0</minvalue>
     <maxvalue>1</maxvalue>
   </option>
   <option>
     <key>SpectateServer</key>
     <type>String</type>
-    <value>127.0.0.1</value>
+    <value>192.168.1.132</value>
   </option>
   <option>
     <key>Username</key>

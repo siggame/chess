@@ -8,21 +8,11 @@ namespace client
 {
 
 struct Connection;
-struct _Move;
 struct _Piece;
+struct _Move;
 struct _Player;
 
 
-struct _Move
-{
-  Connection* _c;
-  int id;
-  int fromFile;
-  int fromRank;
-  int toFile;
-  int toRank;
-  int promoteType;
-};
 struct _Piece
 {
   Connection* _c;
@@ -32,6 +22,16 @@ struct _Piece
   int rank;
   int hasMoved;
   int type;
+};
+struct _Move
+{
+  Connection* _c;
+  int id;
+  int fromFile;
+  int fromRank;
+  int toFile;
+  int toRank;
+  int promoteType;
 };
 struct _Player
 {

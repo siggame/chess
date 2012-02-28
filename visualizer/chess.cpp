@@ -18,10 +18,20 @@ namespace visualizer
 
   Chess::Chess() : BaseAI( 0 )
   {
+    m_game = 0;
+    m_suicide = false;
+    n = 0;
   } // Chess::Chess()
 
   Chess::~Chess()
   {
+    animationEngine->registerGame( 0, 0 );
+    clear();
+    delete m_game;
+    n->kille();
+    n = 0;
+    m_game = 0;
+
   } // Chess::~Chess()
 
   PluginInfo Chess::getPluginInfo()
@@ -171,7 +181,7 @@ namespace visualizer
       addCurrentBoard();
       // We'll want to wait for user input.
       bool input = false;
-      while( !input )
+      while( !input && !n->suiciding() )
       {
         inputMutex.lock();
 
@@ -182,6 +192,9 @@ namespace visualizer
 
         inputMutex.unlock();
       }
+
+      if( n->suiciding() )
+        return false;
 
       addCurrentBoard();
     } 
@@ -201,6 +214,14 @@ namespace visualizer
 
   void Chess::setup()
   {
+
+    players.clear();
+    moves.clear();
+    pieces.clear();
+
+    animationEngine->registerGame(0, 0);
+    timeManager->setNumTurns( 0 );
+    clear();
 
     renderer->setCamera( 0, 0, 12, 8);
     renderer->setGridDimensions( 12, 8 );
@@ -224,6 +245,13 @@ namespace visualizer
   {
     setup();
     cout << "Connecting to: " <<  m_ipAddress << " as " << button << endl;
+
+    if( n )
+    {
+      n->kille();
+    }
+    n = 0;
+    
     c = client::createConnection();
 
     if( button )
@@ -326,6 +354,7 @@ namespace visualizer
     setup();
     m_player = false;
 
+    delete m_game;
     m_game = new parser::Game;
 
     if( !parser::parseGameFromString( *m_game, gamelog.c_str() ) )

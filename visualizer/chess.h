@@ -20,7 +20,6 @@ namespace visualizer
   struct Coord
   {
     float x, y;
-
   };
 
   class Chess: public QObject, public AnimSequence, public IGame, public client::BaseAI
@@ -78,7 +77,10 @@ namespace visualizer
       Coord lastP;
 
       QMutex inputMutex;
+      QMutex m_suicideMutex;
       NetworkLoop* n;
+
+      bool m_suicide;
 
   }; 
 
