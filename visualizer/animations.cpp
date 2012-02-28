@@ -11,7 +11,7 @@ namespace visualizer
 
   void DrawWinner::animate( const float& t, AnimData* d, IGame* game )
   {
-    game->renderer->setColor( Color( 1, 1, 1, t ) );
+    game->renderer->setColor( Color( 1, 1, 1, t*.25 ) );
     game->renderer->drawQuad(0, 0, 8, 8);
     
     game->renderer->setColor( Color( 0, 0, 0, t ) );
