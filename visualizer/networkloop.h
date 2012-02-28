@@ -35,7 +35,6 @@ namespace visualizer
       {
         m_suicide = true;
         destroyConnection( c );
-        close( c->socket );
         while( isRunning() )
         {  }
         delete c;
