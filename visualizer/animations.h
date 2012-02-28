@@ -63,6 +63,32 @@ namespace visualizer
 
     }; // DrawScore
 
+    class DrawWinner: public Anim
+  {
+    public:
+      DrawWinner( int player, string name, string how ) 
+      { 
+        m_player = player; 
+        m_name = name; 
+        m_how = how;
+      }
+
+      void animate( const float& t, AnimData* d, IGame* game );
+
+      float controlDuration() const
+      { return 1; }
+
+      float totalDuration() const
+      { return 1; }
+
+
+    private:
+      string m_name;
+      string m_how;
+      int m_player;
+
+  };
+
 } // visualizer
 
 #endif // ANIMATION_H

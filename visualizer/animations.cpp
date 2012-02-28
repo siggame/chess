@@ -8,6 +8,19 @@ namespace visualizer
   void StartAnim::animate( const float& /* t */, AnimData * /* d */, IGame* game )
   {
   }
+
+  void DrawWinner::animate( const float& t, AnimData* d, IGame* game )
+  {
+    game->renderer->setColor( Color( 1, 1, 1, t ) );
+    game->renderer->drawQuad(0, 0, 8, 8);
+    
+    game->renderer->setColor( Color( 0, 0, 0, t ) );
+    stringstream ss;
+    ss << m_name << " Wins!!";
+    game->renderer->drawText(2, 3, "DroidSansMono", ss.str(), 1.5 );
+    game->renderer->drawText(2, 3.5, "DroidSansMono", m_how.c_str(), 1.5 );
+    
+  }
   
   void DrawBoard::animate( const float& /* t */, AnimData * /* d */, IGame* game )
   {
@@ -24,7 +37,7 @@ namespace visualizer
         game->renderer->setColor( (x+y)%2 ? black : white  );
         
         // Draw the background of the tile
-            game->renderer->drawQuad(x, y, 1, 1);
+        game->renderer->drawQuad(x, y, 1, 1);
         
         // Set the color to gray for the rank & file text to be drawn in
         game->renderer->setColor( Color(0.8, 0.1, 0.1) );

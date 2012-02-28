@@ -6,6 +6,7 @@
 
 #include <QDialog>
 #include <sstream>
+#include <string>
 #include <iomanip>
 #include <cmath>
 #include <QSignalMapper>
@@ -20,6 +21,7 @@ namespace visualizer
   {
     m_game = 0;
     m_suicide = false;
+
     n = 0;
   } // Chess::Chess()
 
@@ -27,9 +29,10 @@ namespace visualizer
   {
     animationEngine->registerGame( 0, 0 );
     clear();
-    delete m_game;
-    n->kille();
+    if( n )
+      n->kille();
     n = 0;
+    delete m_game;
     m_game = 0;
 
   } // Chess::~Chess()
@@ -647,7 +650,7 @@ namespace visualizer
   {
     SmartPointer<ChessBoard> board = new ChessBoard();
 
-    timeManager->setNumTurns( m_game->states.size() );
+    timeManager->setNumTurns( m_game->states.size()+1 );
 
     std::map<int,int> pawns;
     for( size_t i = 0; i < 34; i++ )
@@ -662,6 +665,7 @@ namespace visualizer
       }
     }
 
+    Frame lastTurn;
     // Loop through each state in the gamelog
     for(int state = 0; state < m_game->states.size(); state++)
     {
@@ -791,11 +795,21 @@ namespace visualizer
       }
 
       addFrame( turn );
+      lastTurn = turn;
     }
 
-    cout << "LOADED" << endl;
+    SmartPointer<Winner> winner = new Winner();
+    std::cout << m_game->players[0] << std::endl;
+    winner->addKeyFrame( new DrawWinner
+        ( m_game->winner, m_game->states[0].players[m_game->winner].playerName, m_game->winReason ) 
+        );
+
+    lastTurn.addAnimatable( winner );
+
+    addFrame( lastTurn );
 
     timeManager->play();
+
   }
 
   string Chess::printMove( client::Move& m, Board &board ) 
