@@ -8,8 +8,8 @@
 #include <ctime>
 #include "game.h"
 
-#include "Move.h"
 #include "Piece.h"
+#include "Move.h"
 #include "Player.h"
 
 namespace client
@@ -24,8 +24,8 @@ class BaseAI
 {
 protected:
   Connection* c;
-  std::vector<Move> moves;
   std::vector<Piece> pieces;
+  std::vector<Move> moves;
   std::vector<Player> players;
 public:
   ///How many turns it has been since the beginning of the game

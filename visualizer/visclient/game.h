@@ -39,10 +39,10 @@ struct Connection
   int gameNumber;
   int TurnsToStalemate;
 
-  _Move* Moves;
-  int MoveCount;
   _Piece* Pieces;
   int PieceCount;
+  _Move* Moves;
+  int MoveCount;
   _Player* Players;
   int PlayerCount;
 };
@@ -79,11 +79,11 @@ DLLEXPORT int getPlayerID(Connection* c);
 DLLEXPORT int getGameNumber(Connection* c);
 DLLEXPORT int getTurnsToStalemate(Connection* c);
 
-DLLEXPORT _Move* getMove(Connection* c, int num);
-DLLEXPORT int getMoveCount(Connection* c);
-
 DLLEXPORT _Piece* getPiece(Connection* c, int num);
 DLLEXPORT int getPieceCount(Connection* c);
+
+DLLEXPORT _Move* getMove(Connection* c, int num);
+DLLEXPORT int getMoveCount(Connection* c);
 
 DLLEXPORT _Player* getPlayer(Connection* c, int num);
 DLLEXPORT int getPlayerCount(Connection* c);

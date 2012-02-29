@@ -29,20 +29,20 @@ bool BaseAI::startTurn()
 {
   static bool initialized = false;
   int count = 0;
-  count = getMoveCount(c);
-  moves.clear();
-  moves.resize(count);
-  for(int i = 0; i < count; i++)
-  {
-    moves[i] = Move(getMove(c, i));
-  }
-
   count = getPieceCount(c);
   pieces.clear();
   pieces.resize(count);
   for(int i = 0; i < count; i++)
   {
     pieces[i] = Piece(getPiece(c, i));
+  }
+
+  count = getMoveCount(c);
+  moves.clear();
+  moves.resize(count);
+  for(int i = 0; i < count; i++)
+  {
+    moves[i] = Move(getMove(c, i));
   }
 
   count = getPlayerCount(c);

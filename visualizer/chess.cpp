@@ -6,6 +6,7 @@
 
 #include <QDialog>
 #include <sstream>
+#include <string>
 #include <iomanip>
 #include <cmath>
 #include <QSignalMapper>
@@ -18,10 +19,22 @@ namespace visualizer
 
   Chess::Chess() : BaseAI( 0 )
   {
+    m_game = 0;
+    m_suicide = false;
+
+    n = 0;
   } // Chess::Chess()
 
   Chess::~Chess()
   {
+    animationEngine->registerGame( 0, 0 );
+    clear();
+    if( n )
+      n->kille();
+    n = 0;
+    delete m_game;
+    m_game = 0;
+
   } // Chess::~Chess()
 
   PluginInfo Chess::getPluginInfo()
@@ -171,7 +184,7 @@ namespace visualizer
       addCurrentBoard();
       // We'll want to wait for user input.
       bool input = false;
-      while( !input )
+      while( !input && !n->suiciding() )
       {
         inputMutex.lock();
 
@@ -182,6 +195,9 @@ namespace visualizer
 
         inputMutex.unlock();
       }
+
+      if( n->suiciding() )
+        return false;
 
       addCurrentBoard();
     } 
@@ -201,6 +217,14 @@ namespace visualizer
 
   void Chess::setup()
   {
+
+    players.clear();
+    moves.clear();
+    pieces.clear();
+
+    animationEngine->registerGame(0, 0);
+    timeManager->setNumTurns( 0 );
+    clear();
 
     renderer->setCamera( 0, 0, 12, 8);
     renderer->setGridDimensions( 12, 8 );
@@ -224,6 +248,13 @@ namespace visualizer
   {
     setup();
     cout << "Connecting to: " <<  m_ipAddress << " as " << button << endl;
+
+    if( n )
+    {
+      n->kille();
+    }
+    n = 0;
+    
     c = client::createConnection();
 
     if( button )
@@ -326,6 +357,7 @@ namespace visualizer
     setup();
     m_player = false;
 
+    delete m_game;
     m_game = new parser::Game;
 
     if( !parser::parseGameFromString( *m_game, gamelog.c_str() ) )
@@ -618,7 +650,7 @@ namespace visualizer
   {
     SmartPointer<ChessBoard> board = new ChessBoard();
 
-    timeManager->setNumTurns( m_game->states.size() );
+    timeManager->setNumTurns( m_game->states.size()+1 );
 
     std::map<int,int> pawns;
     for( size_t i = 0; i < 34; i++ )
@@ -633,6 +665,7 @@ namespace visualizer
       }
     }
 
+    Frame lastTurn;
     // Loop through each state in the gamelog
     for(int state = 0; state < m_game->states.size(); state++)
     {
@@ -762,11 +795,21 @@ namespace visualizer
       }
 
       addFrame( turn );
+      lastTurn = turn;
     }
 
-    cout << "LOADED" << endl;
+    SmartPointer<Winner> winner = new Winner();
+    std::cout << m_game->players[0] << std::endl;
+    winner->addKeyFrame( new DrawWinner
+        ( m_game->winner, m_game->states[0].players[m_game->winner].playerName, m_game->winReason ) 
+        );
+
+    lastTurn.addAnimatable( winner );
+
+    addFrame( lastTurn );
 
     timeManager->play();
+
   }
 
   string Chess::printMove( client::Move& m, Board &board ) 

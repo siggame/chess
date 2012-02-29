@@ -56,10 +56,10 @@ DLLEXPORT Connection* createConnection()
   c->playerID = 0;
   c->gameNumber = 0;
   c->TurnsToStalemate = 0;
-  c->Moves = NULL;
-  c->MoveCount = 0;
   c->Pieces = NULL;
   c->PieceCount = 0;
+  c->Moves = NULL;
+  c->MoveCount = 0;
   c->Players = NULL;
   c->PlayerCount = 0;
   return c;
@@ -70,19 +70,19 @@ DLLEXPORT void destroyConnection(Connection* c)
   #ifdef ENABLE_THREADS
   pthread_mutex_destroy(&c->mutex);
   #endif
-  if(c->Moves)
-  {
-    for(int i = 0; i < c->MoveCount; i++)
-    {
-    }
-    delete[] c->Moves;
-  }
   if(c->Pieces)
   {
     for(int i = 0; i < c->PieceCount; i++)
     {
     }
     delete[] c->Pieces;
+  }
+  if(c->Moves)
+  {
+    for(int i = 0; i < c->MoveCount; i++)
+    {
+    }
+    delete[] c->Moves;
   }
   if(c->Players)
   {
@@ -92,7 +92,10 @@ DLLEXPORT void destroyConnection(Connection* c)
     }
     delete[] c->Players;
   }
-  delete c;
+
+  c->socket = -1;
+
+  //delete c;
 }
 
 DLLEXPORT int serverConnect(Connection* c, const char* host, const char* port)
@@ -113,7 +116,14 @@ DLLEXPORT int serverLogin(Connection* c, const char* username, const char* passw
 
   sexp_t* expression, *message;
 
-  char* reply = rec_string(c->socket);
+  char* reply  = 0;
+  while( !reply && c->socket != -1 )
+  {
+    reply = rec_string(c->socket);
+  }
+  if( !reply )
+    return 0;
+
   expression = extract_sexpr(reply);
   delete[] reply;
 
@@ -134,7 +144,14 @@ DLLEXPORT int createGame(Connection* c)
 
   send_string(c->socket, "(create-game)");
 
-  char* reply = rec_string(c->socket);
+  char* reply = 0;
+  while( !reply && c->socket != -1 )
+  {
+    reply = rec_string(c->socket);
+  }
+  if( !reply )
+    return 0;
+
   expression = extract_sexpr(reply);
   delete[] reply;
 
@@ -159,25 +176,38 @@ DLLEXPORT int joinGame(Connection* c, int gameNum, const char* playerType)
   expr << "(join-game " << c->gameNumber << " "<< playerType << ")";
   send_string(c->socket, expr.str().c_str());
 
-  char* reply = rec_string(c->socket);
+  char* reply = 0;
+  while( !reply && c->socket != -1 )
+  {
+    reply = rec_string(c->socket);
+  }
+  if( !reply )
+    return 0;
+
   expression = extract_sexpr(reply);
   delete[] reply;
 
-  if(strcmp(expression->list->val, "join-accepted") != 0)
+  if(strcmp(expression->list->val, "join-accepted") == 0)
+  {
+    destroy_sexp(expression);
+    c->playerID = 1;
+    send_string(c->socket, "(game-start)");
+    return 1;
+  }
+  else if(strcmp(expression->list->val, "create-game") == 0)
+  {
+    std::cout << "Game did not exist, creating game " << c->gameNumber << endl;
+    destroy_sexp(expression);
+    c->playerID = 0;
+    return 1;
+  }
+  else
   {
     cerr << "Cannot join game "<< c->gameNumber << ": " << expression->list->next->val << endl;
     destroy_sexp(expression);
     return 0;
   }
-  destroy_sexp(expression);
-
-  c->playerID = 1;
-  send_string(c->socket, "(game-start)");
-
-  return 1;
-}
-
-DLLEXPORT void endTurn(Connection* c)
+}DLLEXPORT void endTurn(Connection* c)
 {
   LOCK( &c->mutex );
   send_string(c->socket, "(end-turn)");
@@ -190,7 +220,6 @@ DLLEXPORT void getStatus(Connection* c)
   send_string(c->socket, "(game-status)");
   UNLOCK( &c->mutex );
 }
-
 
 
 DLLEXPORT int pieceMove(_Piece* object, int file, int rank, int type)
@@ -211,28 +240,8 @@ DLLEXPORT int pieceMove(_Piece* object, int file, int rank, int type)
 
 
 
+
 //Utility functions for parsing data
-void parseMove(Connection* c, _Move* object, sexp_t* expression)
-{
-  sexp_t* sub;
-  sub = expression->list;
-
-  object->_c = c;
-
-  object->id = atoi(sub->val);
-  sub = sub->next;
-  object->fromFile = atoi(sub->val);
-  sub = sub->next;
-  object->fromRank = atoi(sub->val);
-  sub = sub->next;
-  object->toFile = atoi(sub->val);
-  sub = sub->next;
-  object->toRank = atoi(sub->val);
-  sub = sub->next;
-  object->promoteType = atoi(sub->val);
-  sub = sub->next;
-
-}
 void parsePiece(Connection* c, _Piece* object, sexp_t* expression)
 {
   sexp_t* sub;
@@ -251,6 +260,27 @@ void parsePiece(Connection* c, _Piece* object, sexp_t* expression)
   object->hasMoved = atoi(sub->val);
   sub = sub->next;
   object->type = atoi(sub->val);
+  sub = sub->next;
+
+}
+void parseMove(Connection* c, _Move* object, sexp_t* expression)
+{
+  sexp_t* sub;
+  sub = expression->list;
+
+  object->_c = c;
+
+  object->id = atoi(sub->val);
+  sub = sub->next;
+  object->fromFile = atoi(sub->val);
+  sub = sub->next;
+  object->fromRank = atoi(sub->val);
+  sub = sub->next;
+  object->toFile = atoi(sub->val);
+  sub = sub->next;
+  object->toRank = atoi(sub->val);
+  sub = sub->next;
+  object->promoteType = atoi(sub->val);
   sub = sub->next;
 
 }
@@ -278,7 +308,14 @@ DLLEXPORT int networkLoop(Connection* c)
   {
     sexp_t* base, *expression, *sub, *subsub;
 
-    char* message = rec_string(c->socket);
+    char* message = 0;
+    while( !message && c->socket != -1 )
+    {
+      message = rec_string(c->socket);
+    }
+    if( !message )
+      return 0; 
+
     string text = message;
     base = extract_sexpr(message);
     delete[] message;
@@ -353,23 +390,6 @@ DLLEXPORT int networkLoop(Connection* c)
           sub = sub->next;
 
         }
-        else if(string(sub->val) == "Move")
-        {
-          if(c->Moves)
-          {
-            for(int i = 0; i < c->MoveCount; i++)
-            {
-            }
-            delete[] c->Moves;
-          }
-          c->MoveCount =  sexp_list_length(expression)-1; //-1 for the header
-          c->Moves = new _Move[c->MoveCount];
-          for(int i = 0; i < c->MoveCount; i++)
-          {
-            sub = sub->next;
-            parseMove(c, c->Moves+i, sub);
-          }
-        }
         else if(string(sub->val) == "Piece")
         {
           if(c->Pieces)
@@ -385,6 +405,23 @@ DLLEXPORT int networkLoop(Connection* c)
           {
             sub = sub->next;
             parsePiece(c, c->Pieces+i, sub);
+          }
+        }
+        else if(string(sub->val) == "Move")
+        {
+          if(c->Moves)
+          {
+            for(int i = 0; i < c->MoveCount; i++)
+            {
+            }
+            delete[] c->Moves;
+          }
+          c->MoveCount =  sexp_list_length(expression)-1; //-1 for the header
+          c->Moves = new _Move[c->MoveCount];
+          for(int i = 0; i < c->MoveCount; i++)
+          {
+            sub = sub->next;
+            parseMove(c, c->Moves+i, sub);
           }
         }
         else if(string(sub->val) == "Player")
@@ -419,15 +456,6 @@ DLLEXPORT int networkLoop(Connection* c)
   }
 }
 
-DLLEXPORT _Move* getMove(Connection* c, int num)
-{
-  return c->Moves + num;
-}
-DLLEXPORT int getMoveCount(Connection* c)
-{
-  return c->MoveCount;
-}
-
 DLLEXPORT _Piece* getPiece(Connection* c, int num)
 {
   return c->Pieces + num;
@@ -435,6 +463,15 @@ DLLEXPORT _Piece* getPiece(Connection* c, int num)
 DLLEXPORT int getPieceCount(Connection* c)
 {
   return c->PieceCount;
+}
+
+DLLEXPORT _Move* getMove(Connection* c, int num)
+{
+  return c->Moves + num;
+}
+DLLEXPORT int getMoveCount(Connection* c)
+{
+  return c->MoveCount;
 }
 
 DLLEXPORT _Player* getPlayer(Connection* c, int num)
