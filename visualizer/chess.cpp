@@ -800,9 +800,14 @@ namespace visualizer
 
     SmartPointer<Winner> winner = new Winner();
     std::cout << m_game->players[0] << std::endl;
-    winner->addKeyFrame( new DrawWinner
+    if( m_game->winner == 0 || m_game->winner == 1 )
+      winner->addKeyFrame( new DrawWinner
         ( m_game->winner, m_game->states[0].players[m_game->winner].playerName, m_game->winReason ) 
         );
+    else
+      winner->addKeyFrame( new DrawWinner
+        ( -1, "No One", m_game->winReason ) );
+
 
     lastTurn.addAnimatable( winner );
 
