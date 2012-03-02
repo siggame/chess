@@ -18,7 +18,11 @@ namespace visualizer
     stringstream ss;
     ss << m_name << " Wins!!";
     game->renderer->drawText(2, 3, "DroidSansMono", ss.str(), 1.5 );
-    game->renderer->drawText(2, 3.5, "DroidSansMono", m_how.c_str(), 1.5 );
+    if( m_player == -1 )
+      game->renderer->drawText(2, 3.5, "DroidSansMono", "Stalemate", 1.5 );
+    else
+      game->renderer->drawText(2, 3.5, "DroidSansMono", m_how.c_str(), 1.5 );
+    
     
   }
   
