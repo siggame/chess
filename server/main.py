@@ -168,4 +168,4 @@ if __name__ == "__main__":
   if '-port' in sys.argv:
     indexNumber = sys.argv.index('-port') + 1
     portNumber = int(sys.argv[indexNumber])
-  TestGameServer.main(19000)
+  TestGameServer.main(portNumber)
