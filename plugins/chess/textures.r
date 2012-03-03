@@ -1,4 +1,5 @@
 font DroidSansMono textures/DroidSansMono.png DroidSansMono.dat
+font LindenHill textures/LindenHill.png LindenHill.dat
 texture 0-K textures/black-king.png
 texture 0-Q textures/black-queen.png
 texture 0-R textures/black-rook.png

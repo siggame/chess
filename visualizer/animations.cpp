@@ -17,11 +17,11 @@ namespace visualizer
     game->renderer->setColor( Color( 0, 0, 0, t ) );
     stringstream ss;
     ss << m_name << " Wins!!";
-    game->renderer->drawText(2, 3, "DroidSansMono", ss.str(), 1.5 );
+    game->renderer->drawText(2, 3, "LindenHill", ss.str(), 1.5 );
     if( m_player == -1 )
-      game->renderer->drawText(2, 3.5, "DroidSansMono", "Stalemate", 1.5 );
+      game->renderer->drawText(2, 3.5, "LindenHill", "Stalemate", 1.5 );
     else
-      game->renderer->drawText(2, 3.5, "DroidSansMono", m_how.c_str(), 1.5 );
+      game->renderer->drawText(2, 3.5, "LindenHill", m_how.c_str(), 1.5 );
     
     
   }
@@ -50,7 +50,7 @@ namespace visualizer
         ss << (char)(game->options->getNumber( "RotateBoard" ) ? (104 - x) : (x + 97)) << (game->options->getNumber( "RotateBoard" ) ? (y + 1) : (8 - y));
 		       
         // And raw the rank and file on the tile
-        game->renderer->drawText(x, y, "DroidSansMono", ss.str(), 1.0 );
+        game->renderer->drawText(x, y, "DroidSansMono", ss.str(), 0.5f );
 
       }
     }
@@ -106,12 +106,12 @@ namespace visualizer
     if( 1-m_player )
     {
       game->renderer->drawText( 8, ( rotate ? 0.3 : 7.4 ), "DroidSansMono", ss.str(), 1 );
-      game->renderer->drawText( 8, ( rotate ? 0.0 : 7.7 ), "DroidSansMono", m_scoreTime->playerName, 1 );
+      game->renderer->drawText( 8, ( rotate ? 0.0 : 7.7 ), "LindenHill", m_scoreTime->playerName, 1 );
     }
     else
     {
       game->renderer->drawText( 8, ( rotate ? 7.4 : 0.3 ), "DroidSansMono", ss.str(), 1 );
-      game->renderer->drawText( 8, ( rotate ? 7.7 : 0.0 ), "DroidSansMono", m_scoreTime->playerName, 1 );
+      game->renderer->drawText( 8, ( rotate ? 7.7 : 0.0 ), "LindenHill", m_scoreTime->playerName, 1 );
     }
 
   }
