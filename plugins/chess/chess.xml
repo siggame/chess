@@ -1,24 +1,2 @@
 <options>
-  <option>
-    <key>Password</key>
-    <type>String</type>
-    <value>password</value>
-  </option>
-  <option>
-    <key>RotateBoard</key>
-    <type>Integer</type>
-    <value>0</value>
-    <minvalue>0</minvalue>
-    <maxvalue>1</maxvalue>
-  </option>
-  <option>
-    <key>SpectateServer</key>
-    <type>String</type>
-    <value>127.0.0.1</value>
-  </option>
-  <option>
-    <key>Username</key>
-    <type>String</type>
-    <value>Shell AI</value>
-  </option>
 </options>

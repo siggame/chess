@@ -4,6 +4,10 @@
 #include "animations.h"
 #include "version.h"
 
+#include <QGridLayout>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QLabel>
 #include <QDialog>
 #include <sstream>
 #include <string>
