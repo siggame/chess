@@ -19,9 +19,9 @@ namespace visualizer
     ss << m_name << " Wins!!";
     game->renderer->drawText(4, 3, "LindenHill", ss.str(), 1.5, IRenderer::Center  );
     if( m_player == -1 )
-      game->renderer->drawText(4, 3.5, "LindenHill", "Stalemate", 1.5, IRenderer::Center );
+      game->renderer->drawText(4, 3.5, "LindenHill", "Stalemate", 0.8, IRenderer::Center );
     else
-      game->renderer->drawText(4, 3.5, "LindenHill", m_how.c_str(), 1.5, IRenderer::Center );
+      game->renderer->drawText(4, 3.5, "LindenHill", m_how.c_str(), 0.8, IRenderer::Center );
     
     
   }
