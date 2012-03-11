@@ -34,6 +34,8 @@ namespace visualizer
       void spectate( std::string ipAddress );
       void loadGamelog( std::string gamelog );
 
+      void destroy();
+
       const char* username() { return options->getString( "Username" ).c_str(); }
       const char* password() { return options->getString( "Password" ).c_str(); }
 
