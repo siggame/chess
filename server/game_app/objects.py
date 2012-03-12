@@ -92,6 +92,7 @@ class Piece:
     board = self.createBoard()
     isLegal = True
     verifyVal = self.verifyMove(file,rank,type)
+    promotion = False
     if verifyVal is True:
       if self.hasMoved == 0:
         self.hasMoved = 1
@@ -123,6 +124,7 @@ class Piece:
       if self.type == ord('P') and rank == 1 + 7 * (self.owner^1):
         
         self.type = type
+        promotion = True
       if self.type == ord('P') and board[rank-1][file-1] is None and self.file is not file:
         #EnPassant Code  
         for piece in [i for i in self.game.objects.values() if isinstance(i,Piece)]:
@@ -146,7 +148,7 @@ class Piece:
     else:
       return "type: "+chr(self.type)+" Rank: "+`self.rank`+" to "+`rank`+", File: "+`self.file`+" to "+`file`+" "+verifyVal
     #removes taken piece and updates the turns to stalemate
-    if self.type is ord('P') or targetPiece is not None:
+    if self.type is ord('P') or targetPiece is not None or promotion:
       self.game.TurnsToStalemate = 100
       if targetPiece is not None:
         self.game.removeObject(targetPiece)
