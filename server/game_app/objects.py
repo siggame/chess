@@ -62,13 +62,13 @@ class Piece:
     printableState = ""
     theBoard = self.createBoard()
     
-    for i in range(0,8):
+    for i in reversed(range(0,8)):
       for j in range(0,8):
         if theBoard[i][j] is None:
           printableState += "."
         else:
-          printableState += chr(theBoard[i][j].type)
-          
+          printableState += chr(theBoard[i][j].type) if theBoard[i][j].owner == 0 else chr(theBoard[i][j].type).lower()
+        printableState += " "
       printableState += "\n"
       
     printableState += "\n"
