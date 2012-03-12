@@ -31,6 +31,11 @@ namespace visualizer
 
   Chess::~Chess()
   {
+    destroy();
+  } // Chess::~Chess()
+
+  void Chess::destroy()
+  {
     animationEngine->registerGame( 0, 0 );
     clear();
     if( n )
@@ -39,7 +44,7 @@ namespace visualizer
     delete m_game;
     m_game = 0;
 
-  } // Chess::~Chess()
+  }
 
   PluginInfo Chess::getPluginInfo()
   {
