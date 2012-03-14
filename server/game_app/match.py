@@ -130,6 +130,14 @@ class Match(DefaultGameWorld):
         if p.type == ord('N'):
           self.declareDraw("With a King Vs a King and a Knight it is impossible to checkmate, Stalemate!")
           return
+    if len(self.objects.pieces) == 4:
+      bishops = filter(lambda piece: piece.type == ord('B'), self.objects.pieces)
+      if len(bishops) == 2: #Exactly 2 bishops and 2 kings
+        if bishops[0].owner != bishops[1].owner:# Opposite team
+          if (bishops[0].file + bishops[0].rank) % 2 == (bishops[1].file + bishops[1].rank) % 2: # Same color
+            self.declareDraw("With a King Bishop Vs King Bishop, with bishops on the same color, it is impossible to checkmate, Stalemate!")
+            return
+
     stalemate = True
     bColor = -1
     for i in self.objects.pieces:
