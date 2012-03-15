@@ -164,7 +164,7 @@ class Match(DefaultGameWorld):
 
   def declareDraw(self, reason=''):
     self.winner = 'No one.'
-    
+    self.sendStatus(self.spectators)
     msg = ["game-winner", self.id, 'No one.', 2, reason]
     
     self.scribe.writeSExpr(msg)

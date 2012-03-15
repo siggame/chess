@@ -46,7 +46,8 @@ class Piece:
     return value
 
   def nextTurn(self):
-    pass
+    if self.game.playerID == self.owner and self.hasMoved == 2:
+      self.hasMoved = 1
 
   def move(self, file, rank, type):
     if self.game.moves is 0:
@@ -103,8 +104,6 @@ class Piece:
           targetPiece = piece
           targetPiece.rank = -1
           targetPiece.file = -1
-        if piece.id is not self.id and piece.hasMoved == 2:
-          piece.hasMoved = 1
       if self.file-file == 2 and self.type is ord('K'):
         if self.game.inCheck(self.owner):
           return ("White" if self.game.playerID == 0 else "Black") + " Attempted to Castle out of Check!"
