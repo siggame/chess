@@ -18,9 +18,11 @@ namespace visualizer
     stringstream ss;
     ss << m_name << " Wins!!";
     game->renderer->drawText(4, 3, "LindenHill", ss.str(), 1.5, IRenderer::Center  );
+#if 0
     if( m_player == -1 )
       game->renderer->drawText(4, 3.5, "LindenHill", "Stalemate", 0.6, IRenderer::Center );
     else
+#endif
       game->renderer->drawText(4, 3.5, "LindenHill", m_how.c_str(), 0.6, IRenderer::Center );
     
     
