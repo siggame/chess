@@ -22,7 +22,7 @@ HEADERS +=  *.h \
             ./visclient/*.h \
             ./frcperft/*.h 
 
-CONFIG += debug plugin dll static
+CONFIG += debug plugin dll 
 debug:DEFINES += __DEBUG__
 #QMAKE_CFLAGS_DEBUG += -pg
 #QMAKE_CXXFLAGS_DEBUG += -pg
