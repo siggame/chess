@@ -31,4 +31,4 @@ QMAKE_LFLAGS_RELEASE += -shared -Wl
 DEFINES += YY_NO_UNISTD_H PERFT_FAST
 DESTDIR = ../plugins/
 
-QT += network opengl qt3support
+QT += network opengl gui 
