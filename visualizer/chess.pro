@@ -31,7 +31,7 @@ QMAKE_LFLAGS_RELEASE += -shared -Wl
 
 win32:QMAKE_LFLAGS_DEBUG += -lws2_32
 win32:QMAKE_LFLAGS_RELEASE += -lws2_32
-win32:LIBS += libws2_32.a
+win32:LIBS += /opt/mingw/mingw-cross-env/usr/i686-pc-mingw32/lib/libws2_32.a
 
 DEFINES += YY_NO_UNISTD_H PERFT_FAST
 DESTDIR = ../plugins/
