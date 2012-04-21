@@ -26,6 +26,8 @@ namespace visualizer
     m_game = 0;
     m_suicide = false;
 
+    timeElapsed.start();
+
     n = 0;
   } // Chess::Chess()
 
@@ -193,6 +195,8 @@ namespace visualizer
 
     if( m_player )
     {
+      m_whosTurn = 1 - m_whosTurn;
+      timeElapsed.restart();
       addCurrentBoard();
       // We'll want to wait for user input.
       bool input = false;
@@ -211,6 +215,8 @@ namespace visualizer
       if( n->suiciding() )
         return false;
 
+      m_whosTurn = 1 - m_whosTurn;
+      timeElapsed.restart();
       addCurrentBoard();
     } 
     else
@@ -355,6 +361,8 @@ namespace visualizer
     }
 
     addFrame( turn );
+
+    m_whosTurn = 1 - playerID();
 
     animationEngine->registerGame( this, this );
 
@@ -515,11 +523,22 @@ namespace visualizer
 
       if( players.size() )
       {
-        int min = players[0].time()/60;
-        int sec = players[0].time()-min*60;
+        int time0 = players[0].time();
+        int time1 = players[1].time();
+        
+        if(m_whosTurn)
+        {
+          time1 -= timeElapsed.elapsed()/1000;
+        } else
+        {
+          time0 -= timeElapsed.elapsed()/1000;
+        }
+
+        int min = time0/60;
+        int sec = time0-min*60;
         player2 << min << ":" << setw(2) << setfill( '0' ) << sec;
-        min = players[1].time()/60;
-        sec = players[1].time()-min*60;
+        min = time1/60;
+        sec = time1-min*60;
         player1 << min << ":" << setw(2) << setfill( '0' ) << sec;
       } else
       {

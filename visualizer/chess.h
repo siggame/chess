@@ -2,6 +2,7 @@
 #define CHESS_H
 
 #include <QObject>
+#include <QTime>
 #include "igame.h"
 #include "animsequence.h"
 
@@ -73,6 +74,9 @@ namespace visualizer
     
       bool m_playerMoved;
       char promotion;
+      QTime timeElapsed;
+      int  m_whosTurn;
+
 
       map< char, int > wOffset, bOffset;
 
