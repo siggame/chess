@@ -12,11 +12,6 @@
     <maxvalue>1</maxvalue>
   </option>
   <option>
-    <key>SpectateServer</key>
-    <type>String</type>
-    <value>127.0.0.1</value>
-  </option>
-  <option>
     <key>Username</key>
     <type>String</type>
     <value>Shell AI</value>
