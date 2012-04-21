@@ -133,6 +133,10 @@ namespace visualizer
       piece->x = p->file()-1;
       piece->y = p->rank()-1;
       piece->type = p->type();
+      if( piece->type == 'P' && (piece->y == 7 || piece->y == 0) )
+      {
+        piece->type = promotion;
+      }
       piece->owner = p->owner();
 
       killed[piece->owner][piece->type]--;
@@ -148,7 +152,6 @@ namespace visualizer
       float y = 3.5+0.5*i;
       for( map< char, int >::iterator p = killed[i].begin(); p != killed[i].end(); p++ )
       {
-        //cout << (char)p->first << ":" << p->second << endl;
         while( p->second-- > 0 )
         {
           SmartPointer<ChessPiece> piece = new ChessPiece();
@@ -411,8 +414,9 @@ namespace visualizer
               {
                 if( moveIfValid( *piece, p.x, p.y, promotion ) )
                 {
-                  if( piece->type() == 'P' && ( p.y == 1 || p.y == 8 ) )
+                  if( piece->type() == 'P' && ( p.y == 0 || p.y == 7 ) )
                   {
+                    cout << "Promoted from " << (char)((client::_Piece*)piece->ptr)->type << " to " << (char)promotion << endl;
                     ((client::_Piece*)piece->ptr)->type = promotion;
                   }
                   inputMutex.lock();
