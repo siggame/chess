@@ -215,6 +215,10 @@ namespace visualizer
       if( n->suiciding() )
         return false;
 
+
+      ((client::_Player*)players[m_whosTurn].ptr)->time -= timeElapsed.elapsed()/1000;
+
+
       m_whosTurn = 1 - m_whosTurn;
       timeElapsed.restart();
       addCurrentBoard();
@@ -329,6 +333,8 @@ namespace visualizer
 
     timeManager->setNumTurns( 0 );
 
+    m_whosTurn = 0;
+    cout << "PLAYER: " << playerID() << endl;
 
     n = new NetworkLoop( this, c );
     n->start();
@@ -361,8 +367,6 @@ namespace visualizer
     }
 
     addFrame( turn );
-
-    m_whosTurn = 1 - playerID();
 
     animationEngine->registerGame( this, this );
 
@@ -526,7 +530,6 @@ namespace visualizer
         int time0 = players[0].time();
         int time1 = players[1].time();
         
-#if 0
         if(m_whosTurn)
         {
           time1 -= timeElapsed.elapsed()/1000;
@@ -534,7 +537,6 @@ namespace visualizer
         {
           time0 -= timeElapsed.elapsed()/1000;
         }
-#endif
 
         int min = time0/60;
         int sec = time0-min*60;
