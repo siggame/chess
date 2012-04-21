@@ -333,7 +333,7 @@ namespace visualizer
 
     timeManager->setNumTurns( 0 );
 
-    m_whosTurn = 0;
+    m_whosTurn = 1-playerID();
     cout << "PLAYER: " << playerID() << endl;
 
     n = new NetworkLoop( this, c );
