@@ -526,21 +526,24 @@ namespace visualizer
       bool rotate = options->getNumber( "Rotate Board" );
 
       renderer->setColor( Color( 0.05, 0.05, 0.05, 1 ) );
+      int promote_index = -1;
       switch( promotion )
       {
         case 'Q':
-          renderer->drawProgressBar(  8, 6.05, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 0 );
+          promote_index = 8;
         break;
         case 'N':
-          renderer->drawProgressBar(  9, 6.05, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 0 );
+          promote_index = 9;
         break;
         case 'R':
-          renderer->drawProgressBar(  10, 6.05, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 0 );
+          promote_index = 10;
         break;
         case 'B':
-          renderer->drawProgressBar(  11, 6.05, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 0 );
+          promote_index = 11;
         break;
       }
+
+      renderer->drawProgressBar(  promote_index, 6.05, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 0 );
 
       renderer->setColor( Color( 1, 1, 1 ) );
 
