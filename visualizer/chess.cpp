@@ -149,7 +149,7 @@ namespace visualizer
       for( map< char, int >::iterator p = killed[i].begin(); p != killed[i].end(); p++ )
       {
         //cout << (char)p->first << ":" << p->second << endl;
-        while( p->second-- )
+        while( p->second-- > 0 )
         {
           SmartPointer<ChessPiece> piece = new ChessPiece();
           piece->x = x;
