@@ -49,7 +49,7 @@ namespace visualizer
         game->renderer->setColor( Color(0.8, 0.1, 0.1) );
 		
         // Build the tile's rank & file string
-        ss << (char)(game->options->getNumber( "RotateBoard" ) ? (104 - x) : (x + 97)) << (game->options->getNumber( "RotateBoard" ) ? (y + 1) : (8 - y));
+        ss << (char)(game->options->getNumber( "Rotate Board" ) ? (104 - x) : (x + 97)) << (game->options->getNumber( "Rotate Board" ) ? (y + 1) : (8 - y));
 		       
         // And raw the rank and file on the tile
         game->renderer->drawText(x, y, "DroidSansMono", ss.str(), 0.5f );
@@ -67,7 +67,7 @@ namespace visualizer
     ss << 1-piece.owner << "-" << (char)piece.type;
     
     game->renderer->setColor( Color( 1, 1, 1 ) );
-    if( game->options->getNumber( "RotateBoard" ) )
+    if( game->options->getNumber( "Rotate Board" ) )
       game->renderer->drawTexturedQuad(piece.x, piece.y, 0.5, 0.5, ss.str());
     else
       game->renderer->drawTexturedQuad(piece.x, 7-piece.y, 0.5, 0.5, ss.str());
@@ -85,7 +85,7 @@ namespace visualizer
     ss << 1-piece.owner << "-" << (char)piece.type;
     
     game->renderer->setColor( Color( 1, 1, 1 ) );
-    if( game->options->getNumber( "RotateBoard" ) )
+    if( game->options->getNumber( "Rotate Board" ) )
       game->renderer->drawTexturedQuad(7-piece.x, piece.y, 1, 1, ss.str());
     else
       game->renderer->drawTexturedQuad(piece.x, 7-piece.y, 1, 1, ss.str());
@@ -103,7 +103,7 @@ namespace visualizer
 
     ss << min << ":" << setw(2) << setfill( '0' ) << sec;
 
-    bool rotate = game->options->getNumber( "RotateBoard" );
+    bool rotate = game->options->getNumber( "Rotate Board" );
 
     if( 1-m_player )
     {

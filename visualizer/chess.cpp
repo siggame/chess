@@ -523,24 +523,25 @@ namespace visualizer
         player2 << "WAITING";
       }
 
-      bool rotate = options->getNumber( "RotateBoard" );
-      renderer->setColor( Color( 0, 0, 0, 1 ) );
+      bool rotate = options->getNumber( "Rotate Board" );
+
+      renderer->setColor( Color( 0.05, 0.05, 0.05, 1 ) );
       switch( promotion )
       {
         case 'Q':
-          renderer->drawProgressBar(  8, 6, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
+          renderer->drawProgressBar(  8, 6.05, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 0 );
         break;
         case 'N':
-          renderer->drawProgressBar(  9, 6, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
+          renderer->drawProgressBar(  9, 6.05, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 0 );
         break;
         case 'R':
-          renderer->drawProgressBar(  10, 6, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
+          renderer->drawProgressBar(  10, 6.05, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 0 );
         break;
         case 'B':
-          renderer->drawProgressBar(  11, 6, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
+          renderer->drawProgressBar(  11, 6.05, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 0 );
         break;
       }
-      //renderer->drawProgressBar( promotion == 'Q' ? 10 : 11, 7, 1, 1, 1, Color( 0, 0.2, 0.9f, 0.7f ), 2, 1 );
+
       renderer->setColor( Color( 1, 1, 1 ) );
 
       if( playerID() )
@@ -583,7 +584,6 @@ namespace visualizer
 
       renderer->drawText( 8.0, 5.7, "DroidSansMono", "Current Promotion:", 1 );
 
-
       if( lastP.y >= 0 && lastP.y < 8 )
       {
         if( lastP.x >= 0 && lastP.x < 8 )
@@ -593,7 +593,7 @@ namespace visualizer
           renderer->setColor( Color( 0, 0.2, 0.7, 0.3f ) );
           Coord select = lastP;
           select.y = 7-select.y;
-          if( options->getNumber( "RotateBoard" ) )
+          if( options->getNumber( "Rotate Board" ) )
           {
             select.y = 7-select.y;
             select.x = 7-select.x;
@@ -615,7 +615,7 @@ namespace visualizer
                 int x = to-8*y;
                 y = 7-y;
 
-                if( options->getNumber( "RotateBoard" ) )
+                if( options->getNumber( "Rotate Board" ) )
                 {
                   x = 7-x;
                   y = 7-y;
@@ -629,25 +629,32 @@ namespace visualizer
           }
 
         }
-        else if( lastP.x < 0 && floor(lastP.y) == 6 )
+        else 
         {
-          if( lastP.x == -1 )
+
+          if( options->getNumber( "Rotate Board" ) )
           {
-            // Queen
-            promotion = 'Q';
+            lastP.x = 7 - lastP.x;
+            lastP.y = 7 - lastP.y;
           }
-          else if( lastP.x == -2 )
+
+          if( lastP.x >= 8 && floor(lastP.y) == 1 )
           {
-            // Knight
-            promotion = 'N';
-          }
-          else if( lastP.x == -3 )
-          {
-            promotion = 'R';
-          }
-          else if( lastP.x == -4 )
-          {
-            promotion = 'B';
+            switch(int(lastP.x))
+            {
+              case 8:
+                promotion = 'Q';
+                break;
+              case 9:
+                promotion = 'N';
+                break;
+              case 10:
+                promotion = 'R';
+                break;
+              case 11:
+                promotion = 'B';
+                break;
+            }
           }
         }
       }
@@ -855,7 +862,7 @@ namespace visualizer
     i.x = floor( input.x );
     i.y = 7-floor( input.y );
 
-    if( options->getNumber( "RotateBoard" ) )
+    if( options->getNumber( "Rotate Board" ) )
     {
       i.x = 7-i.x;
       i.y = 7-i.y;

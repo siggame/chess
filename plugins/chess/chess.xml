@@ -5,7 +5,7 @@
     <value>password</value>
   </option>
   <option>
-    <key>RotateBoard</key>
+    <key>Rotate Board</key>
     <type>Integer</type>
     <value>0</value>
     <minvalue>0</minvalue>
