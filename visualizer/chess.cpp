@@ -522,6 +522,8 @@ namespace visualizer
     if( m_player )
     {
 
+      bool rotate = options->getNumber( "Rotate Board" );
+
       stringstream player1;
       stringstream player2;
 
@@ -538,6 +540,7 @@ namespace visualizer
           time0 -= timeElapsed.elapsed()/1000;
         }
 
+        
         int min = time0/60;
         int sec = time0-min*60;
         player2 << min << ":" << setw(2) << setfill( '0' ) << sec;
@@ -550,7 +553,6 @@ namespace visualizer
         player2 << "WAITING";
       }
 
-      bool rotate = options->getNumber( "Rotate Board" );
 
       renderer->setColor( Color( 0.05, 0.05, 0.05, 1 ) );
       int promote_index = -1;
@@ -574,10 +576,10 @@ namespace visualizer
 
       renderer->setColor( Color( 1, 1, 1 ) );
 
+      renderer->drawText( 8, ( rotate ? 7.4 : 0.3 ), "DroidSansMono", player1.str(), 1 );
+      renderer->drawText( 8, ( rotate ? 0.3 : 7.4 ), "DroidSansMono", player2.str(), 1 );
       if( playerID() )
       {
-        renderer->drawText( 8, ( rotate ? 7.4 : 0.3 ), "DroidSansMono", player1.str(), 1 );
-        renderer->drawText( 8, ( rotate ? 0.3 : 7.4 ), "DroidSansMono", player2.str(), 1 );
 
         renderer->drawTexturedQuad( 8, 6, 1, 1, "0-Q" );
         renderer->drawTexturedQuad( 9, 6, 1, 1, "0-N" );
@@ -586,8 +588,11 @@ namespace visualizer
       }
       else
       {
+#if 0
         renderer->drawText( 8, ( rotate ? 0.3 : 7.4 ), "DroidSansMono", player1.str(), 1 );
         renderer->drawText( 8, ( rotate ? 7.4 : 0.3 ), "DroidSansMono", player2.str(), 1 );
+
+#endif
 
         renderer->drawTexturedQuad( 8, 6, 1, 1, "1-Q" );
         renderer->drawTexturedQuad( 9, 6, 1, 1, "1-N" );
