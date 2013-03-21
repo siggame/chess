@@ -17,6 +17,7 @@
 
 namespace visualizer
 {
+	const string FILE[8] = {'a','b','c','d','e','f','g','h'};		// used to convert numbers into files: e.g. 1 -> a , 2 -> b
 
   struct Coord
   {
@@ -76,8 +77,7 @@ namespace visualizer
       char promotion;
       QTime timeElapsed;
       int  m_whosTurn;
-
-
+			
       map< char, int > wOffset, bOffset;
 
       Coord lastP;

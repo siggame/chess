@@ -117,5 +117,17 @@ namespace visualizer
     }
 
   }
+  
+  void DrawMoveHistory::animate(const float& /* t */, AnimData* /* d */, IGame* game)
+  {
+  	float x = 8;
+  	float y = 3.5;
+  	
+  	for(unsigned short i = 0; i < m_pMovesList->moves_list.size(); i++)
+  	{
+  		game->renderer->drawText(x,y,"DroidSansMono",m_pMovesList->moves_list[i].c_str(),1);
+  		y-=.3;
+  	}
+  }
 
 }

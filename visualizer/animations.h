@@ -64,30 +64,44 @@ namespace visualizer
     }; // DrawScore
 
     class DrawWinner: public Anim
-  {
-    public:
-      DrawWinner( int player, string name, string how ) 
-      { 
-        m_player = player; 
-        m_name = name; 
-        m_how = how;
-      }
+		{
+		  public:
+		    DrawWinner( int player, string name, string how ) 
+		    { 
+		      m_player = player; 
+		      m_name = name; 
+		      m_how = how;
+		    }
 
-      void animate( const float& t, AnimData* d, IGame* game );
+		    void animate( const float& t, AnimData* d, IGame* game );
 
-      float controlDuration() const
-      { return 1; }
+		    float controlDuration() const
+		    { return 1; }
 
-      float totalDuration() const
-      { return 1; }
+		    float totalDuration() const
+		    { return 1; }
 
 
-    private:
-      string m_name;
-      string m_how;
-      int m_player;
+		  private:
+		    string m_name;
+		    string m_how;
+		    int m_player;
 
-  };
+		};
+		
+		class DrawMoveHistory: public Anim
+		{
+			public:
+			
+				DrawMoveHistory(MovesHist* pList) : m_pMovesList(pList) {}
+				
+				void animate( const float& t, AnimData* d, IGame* game );
+				
+			private:
+			
+				MovesHist* m_pMovesList;
+				
+		};
 
 } // visualizer
 

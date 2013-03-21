@@ -103,6 +103,11 @@ namespace visualizer
   void Chess::init()
   {
     Bitboard::init();
+    
+    QStringList header;
+  	header << "Move Info";
+  	
+  	gui->setDebugHeader( header );
   }
 
   map<char, int> Chess::populatePieces()
@@ -182,6 +187,23 @@ namespace visualizer
 
       }
     }
+	  
+	  
+	  SmartPointer<MovesHist> history = new MovesHist();
+		
+		// add all moves to the moves list
+		for(unsigned short i = 0; i < moves.size(); i++)
+		{			
+			stringstream stream;
+			
+			stream<<"["<<FILE[moves[i].fromFile()-1]<<","<<moves[i].fromRank()<<"] --> ["<<FILE[moves[i].toFile()-1]<<","<<moves[i].toRank()<<"]"<<endl;
+			
+			history->moves_list.push_back(stream.str());
+			
+			history->addKeyFrame(new DrawMoveHistory(history));
+						
+			turn.addAnimatable(history);
+		}
 
     addFrame( turn );
     timeManager->setNumTurns( size() );
@@ -287,6 +309,8 @@ namespace visualizer
 
     if( !client::serverConnect( c, m_ipAddress.c_str(), "19000" ) )
     {
+    	cout<<"Could Not Connect To: " << m_ipAddress.c_str()<<endl;
+    
       WARNING( "Could Not Connect To Server" );
       return;
     }
@@ -718,7 +742,7 @@ namespace visualizer
 
     Frame lastTurn;
     // Loop through each state in the gamelog
-    for(int state = 0; state < m_game->states.size(); state++)
+    for(unsigned int state = 0; state < m_game->states.size(); state++)
     {
       Frame turn;
 

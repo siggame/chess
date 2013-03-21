@@ -30,6 +30,10 @@ namespace visualizer
   {
   };
 
+	struct MovesHist: public Animatable
+	{
+		std::vector<std::string> moves_list;
+	};
 } // visualizer
 
 #endif // CHESS_ANIMATABLE_H
