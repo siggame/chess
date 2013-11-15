@@ -26,8 +26,8 @@ CONFIG += debug plugin dll
 debug:DEFINES += __DEBUG__
 #QMAKE_CFLAGS_DEBUG += -pg
 #QMAKE_CXXFLAGS_DEBUG += -pg
-QMAKE_LFLAGS_DEBUG += -shared -Wl 
-QMAKE_LFLAGS_RELEASE += -shared -Wl 
+QMAKE_LFLAGS_DEBUG += -shared -W
+QMAKE_LFLAGS_RELEASE += -shared -W
 
 win32:QMAKE_LFLAGS_DEBUG += -lws2_32
 win32:QMAKE_LFLAGS_RELEASE += -lws2_32
