@@ -30,8 +30,17 @@ namespace visualizer
   
   void DrawBoard::animate( const float& /* t */, AnimData * /* d */, IGame* game )
   {
-	Color black = Color( 0.1255, 0.125, 0.12 );
-	Color white = Color( 0.875, 0.875, 0.88 );
+    unsigned int tileColor = (unsigned int)game->options->getNumber("Tile Color");
+
+    Color whiteColorList[4] =
+    {
+      Color(0.875, 0.875, 0.88),
+      Color(0.575, 0.575, 0.58),
+      Color(0.2255, 0.225, 0.72),
+      Color(0.1255, 0.525, 0.12)
+    };
+
+    Color black = Color( 0.1255, 0.125, 0.12 );
 
     for(int x = 0; x < 8; x++)
     {
@@ -40,7 +49,7 @@ namespace visualizer
         stringstream ss;
 		
         // Set the tile's color to white or black based on it's location
-        game->renderer->setColor( (x+y)%2 ? black : white  );
+        game->renderer->setColor( (x+y)%2 ? black : whiteColorList[tileColor % 4] );
         
         // Draw the background of the tile
         game->renderer->drawQuad(x, y, 1, 1);
