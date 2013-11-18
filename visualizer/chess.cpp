@@ -285,7 +285,7 @@ namespace visualizer
       m_player = true;
     }
 
-    if( !client::serverConnect( c, m_ipAddress.c_str(), "19000" ) )
+	if( !client::serverConnect( c, m_ipAddress.c_str(), options->getString("Port Number").c_str() ) )
     {
       WARNING( "Could Not Connect To Server" );
       return;

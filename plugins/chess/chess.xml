@@ -5,6 +5,11 @@
     <value>password</value>
   </option>
   <option>
+    <key>Port Number</key>
+    <type>String</type>
+    <value>19000</value>
+  </option>
+  <option>
     <key>Rotate Board</key>
     <type>Integer</type>
     <value>0</value>
