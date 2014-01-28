@@ -547,12 +547,12 @@ namespace visualizer
         min = time1/60;
         sec = time1-min*60;
         player1 << min << ":" << setw(2) << setfill( '0' ) << sec;
+
       } else
       {
         player1 << "WAITING";
         player2 << "WAITING";
-      }
-
+      }      
 
       renderer->setColor( Color( 0.05, 0.05, 0.05, 1 ) );
       int promote_index = -1;
@@ -618,6 +618,50 @@ namespace visualizer
       renderer->drawText( 8, ( rotate ? 7.7 : 0.0 ), "DroidSansMono", player2.str(), 1 );
 
       renderer->drawText( 8.0, 5.7, "DroidSansMono", "Current Promotion:", 1 );
+
+      if(players.size())
+      {
+          if(m_whosTurn)
+          {
+              if(options->getNumber( "Rotate Board" ))
+              {
+                  renderer->setColor(Color(1.0f, 1.0f, 1.0f, 0.5f));
+                  renderer->drawTexturedQuad(8.0f, 3.0f, 1.0f, 1.0f, "arrow");
+                  renderer->setColor(Color(1.0f, 1.0f, 1.0f, 1.0f));
+                  renderer->drawRotatedTexturedQuad(8.0f, 4.0f, 1.0f, 1.0f, 180.0f, "arrow");
+              }
+              else
+              {
+                  renderer->setColor(Color(1.0f, 1.0f, 1.0f, 1.0f));
+                  renderer->drawTexturedQuad(8.0f, 3.0f, 1.0f, 1.0f, "arrow");
+                  renderer->setColor(Color(1.0f, 1.0f, 1.0f, 0.5f));
+                  renderer->drawRotatedTexturedQuad(8.0f, 4.0f, 1.0f, 1.0f, 180.0f, "arrow");
+              }
+          }
+          else
+          {
+              if(options->getNumber( "Rotate Board" ))
+              {
+                  renderer->setColor(Color(1.0f, 1.0f, 1.0f, 1.0f));
+                  renderer->drawTexturedQuad(8.0f, 3.0f, 1.0f, 1.0f, "arrow");
+                  renderer->setColor(Color(1.0f, 1.0f, 1.0f, 0.5f));
+                  renderer->drawRotatedTexturedQuad(8.0f, 4.0f, 1.0f, 1.0f, 180.0f, "arrow");
+              }
+              else
+              {
+                  renderer->setColor(Color(1.0f, 1.0f, 1.0f, 0.5f));
+                  renderer->drawTexturedQuad(8.0f, 3.0f, 1.0f, 1.0f, "arrow");
+                  renderer->setColor(Color(1.0f, 1.0f, 1.0f, 1.0f));
+                  renderer->drawRotatedTexturedQuad(8.0f, 4.0f, 1.0f, 1.0f, 180.0f, "arrow");
+              }
+          }
+      }
+      else
+      {
+          renderer->setColor(Color(1.0f, 1.0f, 1.0f, 0.5f));
+          renderer->drawTexturedQuad(8.0f, 3.0f, 1.0f, 1.0f, "arrow");
+          renderer->drawRotatedTexturedQuad(8.0f, 4.0f, 1.0f, 1.0f, 180.0f, "arrow");
+      }
 
       if( lastP.y >= 0 && lastP.y < 8 )
       {

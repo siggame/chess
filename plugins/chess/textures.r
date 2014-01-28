@@ -12,3 +12,4 @@ texture 1-R textures/white-rook.png
 texture 1-B textures/white-bishop.png
 texture 1-P textures/white-pawn.png
 texture 1-N textures/white-knight.png
+texture arrow textures/arrow.png
