@@ -151,7 +151,7 @@ namespace visualizer
     for( size_t i = 0; i < 2; i++ )
     {
       float x = 7.95;
-      float y = 3.5+0.5*i;
+      float y = 3.5 + (1.5f * ((i)?1:-1));
       for( map< char, int >::iterator p = killed[i].begin(); p != killed[i].end(); p++ )
       {
         while( p->second-- > 0 )
@@ -851,7 +851,7 @@ namespace visualizer
       for( size_t i = 0; i < 2; i++ )
       {
         float x = 7.95;
-        float y = 3.5+0.5*i;
+        float y = 3.5+(1.5f * ((i)?1:-1));
         for( map< char, int >::iterator p = killed[i].begin(); p != killed[i].end(); p++ )
         {
           if( p->second < 0 )
