@@ -3,6 +3,7 @@
 
 #include "chessAnimatable.h"
 #include "irenderer.h"
+#include <glm/glm.hpp>
 
 namespace visualizer
 {
@@ -41,11 +42,12 @@ namespace visualizer
     class DrawChessPiece: public Anim
     {
       public:
-        DrawChessPiece( ChessPiece* piece ) { m_piece = piece; }
+		DrawChessPiece( ChessPiece* piece, const glm::vec2& from) : m_piece(piece), m_from(from) {}
 
         void animate( const float& t, AnimData* d, IGame* game );
       private:
         ChessPiece* m_piece;
+		glm::vec2 m_from;
         
     }; // DrawChessPiece
 

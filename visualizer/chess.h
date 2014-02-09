@@ -15,6 +15,8 @@
 #include "networkloop.h"
 #include "frcperft/MoveParser.h"
 
+#include <glm/glm.hpp>
+
 namespace visualizer
 {
 
@@ -77,8 +79,8 @@ namespace visualizer
       QTime timeElapsed;
       int  m_whosTurn;
 
-
       map< char, int > wOffset, bOffset;
+	  map< int, glm::vec2> m_LastPos;
 
       Coord lastP;
 

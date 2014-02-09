@@ -85,9 +85,12 @@ namespace visualizer
 
 
 
-  void DrawChessPiece::animate( const float& /* t */, AnimData * /* d */, IGame* game )
+  void DrawChessPiece::animate( const float& t, AnimData * /* d */, IGame* game )
   {
     ChessPiece &piece = *m_piece;
+
+	glm::vec2 diff = glm::vec2(piece.x,piece.y) - m_from;
+	glm::vec2 pos = m_from + diff * t;
     
     stringstream ss;
     
@@ -95,13 +98,13 @@ namespace visualizer
     
     game->renderer->setColor( Color( 1, 1, 1 ) );
     if( game->options->getNumber( "Rotate Board" ) )
-      game->renderer->drawTexturedQuad(7-piece.x, piece.y, 1, 1, ss.str());
+	  game->renderer->drawTexturedQuad(7-pos.x, pos.y, 1, 1, ss.str());
     else
-      game->renderer->drawTexturedQuad(piece.x, 7-piece.y, 1, 1, ss.str());
+	  game->renderer->drawTexturedQuad(pos.x, 7-pos.y, 1, 1, ss.str());
 
   }
 
-  void DrawTime::animate( const float& t, AnimData* d, IGame* game )
+  void DrawTime::animate( const float& /*t*/, AnimData* /*d*/, IGame* game )
   {
     game->renderer->setColor( Color( 1, 1, 1 ) );
 

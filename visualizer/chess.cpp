@@ -143,8 +143,19 @@ namespace visualizer
 
       killed[piece->owner][piece->type]--;
 
-      piece->addKeyFrame( new DrawChessPiece( piece ) );
+	  map< int, glm::vec2>::iterator iter = m_LastPos.find(p->id());
+	  if(iter == m_LastPos.end())
+	  {
+		  iter = m_LastPos.insert(make_pair(p->id(), glm::vec2(piece->x, piece->y))).first;
+	  }
+
+	  piece->addKeyFrame( new DrawChessPiece( piece, iter->second ) );
       turn.addAnimatable( piece );
+
+	  if(iter != m_LastPos.end())
+	  {
+		  iter->second = glm::vec2(piece->x, piece->y);
+	  }
 
     }
 
@@ -362,7 +373,7 @@ namespace visualizer
         piece->y += 4;
       }
 
-      piece->addKeyFrame( new DrawChessPiece( piece ) );
+	  piece->addKeyFrame( new DrawChessPiece( piece, glm::vec2(piece->x,piece->y) ) );
       turn.addAnimatable( piece );
     }
 
@@ -844,8 +855,8 @@ namespace visualizer
 
         killed[piece->owner][piece->type]--;
 
-        piece->addKeyFrame( new DrawChessPiece( piece ) );
-        turn.addAnimatable( piece );
+		piece->addKeyFrame(new DrawChessPiece( piece, glm::vec2(piece->x,piece->y)));
+		turn.addAnimatable(piece);
       }
 
       for( size_t i = 0; i < 2; i++ )
