@@ -20,13 +20,13 @@
 namespace visualizer
 {
 
-  struct Coord
-  {
-    float x, y;
-  };
-
   class Chess: public QObject, public AnimSequence, public IGame, public client::BaseAI
   {
+	struct Coord
+	{
+	float x, y;
+	};
+
     Q_OBJECT;
     Q_INTERFACES( visualizer::IGame );
     public: 

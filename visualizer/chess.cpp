@@ -945,7 +945,7 @@ namespace visualizer
     return move;
   }
 
-  Coord Chess::getCoord() const
+  Chess::Coord Chess::getCoord() const
   {
     const Input& input = gui->getInput();
     Coord i;
