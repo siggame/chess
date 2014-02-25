@@ -22,16 +22,17 @@ HEADERS +=  *.h \
             ./visclient/*.h \
             ./frcperft/*.h 
 
-CONFIG += debug plugin dll 
+win32: {
+CONFIG += static
+} else {
+LIBS += -lGLU
+CONFIG += dll
+}
+
+CONFIG += release 
 debug:DEFINES += __DEBUG__
-#QMAKE_CFLAGS_DEBUG += -pg
-#QMAKE_CXXFLAGS_DEBUG += -pg
 QMAKE_LFLAGS_DEBUG += -shared -W
 QMAKE_LFLAGS_RELEASE += -shared -W
-
-win32:QMAKE_LFLAGS_DEBUG += -lws2_32
-win32:QMAKE_LFLAGS_RELEASE += -lws2_32
-win32:LIBS += /opt/mingw/mingw-cross-env/usr/i686-pc-mingw32/lib/libws2_32.a
 
 DEFINES += YY_NO_UNISTD_H PERFT_FAST
 DESTDIR = ../plugins/
