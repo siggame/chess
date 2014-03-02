@@ -90,6 +90,8 @@ namespace visualizer
 
       bool m_suicide;
 
+	  void AddPieceToTurn(int id, SmartPointer<class ChessPiece>& piece, Frame& turn);
+
   }; 
 
 } // visualizer
