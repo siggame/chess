@@ -19,7 +19,7 @@
   <option>
     <key>Tile Color</key>
     <type>Integer</type>
-    <value>0</value>
+    <value>3</value>
     <minvalue>0</minvalue>
     <maxvalue>3</maxvalue>
   </option>
