@@ -1,5 +1,12 @@
 <options>
   <option>
+    <key>Enable Move Arrows</key>
+    <type>Integer</type>
+    <value>1</value>
+    <minvalue>0</minvalue>
+    <maxvalue>1</maxvalue>
+  </option>
+  <option>
     <key>Password</key>
     <type>String</type>
     <value>password</value>

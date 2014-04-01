@@ -87,20 +87,51 @@ namespace visualizer
 
   void DrawChessPiece::animate( const float& t, AnimData * /* d */, IGame* game )
   {
-    ChessPiece &piece = *m_piece;
+	const ChessPiece &piece = *m_piece;
 
 	glm::vec2 diff = glm::vec2(piece.x,piece.y) - m_from;
 	glm::vec2 pos = m_from + diff * t;
     
     stringstream ss;
+	bool bRotateBoard = game->options->getNumber( "Rotate Board" ) > 0.0f;
     
     ss << 1-piece.owner << "-" << (char)piece.type;
     
     game->renderer->setColor( Color( 1, 1, 1 ) );
-    if( game->options->getNumber( "Rotate Board" ) )
+	if( bRotateBoard )
 	  game->renderer->drawTexturedQuad(7-pos.x, pos.y, 1, 1, ss.str());
     else
 	  game->renderer->drawTexturedQuad(pos.x, 7-pos.y, 1, 1, ss.str());
+
+	if(game->options->getNumber( "Enable Move Arrows" ) > 0.0f)
+	{
+		if(diff != glm::vec2(0.0f))
+		{
+			float length = glm::length(diff);
+			float angle = glm::degrees(atan2(diff.x, diff.y)) + 180.0f;
+
+			game->renderer->push();
+
+			if(bRotateBoard)
+				game->renderer->translate((7.0f - m_from.x) + 0.5f, m_from.y + 0.5f);
+			else
+				game->renderer->translate(m_from.x + 0.5f, (7 - m_from.y) + 0.5f);
+
+			game->renderer->rotate(angle,0.0f,0.0f,1.0f);
+			game->renderer->translate(-0.5f,-0.5f);
+
+			if(bRotateBoard)
+				game->renderer->scale(1.0f, -length*1.1f);
+			else
+				game->renderer->scale(1.0f, length*1.1f);
+
+			float yOffset = bRotateBoard ? -0.2f : 0.0f;
+
+			// Draw the arrow
+			game->renderer->drawTexturedQuad(0.0f, yOffset, 1.0f, 1.0f, "move_arrow");
+			game->renderer->pop();
+		}
+	}
 
   }
 

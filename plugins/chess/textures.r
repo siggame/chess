@@ -13,3 +13,4 @@ texture 1-B textures/white-bishop.png
 texture 1-P textures/white-pawn.png
 texture 1-N textures/white-knight.png
 texture arrow textures/arrow.png
+texture move_arrow textures/move_arrow.png
