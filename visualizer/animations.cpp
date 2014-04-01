@@ -128,6 +128,7 @@ namespace visualizer
 			float yOffset = bRotateBoard ? -0.2f : 0.0f;
 
 			// Draw the arrow
+			game->renderer->setColor(Color( 1, 1, 1, 0.5f ));
 			game->renderer->drawTexturedQuad(0.0f, yOffset, 1.0f, 1.0f, "move_arrow");
 			game->renderer->pop();
 		}
