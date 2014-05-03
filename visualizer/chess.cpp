@@ -278,14 +278,21 @@ namespace visualizer
     n = 0;
     
     c = client::createConnection();
+	
+	string port;
 
     if( button )
     {
       // we're a player
       m_player = true;
+	  port = options->getString("Port Number");
     }
+	else
+	{
+	  port = "19000";
+	}
 
-	if( !client::serverConnect( c, m_ipAddress.c_str(), options->getString("Port Number").c_str() ) )
+	if( !client::serverConnect( c, m_ipAddress.c_str(), port.c_str() ) )
     {
       WARNING( "Could Not Connect To Server" );
       return;
