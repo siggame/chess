@@ -528,7 +528,7 @@ namespace visualizer
 
   void Chess::postDraw()
   {
-    if( m_player )
+    //if( m_player )
     {
 
       bool rotate = options->getNumber( "Rotate Board" );
